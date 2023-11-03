@@ -51,4 +51,4 @@
 
 ## Domain Model (Class Diagram)
 
-![Class diagram](domain_model.jpg)
+![Domain model](domain_model.jpg)

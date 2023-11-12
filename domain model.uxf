@@ -24,14 +24,14 @@ fontsize=10
 
 
 // This text will be stored with each diagram;  use it for notes.</help_text>
-  <zoom_level>14</zoom_level>
+  <zoom_level>10</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1148</x>
-      <y>238</y>
-      <w>350</w>
-      <h>154</h>
+      <x>830</x>
+      <y>170</y>
+      <w>250</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>Vehicle
 --
@@ -41,16 +41,17 @@ manufacturer: String
 miles: int
 plate_number: String
 type: VehicleType
-vehicleState: VehicleState</panel_attributes>
+vehicleState: VehicleState
+countdamages:int</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>462</x>
-      <y>294</y>
-      <w>196</w>
-      <h>70</h>
+      <x>340</x>
+      <y>210</y>
+      <w>140</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>Company
 --
@@ -61,29 +62,28 @@ IBAN: String</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1680</x>
-      <y>252</y>
-      <w>168</w>
-      <h>140</h>
+      <x>1210</x>
+      <y>450</y>
+      <w>120</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-VehicleType
+DamageType
 --
-SUV
-Hatchback
-Sedan
-Mini
-Cabrio
-</panel_attributes>
+Machine
+Tyres
+Glasses
+Scratches
+Interior</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>560</x>
-      <y>812</y>
-      <w>224</w>
-      <h>112</h>
+      <x>410</x>
+      <y>580</y>
+      <w>160</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>Customer
 --
@@ -96,10 +96,10 @@ holderName: String</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1638</x>
-      <y>1036</y>
-      <w>210</w>
-      <h>112</h>
+      <x>1180</x>
+      <y>740</y>
+      <w>150</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;value&gt;&gt;
 Money
@@ -111,10 +111,10 @@ currency: Currency</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1680</x>
-      <y>518</y>
-      <w>168</w>
-      <h>98</h>
+      <x>1210</x>
+      <y>370</y>
+      <w>120</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 RentState
@@ -126,10 +126,10 @@ Pending</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1176</x>
-      <y>812</y>
-      <w>210</w>
-      <h>98</h>
+      <x>850</x>
+      <y>580</y>
+      <w>150</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>Rent
 --
@@ -141,10 +141,10 @@ rentState: RentState</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1680</x>
-      <y>406</y>
-      <w>168</w>
-      <h>98</h>
+      <x>1210</x>
+      <y>290</y>
+      <w>120</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 Currency
@@ -156,10 +156,10 @@ USD</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>644</x>
-      <y>322</y>
-      <w>532</w>
-      <h>56</h>
+      <x>470</x>
+      <y>220</y>
+      <w>380</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
@@ -170,10 +170,10 @@ owns &gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>840</y>
-      <w>434</w>
-      <h>56</h>
+      <x>560</x>
+      <y>600</y>
+      <w>310</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
@@ -184,24 +184,24 @@ m2=0..*
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1274</x>
-      <y>378</y>
-      <w>112</w>
-      <h>462</h>
+      <x>920</x>
+      <y>290</y>
+      <w>80</w>
+      <h>310</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..*
 m2=1
 contains ^</panel_attributes>
-    <additional_attributes>10.0;310.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;290.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>560</x>
-      <y>518</y>
-      <w>350</w>
-      <h>154</h>
+      <x>410</x>
+      <y>380</y>
+      <w>250</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>User
 --
@@ -219,32 +219,32 @@ zipCode: String
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>588</x>
-      <y>658</y>
-      <w>42</w>
-      <h>182</h>
+      <x>430</x>
+      <y>480</y>
+      <w>30</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>588</x>
-      <y>350</y>
-      <w>42</w>
-      <h>196</h>
+      <x>430</x>
+      <y>250</y>
+      <w>30</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>644</x>
+      <x>470</x>
       <y>0</y>
-      <w>210</w>
-      <h>112</h>
+      <w>150</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;value&gt;&gt;
 Money
@@ -256,10 +256,10 @@ currency: Currency</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>574</x>
-      <y>56</y>
-      <w>140</w>
-      <h>266</h>
+      <x>420</x>
+      <y>40</y>
+      <w>100</w>
+      <h>190</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1
@@ -269,10 +269,10 @@ damage_cost=0</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>840</x>
-      <y>42</y>
-      <w>364</w>
-      <h>224</h>
+      <x>610</x>
+      <y>30</y>
+      <w>260</w>
+      <h>160</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1
@@ -282,10 +282,10 @@ fixedCharge</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1372</x>
-      <y>812</y>
-      <w>476</w>
-      <h>252</h>
+      <x>990</x>
+      <y>580</y>
+      <w>340</w>
+      <h>180</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1
@@ -295,10 +295,10 @@ fixed_cost</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1372</x>
-      <y>840</y>
-      <w>448</w>
-      <h>224</h>
+      <x>990</x>
+      <y>600</y>
+      <w>320</w>
+      <h>160</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1
@@ -308,10 +308,10 @@ total_cost</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1372</x>
-      <y>868</y>
-      <w>420</w>
-      <h>196</h>
+      <x>990</x>
+      <y>620</y>
+      <w>300</w>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1
@@ -321,10 +321,10 @@ mileage_cost</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>476</x>
-      <y>28</y>
-      <w>196</w>
-      <h>294</h>
+      <x>350</x>
+      <y>20</y>
+      <w>140</w>
+      <h>210</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1
@@ -334,10 +334,10 @@ income=0</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>56</x>
-      <y>294</y>
-      <w>196</w>
-      <h>70</h>
+      <x>50</x>
+      <y>210</y>
+      <w>140</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>ChargingPolicy
 --
@@ -348,10 +348,10 @@ mileageScale : Set</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>238</x>
-      <y>294</y>
-      <w>252</w>
-      <h>56</h>
+      <x>180</x>
+      <y>210</y>
+      <w>180</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
@@ -362,10 +362,10 @@ m2=1
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1680</x>
-      <y>126</y>
-      <w>168</w>
-      <h>112</h>
+      <x>1210</x>
+      <y>90</y>
+      <w>120</w>
+      <h>80</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 VehicleState
@@ -378,10 +378,10 @@ Rented</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>728</x>
-      <y>1064</y>
-      <w>210</w>
-      <h>70</h>
+      <x>530</x>
+      <y>760</y>
+      <w>150</w>
+      <h>50</h>
     </coordinates>
     <panel_attributes>TechnicalCheck
 --
@@ -391,13 +391,13 @@ damages: Set</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>924</x>
-      <y>896</y>
-      <w>322</w>
-      <h>210</h>
+      <x>670</x>
+      <y>640</y>
+      <w>230</w>
+      <h>150</h>
     </coordinates>
     <panel_attributes>lt=-
-m1=1
+m1=0..1
 m2=1
 &lt; undergoes</panel_attributes>
     <additional_attributes>10.0;130.0;210.0;130.0;210.0;10.0</additional_attributes>
@@ -405,10 +405,10 @@ m2=1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>924</x>
-      <y>1092</y>
-      <w>742</w>
-      <h>56</h>
+      <x>670</x>
+      <y>780</y>
+      <w>530</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m2=1
@@ -416,58 +416,22 @@ total_damage_cost</panel_attributes>
     <additional_attributes>10.0;20.0;510.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
+    <id>UMLClass</id>
     <coordinates>
-      <x>644</x>
-      <y>280</y>
-      <w>532</w>
-      <h>56</h>
+      <x>1210</x>
+      <y>180</y>
+      <w>120</w>
+      <h>100</h>
     </coordinates>
-    <panel_attributes>lt=-
-m1=1
-m2=1
-&lt; belongs</panel_attributes>
-    <additional_attributes>10.0;20.0;360.0;20.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>490</x>
-      <y>350</y>
-      <w>266</w>
-      <h>784</h>
-    </coordinates>
-    <panel_attributes>lt=-
-m1=1
-m2=1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-makes &gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;540.0;170.0;540.0</additional_attributes>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+VehicleType
+--
+SUV
+Hatchback
+Sedan
+Mini
+Cabrio
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

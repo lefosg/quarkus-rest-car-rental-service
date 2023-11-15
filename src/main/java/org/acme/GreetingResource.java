@@ -4,17 +4,20 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import java.util.Date;
-import org.entities.Customer;
+
+import java.time.LocalDate;
+
+import org.domain.Customer;
+import org.util.SystemDate;
 
 @Path("/hello")
 public class GreetingResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public Date lalala() {
-        Date date = new Date();
-        Customer customer=new Customer("GObbb","GObbb",date,"GObbb","GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+    public LocalDate lalala() {
+        LocalDate date = SystemDate.now();
+        Customer customer=new Customer("GObbb","GObbb",date,"aa", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
         return customer.getExpirationDate();
     }
 }

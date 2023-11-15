@@ -1,11 +1,10 @@
-package org.entities;
+package org.domain;
 
 import jakarta.persistence.*;
-import java.util.Date;
 
 
 @Entity
-@Table(name="USERSS")
+@Table(name="USERS")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
     name="type",
@@ -20,6 +19,9 @@ public abstract class User{
 
     @Column(name="name", length=30, nullable = false)
     private String name;
+
+    @Column(name="password", length=30, nullable = false)
+    private String password;
 
     @Column(name="phone", length=12, nullable = false)
     private String phone;
@@ -39,8 +41,9 @@ public abstract class User{
     public User(){
     }
 
-    public User(String name,String phone,String street,String city,String email,String zipcode){
+    public User(String name, String password, String phone,String street,String city,String email,String zipcode){
         this.name=name;
+        this.password = password;
         this.phone=phone;
         this.street=street;
         this.city=city;
@@ -52,7 +55,11 @@ public abstract class User{
     public String getName(){
         return name;
     }
-    
+
+    public String getPassword() {
+        return password;
+    }
+
     public String getPhone(){
         return phone;
     }
@@ -75,6 +82,10 @@ public abstract class User{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setPhone(String phone) {

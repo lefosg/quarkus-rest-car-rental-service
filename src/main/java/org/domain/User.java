@@ -20,6 +20,9 @@ public abstract class User{
     @Column(name="name", length=30, nullable = false)
     private String name;
 
+    @Column(name="email", length=25, nullable = false)
+    private String email;
+
     @Column(name="password", length=30, nullable = false)
     private String password;
 
@@ -32,22 +35,19 @@ public abstract class User{
     @Column(name="city", length=25, nullable = false)
     private String city;
 
-    @Column(name="email", length=25, nullable = false)
-    private String email;
-
     @Column(name="zipcode", length=5, nullable = false)
     private String zipcode;
 
     public User(){
     }
 
-    public User(String name, String password, String phone,String street,String city,String email,String zipcode){
+    public User(String name, String email, String password, String phone, String street, String city, String zipcode){
         this.name=name;
+        this.email=email;
         this.password = password;
         this.phone=phone;
         this.street=street;
         this.city=city;
-        this.email=email;
         this.zipcode=zipcode;
 
     }

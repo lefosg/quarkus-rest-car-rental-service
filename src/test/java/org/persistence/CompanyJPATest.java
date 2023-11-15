@@ -14,4 +14,6 @@ class CompanyJPATest extends JPATest{
         assertEquals(2, companies.size());
     }
 
+    //todo: create companies with policy, test persist etc -> DIMITRIS
+
 }

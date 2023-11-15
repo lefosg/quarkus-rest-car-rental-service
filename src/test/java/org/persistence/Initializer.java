@@ -32,8 +32,10 @@ public class Initializer {
         //create data
 
         LocalDate date = LocalDate.of(2022, 11, 11);
-        Customer customer1 =new Customer("GObbb","GObbb",date,"aa", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
-        Customer customer2 =new Customer("GObbb","GObbb",date,"aa", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+        Customer customer1 =new Customer("GObbb", "GObbb","GObbb","GObbb",
+                "GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
+        Customer customer2 =new Customer("GObbb", "GObbb","GObbb","GObbb",
+                "GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
 
         Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
         Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");

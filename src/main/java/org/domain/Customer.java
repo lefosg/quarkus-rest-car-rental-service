@@ -25,9 +25,9 @@ public class Customer extends User{
     public Customer(){
     }
 
-    public Customer(String surname, String number, LocalDate expirationDate, String holderName,
-                    String name, String password, String phone, String street, String city, String email, String zipcode){
-        super(name, password, phone, street, city, email, zipcode);
+    public Customer(String name, String email, String password, String phone, String street, String city, String zipcode,
+                    String surname, String number, LocalDate expirationDate, String holderName){
+        super(name, email, password, phone, street, city, zipcode);
         this.surname = surname;
         this.number = number;
         this.expirationDate = expirationDate;
@@ -77,7 +77,7 @@ public class Customer extends User{
                 '}';
     }
 
-    //todo: check all variables
+    //todo: check all variables -> dimitris
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

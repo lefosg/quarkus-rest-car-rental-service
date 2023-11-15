@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompanyTest {
-    //todo: test getters & setters
+    //todo: test getters & setters -> VASO
     Company company;
 
     @BeforeEach

@@ -36,8 +36,8 @@ public class Company extends User{
     public Company() {
     }
 
-    public Company(String name, String password, String phone, String street, String city, String email, String zipcode, String AFM, String IBAN) {
-        super(name, password, phone, street, city, email, zipcode);
+    public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM, String IBAN) {
+        super(name, email, password, phone, street, city, zipcode);
         this.AFM = AFM;
         this.IBAN = IBAN;
         income = new Money(0);
@@ -87,15 +87,15 @@ public class Company extends User{
                 '}';
     }
 
-    //todo: check all variables
+    //todo: check all variables -> DIMITRIS
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Company company)) return false;
-        Company c = (Company) o;
-        return  this.getName().equals(c.getName()) && this.AFM.equals(c.getAFM()) && this.IBAN.equals(c.getIBAN())
-                && this.income.equals(c.getIncome())
-                && this.damage_cost.equals(c.getDamage_cost());
+        return  this.getName().equals(company.getName()) && this.AFM.equals(company.getAFM())
+                && this.IBAN.equals(company.getIBAN())
+                && this.income.equals(company.getIncome())
+                && this.damage_cost.equals(company.getDamage_cost());
     }
 
     @Override

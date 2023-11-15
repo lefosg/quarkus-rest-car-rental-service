@@ -13,5 +13,11 @@ import org.util.SystemDate;
 @Path("/hello")
 public class GreetingResource {
 
-
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public LocalDate lalala() {
+        LocalDate date = SystemDate.now();
+        Customer customer=new Customer("GObbb","GObbb",date,"aa", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+        return customer.getExpirationDate();
+    }
 }

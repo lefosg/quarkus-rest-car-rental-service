@@ -29,6 +29,10 @@ public class Company extends User{
     })
     private Money damage_cost;
 
+    //todo: fix cascade
+    @OneToOne(mappedBy="company", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private ChargingPolicy policy;
+
     public Company() {
     }
 

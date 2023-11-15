@@ -15,7 +15,7 @@ public abstract class User{
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    protected Integer id;
 
     @Column(name="name", length=30, nullable = false)
     private String name;
@@ -107,9 +107,6 @@ public abstract class User{
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-
-
-
 
 
 }

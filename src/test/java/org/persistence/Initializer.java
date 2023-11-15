@@ -2,6 +2,7 @@ package org.persistence;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import org.domain.Company;
 import org.domain.Customer;
 import org.util.SystemDate;
 
@@ -19,6 +20,8 @@ public class Initializer {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
+        em.createNativeQuery("delete from USERS").executeUpdate();
+
         tx.commit();
     }
 
@@ -28,10 +31,12 @@ public class Initializer {
 
         //create data
 
-        LocalDate date = SystemDate.now();
+        LocalDate date = LocalDate.of(2022, 11, 11);
         Customer customer1 =new Customer("GObbb","GObbb",date,"aa", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+        Customer customer2 =new Customer("GObbb","GObbb",date,"aa", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
 
-
+        Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
 
         //persist
 
@@ -39,7 +44,10 @@ public class Initializer {
         tx.begin();
 
         em.persist(customer1);
+        em.persist(customer2);
 
+        em.persist(company1);
+        em.persist(company2);
 
         tx.commit();
 

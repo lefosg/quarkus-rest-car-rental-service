@@ -12,7 +12,7 @@ public class Money {
     public enum Currency {EUR, USD}
 
     @Column(name = "amount", nullable = false)
-    private int amount;
+    private double amount;
 
     @Column(name = "currency", nullable = false)
     private Currency currency;
@@ -20,21 +20,21 @@ public class Money {
     public Money() {
     }
 
-    public Money(int amount) {
+    public Money(double amount) {
         this.amount = amount;
         this.currency = Money.Currency.EUR;
     }
 
-    public Money(int amount, Currency currency) {
+    public Money(double amount, Currency currency) {
         this.amount = amount;
         this.currency = currency;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

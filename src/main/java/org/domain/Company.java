@@ -92,7 +92,13 @@ public class Company extends User{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Company company)) return false;
-        return  this.getName().equals(company.getName()) && this.AFM.equals(company.getAFM())
+        return  this.getName().equals(company.getName())
+                && this.getPassword().equals(company.getPassword())
+                && this.getCity().equals(company.getCity())
+                && this.getEmail().equals(company.getEmail())
+                && this.getPhone().equals(company.getPhone())
+                && this.getZipcode().equals(company.getZipcode())
+                && this.AFM.equals(company.getAFM())
                 && this.IBAN.equals(company.getIBAN())
                 && this.income.equals(company.getIncome())
                 && this.damage_cost.equals(company.getDamage_cost());

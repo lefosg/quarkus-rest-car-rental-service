@@ -83,6 +83,12 @@ public class Customer extends User{
         if (this == o) return true;
         if (!(o instanceof Customer customer)) return false;
         return  this.surname.equals(customer.getSurname()) && this.number.equals(customer.getNumber())
+                && this.getName().equals(customer.getName())
+                && this.getPassword().equals(customer.getPassword())
+                && this.getCity().equals(customer.getCity())
+                && this.getEmail().equals(customer.getEmail())
+                && this.getPhone().equals(customer.getPhone())
+                && this.getZipcode().equals(customer.getZipcode())
                 && this.expirationDate.equals(customer.getExpirationDate())
                 && this.holderName.equals(customer.getHolderName());
     }

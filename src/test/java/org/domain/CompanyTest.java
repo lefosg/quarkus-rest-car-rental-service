@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompanyTest {
-    //todo: test getters & setters -> VASO
+    //todo: test getters & setters -> VAS
+
     Company company;
 
     @BeforeEach
@@ -31,34 +32,41 @@ class CompanyTest {
     }
 
     @Test
-    void getAFM() {
+    public void testGetAFM() {
+        assertEquals("GObbb", company.getAFM());
+
     }
 
     @Test
-    void setAFM() {
+    public void testSetAFM() {
+        company.setAFM("123");
+        assertEquals("123", company.getAFM());
     }
 
     @Test
-    void getIBAN() {
+    public void testGetIBAN() {
+        assertEquals("GObbb", company.getIBAN());
     }
 
     @Test
-    void setIBAN() {
+    public void testSetIBAN() {
+        company.setIBAN("peiraivs");
+        assertEquals("peiraivs", company.getIBAN());
     }
 
     @Test
-    void getIncome() {
+    public void testGetIncome() {
     }
 
     @Test
-    void setIncome() {
+    public void testSetIncome() {
     }
 
     @Test
-    void getDamage_cost() {
+    public void testgGetDamage_cost() {
     }
 
     @Test
-    void setDamage_cost() {
+    public void testSetDamage_cost() {
     }
 }

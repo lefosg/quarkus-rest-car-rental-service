@@ -9,8 +9,6 @@ import java.util.Objects;
 @Embeddable
 public class Money {
 
-    public enum Currency {EUR, USD}
-
     @Column(name = "amount", nullable = false)
     private double amount;
 
@@ -22,7 +20,7 @@ public class Money {
 
     public Money(double amount) {
         this.amount = amount;
-        this.currency = Money.Currency.EUR;
+        this.currency = Currency.EUR;
     }
 
     public Money(double amount, Currency currency) {

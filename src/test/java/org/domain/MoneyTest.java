@@ -4,10 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.CurrencyConverter;
 import org.util.Money;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.util.Money.Currency.EUR;
-import static org.util.Money.Currency.USD;
+import static org.util.Currency.EUR;
+import static org.util.Currency.USD;
 
 //todo -> DIMITRIS
 public class MoneyTest {
@@ -32,8 +31,9 @@ public class MoneyTest {
     public void equalsSameMoneyWithAllTheSame(){
         assertEquals(money.getAmount(),money3.getAmount());
     }
+
     @Test
-    public void notEqualsMoney(){
+    public void notEqualsMoneyAmount(){
         assertNotEquals(money.getAmount(),money1.getAmount());
     }
 

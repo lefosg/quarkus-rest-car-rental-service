@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import org.domain.Company;
 import org.domain.Customer;
-import org.util.SystemDate;
 
 import java.time.LocalDate;
 
@@ -54,8 +53,6 @@ public class Initializer {
         tx.commit();
 
         em.close();
-
-
 
     }
 

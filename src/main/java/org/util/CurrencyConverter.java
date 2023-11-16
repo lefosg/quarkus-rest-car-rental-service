@@ -1,7 +1,7 @@
 package org.util;
 
-import static org.util.Money.Currency.EUR;
-import static org.util.Money.Currency.USD;
+import static org.util.Currency.EUR;
+import static org.util.Currency.USD;
 
 
 public class CurrencyConverter {

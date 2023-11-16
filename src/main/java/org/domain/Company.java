@@ -9,10 +9,10 @@ import java.util.Objects;
 @DiscriminatorValue("Company")
 public class Company extends User{
 
-    @Column(name="AFM", length=30)
+    @Column(name="AFM", length=30, nullable = false)
     private String AFM;
 
-    @Column(name="IBAN", length=30)
+    @Column(name="IBAN", length=30, nullable = false)
     private String IBAN;
 
     @Embedded
@@ -30,8 +30,8 @@ public class Company extends User{
     private Money damage_cost;
 
     //todo: fix cascade
-    @OneToOne(mappedBy="company", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private ChargingPolicy policy;
+    //@OneToOne(mappedBy="company", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    //private ChargingPolicy policy;
 
     public Company() {
     }

@@ -32,7 +32,7 @@ class CustomerTest {
 
     @Test
     public void notEqualsDifferentCustomers() {
-        Customer customer2 = new Customer("GObbb", "GObbb","GObbb","GObbb",
+        Customer customer2 = new Customer("GObb", "GObbb","GObbb","GObbb",
                 "GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
         assertNotEquals(customer, customer2);
     }

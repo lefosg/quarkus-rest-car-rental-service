@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.util.Currency.EUR;
 import static org.util.Currency.USD;
 
-//todo -> DIMITRIS
 public class MoneyTest {
 
     Money money;

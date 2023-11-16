@@ -38,8 +38,7 @@ public abstract class User{
     @Column(name="zipcode", length=5, nullable = false)
     private String zipcode;
 
-    public User(){
-    }
+    public User(){ }
 
     public User(String name, String email, String password, String phone, String street, String city, String zipcode){
         this.name=name;

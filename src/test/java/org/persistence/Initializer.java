@@ -2,9 +2,9 @@ package org.persistence;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import org.domain.ChargingPolicy;
 import org.domain.Company;
 import org.domain.Customer;
-
 import java.time.LocalDate;
 
 public class Initializer {
@@ -19,7 +19,11 @@ public class Initializer {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
+        //1. users => companies & customers
         em.createNativeQuery("delete from USERS").executeUpdate();
+        //2. policies
+        //em.createNativeQuery("delete from CHARGING_POLICIES").executeUpdate();
+
 
         tx.commit();
     }
@@ -30,14 +34,20 @@ public class Initializer {
 
         //create data
 
+        //1a. customers
         LocalDate date = LocalDate.of(2022, 11, 11);
         Customer customer1 =new Customer("GObbb", "GObbb","GObbb","GObbb",
                 "GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
         Customer customer2 =new Customer("GObbb", "GObbb","GObbb","GObbb",
                 "GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
 
+        //1b. companies
         Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
         Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+
+        //2. policies
+        //ChargingPolicy policy1 = new ChargingPolicy();
+
 
         //persist
 

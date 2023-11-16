@@ -2,6 +2,8 @@ package org.util;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import java.util.Objects;
 
@@ -12,6 +14,7 @@ public class Money {
     @Column(name = "amount", nullable = false)
     private double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "currency", nullable = false)
     private Currency currency;
 

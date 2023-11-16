@@ -29,12 +29,11 @@ public class Company extends User{
     })
     private Money damage_cost;
 
-    //todo: fix cascade
-    //@OneToOne(mappedBy="company", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    //private ChargingPolicy policy;
+    //fixme (kinda)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
+    private ChargingPolicy policy;
 
-    public Company() {
-    }
+    public Company() { }
 
     public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM, String IBAN) {
         super(name, email, password, phone, street, city, zipcode);

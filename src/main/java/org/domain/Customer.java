@@ -22,8 +22,7 @@ public class Customer extends User{
     @Column(name="holderName", length=25)
     private String holderName;
 
-    public Customer(){
-    }
+    public Customer(){ }
 
     public Customer(String name, String email, String password, String phone, String street, String city, String zipcode,
                     String surname, String number, LocalDate expirationDate, String holderName){

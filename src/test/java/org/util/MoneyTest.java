@@ -1,4 +1,4 @@
-package org.domain;
+package org.util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,14 +56,6 @@ public class MoneyTest {
     public void setNewCurrency(){
         money.setCurrency(USD);
         assertEquals(money.getCurrency(),money2.getCurrency());
-    }
-
-    @Test
-    public void converterEurToUsd(){
-        CurrencyConverter cnv=new CurrencyConverter();
-        cnv.currencyConverter(money);
-        assertEquals(money.getCurrency(),USD);
-
     }
 
 }

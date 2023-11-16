@@ -9,17 +9,17 @@ import java.util.Objects;
 @DiscriminatorValue("Customer")
 public class Customer extends User{
 
-    @Column(name="surname", length=30, nullable = false)
+    @Column(name="surname", length=30)
     private String surname;
 
     //credit card info
-    @Column(name="number", length=12, nullable = false)
+    @Column(name="number", length=12)
     private String number;
 
-    @Column(name="expirationDate", length=30, nullable = false)
+    @Column(name="expirationDate", length=30)
     private LocalDate expirationDate;
 
-    @Column(name="holderName", length=25, nullable = false)
+    @Column(name="holderName", length=25)
     private String holderName;
 
     public Customer(){

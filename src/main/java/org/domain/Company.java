@@ -9,10 +9,10 @@ import java.util.Objects;
 @DiscriminatorValue("Company")
 public class Company extends User{
 
-    @Column(name="AFM", length=30, nullable = false)
+    @Column(name="AFM", length=30)
     private String AFM;
 
-    @Column(name="IBAN", length=30, nullable = false)
+    @Column(name="IBAN", length=30)
     private String IBAN;
 
     @Embedded

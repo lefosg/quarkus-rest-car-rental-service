@@ -24,9 +24,9 @@ public class Customer extends User{
 
     public Customer(){ }
 
-    public Customer(String name, String email, String password, String phone, String street, String city, String zipcode,
+    public Customer(String name, String email, String password, String phone, String AFM, String street, String city, String zipcode,
                     String surname, String number, LocalDate expirationDate, String holderName){
-        super(name, email, password, phone, street, city, zipcode);
+        super(name, email, password, phone, AFM, street, city, zipcode);
         this.surname = surname;
         this.number = number;
         this.expirationDate = expirationDate;
@@ -87,6 +87,7 @@ public class Customer extends User{
                 && this.getCity().equals(customer.getCity())
                 && this.getEmail().equals(customer.getEmail())
                 && this.getPhone().equals(customer.getPhone())
+                && this.getAFM().equals(customer.getAFM())
                 && this.getZipcode().equals(customer.getZipcode())
                 && this.expirationDate.equals(customer.getExpirationDate())
                 && this.holderName.equals(customer.getHolderName());

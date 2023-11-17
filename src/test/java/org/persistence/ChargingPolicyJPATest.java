@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChargingPolicyJPATest extends JPATest {
 
-    //@Test
+    @Test
     public void listChargingPolicies() {
-        List<ChargingPolicy> policies = em.createQuery("select cp from CharingPolicy cp").getResultList();
-        assertEquals(0, policies.size());
+        List<ChargingPolicy> policies = em.createQuery("select cp from ChargingPolicy cp").getResultList();
+        assertEquals(1, policies.size());
     }
 
 }

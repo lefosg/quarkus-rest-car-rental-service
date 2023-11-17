@@ -38,17 +38,29 @@ public abstract class User{
     @Column(name="zipcode", length=5, nullable = false)
     private String zipcode;
 
+    @Column(name="AFM", length=30, nullable = false, unique = true)
+    private String AFM;
+
     public User(){ }
 
-    public User(String name, String email, String password, String phone, String street, String city, String zipcode){
+    public User(String name, String email, String password, String phone, String AFM, String street, String city, String zipcode){
         this.name=name;
         this.email=email;
         this.password = password;
+        this.AFM = AFM;
         this.phone=phone;
         this.street=street;
         this.city=city;
         this.zipcode=zipcode;
 
+    }
+
+    public String getAFM() {
+        return AFM;
+    }
+
+    public void setAFM(String AFM) {
+        this.AFM = AFM;
     }
 
     public String getName(){
@@ -106,6 +118,5 @@ public abstract class User{
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-
 
 }

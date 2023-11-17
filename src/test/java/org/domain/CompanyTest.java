@@ -14,23 +14,11 @@ class CompanyTest {
 
     @BeforeEach
     public void setup() {
-        HashMap<Integer, Float> hash1=new HashMap<>();
-
-        HashMap<VehicleType, Integer> hash2= new HashMap<>();
-        hash1.put(55, 2.5F);
-        hash1.put(100,3.5F);
-
-        hash2.put(VehicleType.SUV,5);
-        company = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",hash1,hash2);
+        company = new Company("etaireia1","123456789", "123456798",
+                "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",null);
     }
-    @Test
-    public void checkHashTables(){
-        HashMap<Integer, Float> hash3=new HashMap<>();
-        hash3.put(55, 2.5F);
-        hash3.put(100,3.5F);
-        HashMap test1=company.getMileageScale();
-        assertEquals(test1,hash3);
-    }
+
+
     @Test
     public void equalsSameCompany() {
         assertEquals(company, company);
@@ -38,21 +26,13 @@ class CompanyTest {
 
     @Test
     public void equalsDifferentCompany() {
-        HashMap<Integer, Float> hash1=new HashMap<>();
-        HashMap<VehicleType, Integer> hash2= new HashMap<>();
-        hash1.put(55, 2.5F);
-        hash2.put(VehicleType.SUV,5);
-        Company company2 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",hash1,hash2);
+        Company company2 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",null);
         assertEquals(company, company2);
     }
 
     @Test
     public void notEqualsDifferentCompany() {
-        HashMap<Integer, Float> hash1=new HashMap<>();
-        HashMap<VehicleType, Integer> hash2= new HashMap<>();
-        hash1.put(55, 2.5F);
-        hash2.put(VehicleType.SUV,5);
-        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",hash1,hash2);
+        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",null);
         assertNotEquals(company, company2);
     }
 

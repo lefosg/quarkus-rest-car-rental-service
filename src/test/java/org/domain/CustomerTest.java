@@ -14,7 +14,7 @@ class CustomerTest {
     @BeforeEach
     public void setup() {
         SystemDateStub.setStub(date);
-        customer = new Customer("GObbb",
+        customer = new Customer("GObbb","GObbb",
                 "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
     }
 
@@ -25,14 +25,14 @@ class CustomerTest {
 
     @Test
     public void equalsDifferentCustomers() {
-        Customer customer2 = new Customer("GObbb",
+        Customer customer2 = new Customer("GObbb","GObbb",
                 "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
         assertEquals(customer, customer2);
     }
 
     @Test
     public void notEqualsDifferentCustomers() {
-        Customer customer2 = new Customer("GObb", "GObbb","GObbb","GObbb",
+        Customer customer2 = new Customer("GObb","GObbb", "GObbb","GObbb","GObbb",
                 "GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
         assertNotEquals(customer, customer2);
     }

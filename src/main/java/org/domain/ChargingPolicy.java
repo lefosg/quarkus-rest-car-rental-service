@@ -2,6 +2,8 @@ package org.domain;
 
 import jakarta.persistence.*;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "CHARGING_POLICIES")
@@ -12,26 +14,34 @@ public class ChargingPolicy {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "mileage_scale", nullable = false)
-    private HashMap<Integer, Float> mileageScale = new HashMap<Integer, Float>();
+    @ElementCollection
+    private List<Integer> miles_scale;
+
+    @ElementCollection
+    private List<Float> cost_scale;
+
+    //todo do sth with damage idk
+    //@ElementCollection
+    //private List<VehicleType> car_type;
 //
-    @Column(name = "vehicle_to_int", nullable = false)
-    private HashMap<VehicleType, Integer> vehicle_to_int= new HashMap<VehicleType, Integer>();
-//
+    //@ElementCollection
+    //private List<Integer> damage_cost_per_type;
+
     public ChargingPolicy() { }
 
-    ChargingPolicy(HashMap<Integer, Float> mileageScale, HashMap<VehicleType, Integer> vehicle_to_int) {
-        this.mileageScale = mileageScale;
-        this.vehicle_to_int = vehicle_to_int;
+    public ChargingPolicy(List<Integer> miles_scale, List<Float> cost_scale) {
+        this.miles_scale = miles_scale;
+        this.cost_scale = cost_scale;
     }
 
-    public HashMap getMileageScale(){
-        return this.mileageScale;
+    public HashMap<Integer, Float> getMileageScale() {
+        HashMap<Integer, Float> mileage_scale = new HashMap<Integer, Float>();
+        for (int i=0; i < miles_scale.size(); i++) {
+            mileage_scale.put(miles_scale.get(i), cost_scale.get(i));
+        }
+        return mileage_scale;
     }
 
-    public HashMap getVehicleToInt(){
-        return this.vehicle_to_int;
-    }
     public Long getId() {
         return id;
     }
@@ -39,4 +49,5 @@ public class ChargingPolicy {
     public void setId(Long id) {
         this.id = id;
     }
+
 }

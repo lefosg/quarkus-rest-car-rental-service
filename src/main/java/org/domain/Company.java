@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 import org.util.Money;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity
 @DiscriminatorValue("Company")
 public class Company extends User{
 
-    @Column(name="AFM", length=30)
-    private String AFM;
+
 
     @Column(name="IBAN", length=30)
     private String IBAN;
@@ -31,32 +29,30 @@ public class Company extends User{
     })
     private Money damage_cost;
 
-    //fixme (kinda)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
     private ChargingPolicy policy;
 
     public Company() { }
 
     public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM,
-                   String IBAN,HashMap<Integer, Float> mileageScale, HashMap<VehicleType, Integer> vehicleToInt) {
-        super(name, email, password, phone, street, city, zipcode);
-        this.AFM = AFM;
+                   String IBAN) {
+        super(name, email, password, phone, AFM, street, city, zipcode);
         this.IBAN = IBAN;
         income = new Money(0);
         damage_cost = new Money(0);
-        this.policy= new ChargingPolicy(mileageScale,vehicleToInt);
     }
 
-    public String getAFM() {
-        return AFM;
+    public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM,
+                   String IBAN, ChargingPolicy policy) {
+        super(name, email, password, phone, AFM, street, city, zipcode);
+        this.IBAN = IBAN;
+        income = new Money(0);
+        damage_cost = new Money(0);
+        this.policy= policy;
     }
 
-    public HashMap getMileageScale(){
+    public HashMap<Integer, Float> getMileageScale(){
         return this.policy.getMileageScale();
-    }
-
-    public void setAFM(String AFM) {
-        this.AFM = AFM;
     }
 
     public String getIBAN() {
@@ -83,10 +79,18 @@ public class Company extends User{
         this.damage_cost = damage_cost;
     }
 
+    public ChargingPolicy getPolicy() {
+        return policy;
+    }
+
+    public void setPolicy(ChargingPolicy policy) {
+        this.policy = policy;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
-                "AFM='" + AFM + '\'' +
+                "AFM='" + getAFM() + '\'' +
                 ", IBAN='" + IBAN + '\'' +
                 ", income=" + income +
                 ", damage_cost=" + damage_cost +
@@ -105,7 +109,7 @@ public class Company extends User{
                 && this.getEmail().equals(company.getEmail())
                 && this.getPhone().equals(company.getPhone())
                 && this.getZipcode().equals(company.getZipcode())
-                && this.AFM.equals(company.getAFM())
+                && this.getAFM().equals(company.getAFM())
                 && this.IBAN.equals(company.getIBAN())
                 && this.income.equals(company.getIncome())
                 && this.damage_cost.equals(company.getDamage_cost());

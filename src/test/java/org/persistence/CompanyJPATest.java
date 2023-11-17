@@ -1,6 +1,9 @@
 package org.persistence;
 
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.RollbackException;
 import org.domain.Company;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +17,20 @@ class CompanyJPATest extends JPATest{
         assertEquals(2, companies.size());
     }
 
-    //todo: create companies with policy, test persist etc -> DIMITRIS
+    @Test
+    public void denySavingCompanyWithSameName() {
+
+        Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+
+        Assertions.assertThrows(RollbackException.class, () -> {
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+            em.persist(company1);
+            em.persist(company2);
+            tx.commit();
+        });
+    }
+
 
 }

@@ -2,6 +2,8 @@ package org.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.util.Currency;
+import org.util.Money;
 
 import java.util.HashMap;
 
@@ -60,19 +62,37 @@ class CompanyTest {
     }
 
     @Test
-    public void testGetIncome() {
+    public void testSetMoney(){
+        Money money = new Money(10, Currency.USD);
+        assertNotEquals(money, new Money());
+    }
 
+    @Test
+    public void testnotEqualsMoneyCurrency() {
+        Money money = new Money(10, Currency.USD);
+        assertNotEquals(company, money);
+    }
+
+    @Test
+    public void testGetIncome() {
+        Money money = new Money(0);
+        assertEquals(money, company.getIncome());
     }
 
     @Test
     public void testSetIncome() {
+    Money money = new Money(0);
+    assertEquals(money, company.getIncome());
     }
 
     @Test
     public void testgGetDamage_cost() {
+        Money damage_cost = new Money(0);
+        assertEquals(damage_cost, company.getDamage_cost());
     }
 
     @Test
     public void testSetDamage_cost() {
-    }
+        Money damage_cost = new Money(0);
+    assertEquals(damage_cost, company.getDamage_cost());}
 }

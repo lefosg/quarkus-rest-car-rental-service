@@ -81,6 +81,7 @@ class CompanyTest {
 
     @Test
     public void testGetIncome() {
+
     }
 
     @Test

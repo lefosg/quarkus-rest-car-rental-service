@@ -41,7 +41,6 @@ class CompanyTest {
     @Test
     public void testGetAFM() {
         assertEquals("GObbb", company.getAFM());
-
     }
 
     @Test
@@ -62,37 +61,40 @@ class CompanyTest {
     }
 
     @Test
-    public void testSetMoney(){
-        Money money = new Money(10, Currency.USD);
-        assertNotEquals(money, new Money());
-    }
-
-    @Test
-    public void testnotEqualsMoneyCurrency() {
-        Money money = new Money(10, Currency.USD);
-        assertNotEquals(company, money);
-    }
-
-    @Test
-    public void testGetIncome() {
+    public void testIncomeGetMoneyEUR(){
         Money money = new Money(0);
         assertEquals(money, company.getIncome());
     }
 
     @Test
-    public void testSetIncome() {
-    Money money = new Money(0);
-    assertEquals(money, company.getIncome());
+    public void testIncomeGetMoneyUSD(){
+        Money money = new Money(0, Currency.USD);
+        assertNotEquals(money, company.getIncome());
     }
 
     @Test
-    public void testgGetDamage_cost() {
-        Money damage_cost = new Money(0);
-        assertEquals(damage_cost, company.getDamage_cost());
+    public void testIncomeSetMoney() {
+        Money money = new Money(10, Currency.USD);
+        company.setIncome(money);
+        assertEquals(money, company.getIncome());
     }
 
     @Test
-    public void testSetDamage_cost() {
-        Money damage_cost = new Money(0);
-    assertEquals(damage_cost, company.getDamage_cost());}
+    public void testDamageCostGetMoneyEUR(){
+        Money money = new Money(0);
+        assertEquals(money, company.getDamage_cost());
+    }
+
+    @Test
+    public void testDamageCostGetMoneyUSD(){
+        Money money = new Money(0, Currency.USD);
+        assertNotEquals(money, company.getDamage_cost());
+    }
+
+    @Test
+    public void testDamageCostSetMoney() {
+        Money money = new Money(10, Currency.USD);
+        company.setDamage_cost(money);
+        assertEquals(money, company.getDamage_cost());
+    }
 }

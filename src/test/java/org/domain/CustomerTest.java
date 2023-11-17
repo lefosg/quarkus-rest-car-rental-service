@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
-    //todo: test getters & setters -> VASO
+    //todo test getters & setters -> VASO ok
     Customer customer;
     LocalDate date = LocalDate.of(2023, 11, 15);
 
@@ -38,35 +38,45 @@ class CustomerTest {
     }
 
     @Test
-    void setSurname() {
-    }
-
-    @Test
-    void setNumber() {
-    }
-
-    @Test
-    void setExpirationDate() {
-    }
-
-    @Test
-    void setHolderName() {
-    }
-
-    @Test
-    void getSurname() {
+    public void testsetSurname() {
         assertEquals("GObbb", customer.getSurname());
     }
 
     @Test
-    void getNumber() {
+    public void testsetNumber() {
+        assertEquals("GObbb", customer.getNumber());
     }
 
     @Test
-    void getExpirationDate() {
+    public void testsetExpirationDate() {
+        assertEquals( date, customer.getExpirationDate());
     }
 
     @Test
-    void getHolderName() {
+   public void testsetHolderName() {
+        customer.setHolderName("GObbb");
+        assertEquals("GObbb", customer.getHolderName());
+
+    }
+
+    @Test
+    public void testgetSurname() {
+        assertEquals("GObbb", customer.getSurname());
+    }
+
+    @Test
+    public void testgetNumber() {
+        assertEquals("GObbb", customer.getNumber());
+
+    }
+
+    @Test
+    public void testgetExpirationDate() {
+        assertEquals( date, customer.getExpirationDate());
+    }
+
+    @Test
+    public void testgetHolderName() {
+        assertEquals("GObbb", customer.getHolderName());
     }
 }

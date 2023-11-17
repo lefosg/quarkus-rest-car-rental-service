@@ -3,6 +3,8 @@ package org.domain;
 import jakarta.persistence.*;
 import org.util.Money;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -35,16 +37,22 @@ public class Company extends User{
 
     public Company() { }
 
-    public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM, String IBAN) {
+    public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM,
+                   String IBAN,HashMap<Integer, Float> mileageScale, HashMap<VehicleType, Integer> vehicleToInt) {
         super(name, email, password, phone, street, city, zipcode);
         this.AFM = AFM;
         this.IBAN = IBAN;
         income = new Money(0);
         damage_cost = new Money(0);
+        this.policy= new ChargingPolicy(mileageScale,vehicleToInt);
     }
 
     public String getAFM() {
         return AFM;
+    }
+
+    public HashMap getMileageScale(){
+        return this.policy.getMileageScale();
     }
 
     public void setAFM(String AFM) {

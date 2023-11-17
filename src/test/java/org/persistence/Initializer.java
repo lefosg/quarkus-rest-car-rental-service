@@ -5,7 +5,10 @@ import jakarta.persistence.EntityTransaction;
 import org.domain.ChargingPolicy;
 import org.domain.Company;
 import org.domain.Customer;
+import org.domain.VehicleType;
+
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class Initializer {
 
@@ -31,6 +34,10 @@ public class Initializer {
     public void prepareData() {
 
         eraseData();
+        HashMap<Integer, Float> hash1=new HashMap<>();
+        HashMap<VehicleType, Integer> hash2= new HashMap<>();
+        hash1.put(55, 2.5F);
+        hash2.put(VehicleType.SUV,5);
 
         //create data
 
@@ -42,8 +49,8 @@ public class Initializer {
                 "GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
 
         //1b. companies
-        Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
-        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+        Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",hash1,hash2);
+        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",hash1,hash2);
 
         //2. policies
         //ChargingPolicy policy1 = new ChargingPolicy();

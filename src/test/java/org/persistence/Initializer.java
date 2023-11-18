@@ -8,10 +8,7 @@ import org.domain.Customer;
 import org.domain.VehicleType;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Initializer {
 
@@ -53,13 +50,13 @@ public class Initializer {
         Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","456","GObbb");
 
         //2. policies
-        Map<Integer, Float> mileage_scale = new HashMap<Integer, Float>();
+        LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
         mileage_scale.put(100, 0.10f);
         mileage_scale.put(200, 0.20f);
         mileage_scale.put(300, 0.30f);
         ChargingPolicy policy1 = new ChargingPolicy(mileage_scale);
 
-        mileage_scale = new HashMap<Integer, Float>();
+        mileage_scale = new LinkedHashMap<Integer, Float>();
         mileage_scale.put(150, 0.15f);
         mileage_scale.put(250, 0.25f);
         mileage_scale.put(350, 0.35f);

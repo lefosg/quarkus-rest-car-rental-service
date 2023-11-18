@@ -48,12 +48,12 @@ public class ChargingPolicy {
             Float cost = e.getValue();
 
             if (customer_miles > miles_scale) {
-                sum_cost += miles_scale * cost;
-                sum_miles += miles_scale;
+                sum_cost += (miles_scale - sum_miles) * cost;
+                sum_miles = miles_scale;
             } else if (customer_miles <= miles_scale) {
-                sum_cost += (miles_scale - (customer_miles - sum_miles)) * cost;
+                sum_cost += (customer_miles - sum_miles) * cost;
+                break;  // Break out of the loop since the customer_miles is within the current scale
             }
-
         }
 
         return sum_cost;

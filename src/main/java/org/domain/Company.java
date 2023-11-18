@@ -51,10 +51,6 @@ public class Company extends User{
         this.policy= policy;
     }
 
-    public HashMap<Integer, Float> getMileageScale(){
-        return this.policy.getMileageScale();
-    }
-
     public String getIBAN() {
         return IBAN;
     }

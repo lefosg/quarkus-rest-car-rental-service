@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Initializer {
 
@@ -52,25 +53,17 @@ public class Initializer {
         Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","456","GObbb");
 
         //2. policies
-        List<Integer> miles1 = new ArrayList<>();
-        miles1.add(100);
-        miles1.add(200);
-        miles1.add(300);
-        List<Float> cost1 = new ArrayList<>();
-        cost1.add(0.10f);
-        cost1.add(0.20f);
-        cost1.add(0.30f);
-        ChargingPolicy policy1 = new ChargingPolicy(miles1, cost1);
+        Map<Integer, Float> mileage_scale = new HashMap<Integer, Float>();
+        mileage_scale.put(100, 0.10f);
+        mileage_scale.put(200, 0.20f);
+        mileage_scale.put(300, 0.30f);
+        ChargingPolicy policy1 = new ChargingPolicy(mileage_scale);
 
-        List<Integer> miles2 = new ArrayList<>();
-        miles2.add(150);
-        miles2.add(250);
-        miles2.add(350);
-        List<Float> cost2 = new ArrayList<>();
-        cost2.add(0.15f);
-        cost2.add(0.25f);
-        cost2.add(0.35f);
-        ChargingPolicy policy2 = new ChargingPolicy(miles2, cost2);
+        mileage_scale = new HashMap<Integer, Float>();
+        mileage_scale.put(150, 0.15f);
+        mileage_scale.put(250, 0.25f);
+        mileage_scale.put(350, 0.35f);
+        ChargingPolicy policy2 = new ChargingPolicy(mileage_scale);
 
 
         company1.setPolicy(policy1);

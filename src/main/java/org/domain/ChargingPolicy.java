@@ -42,14 +42,20 @@ public class ChargingPolicy {
 
     public float calculateMileageCost(float customer_miles) {
         float sum_cost = 0, sum_miles=0;
+        int count=1;
 
         for (Map.Entry<Integer, Float> e : mileageScale.entrySet()) {
+
             Integer miles_scale = e.getKey();
             Float cost = e.getValue();
-
-            if (customer_miles > miles_scale) {
+            if(count==mileageScale.size()){
+                sum_cost+=(customer_miles-sum_miles)*cost;
+                break;
+            }
+            else if (customer_miles > miles_scale) {
                 sum_cost += (miles_scale - sum_miles) * cost;
                 sum_miles = miles_scale;
+                count+=1;
             } else if (customer_miles <= miles_scale) {
                 sum_cost += (customer_miles - sum_miles) * cost;
                 break;  // Break out of the loop since the customer_miles is within the current scale

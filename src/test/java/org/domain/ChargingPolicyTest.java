@@ -24,8 +24,8 @@ class ChargingPolicyTest {
 
     @Test
     public void calculatesMilesChargingCorrectly() {
-        float cost = policy.calculateMileageCost(264);
-        assertEquals(49.2f, cost);
+        float cost = policy.calculateMileageCost(150);
+        assertEquals(20f, cost);
     }
 
 }

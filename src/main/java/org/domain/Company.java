@@ -29,6 +29,9 @@ public class Company extends User{
     })
     private Money damage_cost;
 
+    @OneToMany(fetch =FetchType.EAGER,cascade = CascadeType.ALL)
+    private Vehicle vehicle;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
     private ChargingPolicy policy;
 

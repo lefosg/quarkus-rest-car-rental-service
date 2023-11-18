@@ -19,13 +19,14 @@ class ChargingPolicyTest {
         mileage_scale.put(100, 0.10f);
         mileage_scale.put(200, 0.20f);
         mileage_scale.put(300, 0.30f);
+        mileage_scale.put(450, 0.5f);
         policy = new ChargingPolicy(mileage_scale);
     }
 
     @Test
     public void calculatesMilesChargingCorrectly() {
-        float cost = policy.calculateMileageCost(150);
-        assertEquals(20f, cost);
+        float cost = policy.calculateMileageCost(550);
+        assertEquals(185f, cost);
     }
 
 }

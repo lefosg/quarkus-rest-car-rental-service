@@ -5,7 +5,10 @@ import jakarta.persistence.EntityTransaction;
 import org.domain.ChargingPolicy;
 import org.domain.Company;
 import org.domain.Customer;
-import org.domain.VehicleType;
+import org.domain.Vehicle;
+import org.util.Money;
+import org.util.VehicleState;
+import org.util.VehicleType;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -26,6 +29,8 @@ public class Initializer {
         em.createNativeQuery("delete from USERS").executeUpdate();
         //2. policies
         em.createNativeQuery("delete from CHARGING_POLICIES").executeUpdate();
+        //2. vehicles
+        em.createNativeQuery("delete from VEHICLES").executeUpdate();
 
 
         tx.commit();
@@ -48,6 +53,8 @@ public class Initializer {
         //1b. companies
         Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","345","GObbb");
         Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","456","GObbb");
+
+        Vehicle vehicle1=new Vehicle("test",155,"test","test");
 
         //2. policies
         LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
@@ -80,6 +87,7 @@ public class Initializer {
 
         em.persist(company1);
         em.persist(company2);
+
 
 
         tx.commit();

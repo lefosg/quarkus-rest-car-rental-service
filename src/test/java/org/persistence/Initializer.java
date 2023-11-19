@@ -6,6 +6,7 @@ import org.domain.ChargingPolicy;
 import org.domain.Company;
 import org.domain.Customer;
 import org.domain.Vehicle;
+import org.util.DamageType;
 import org.util.Money;
 import org.util.VehicleState;
 import org.util.VehicleType;
@@ -61,13 +62,20 @@ public class Initializer {
         mileage_scale.put(100, 0.10f);
         mileage_scale.put(200, 0.20f);
         mileage_scale.put(300, 0.30f);
-        ChargingPolicy policy1 = new ChargingPolicy(mileage_scale);
+
+        LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
+        damage_type.put(DamageType.Glasses,50f);
+        damage_type.put(DamageType.Machine,30f);
+
+        ChargingPolicy policy1 = new ChargingPolicy(mileage_scale,damage_type);
 
         mileage_scale = new LinkedHashMap<Integer, Float>();
         mileage_scale.put(150, 0.15f);
         mileage_scale.put(250, 0.25f);
         mileage_scale.put(350, 0.35f);
-        ChargingPolicy policy2 = new ChargingPolicy(mileage_scale);
+        ChargingPolicy policy2 = new ChargingPolicy(mileage_scale,damage_type);
+
+
 
 
         company1.setPolicy(policy1);

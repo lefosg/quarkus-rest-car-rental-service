@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.util.DamageType;
 
 import java.util.*;
 
@@ -30,12 +31,20 @@ public class ChargingPolicy {
 
     //@ElementCollection
     //private List<Integer> damage_cost_per_type;
+    @ElementCollection(fetch = FetchType.EAGER)  // map is small, make it eager
+    @CollectionTable(name = "policy_damage_cost", joinColumns = @JoinColumn(name = "policy_id"))
+    @JoinColumn(name = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    private Map<DamageType, Float> damageType;
 
     public ChargingPolicy() { }
 
 
-    public ChargingPolicy(LinkedHashMap<Integer, Float> mileage_scale) {
+
+    public ChargingPolicy(LinkedHashMap<Integer, Float> mileage_scale, LinkedHashMap<DamageType, Float> damage_type) {
         this.mileageScale = mileage_scale;
+        this.damageType=damage_type;
     }
 
     // domain logic
@@ -68,13 +77,27 @@ public class ChargingPolicy {
 
 
     // getters & setters
+    public Map<DamageType, Float> getDamageType() {
+        return damageType;
+    }
 
+    public void setDamageType(Map<DamageType, Float> damageType) {
+        this.damageType = damageType;
+    }
     public Map<Integer, Float> getMileageScale() {
         return mileageScale;
     }
 
     public void setMileageScale(Map<Integer, Float> mileage_scale) {
         this.mileageScale = mileage_scale;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this==o) return  true;
+        if (!(o instanceof ChargingPolicy policy)) return false;
+        return Objects.equals(this.getMileageScale(), policy.getMileageScale()) &&
+                Objects.equals(this.getDamageType(), policy.getDamageType());
     }
 
     public Long getId() {

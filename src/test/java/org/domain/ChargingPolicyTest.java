@@ -2,6 +2,7 @@ package org.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.util.DamageType;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,7 +21,12 @@ class ChargingPolicyTest {
         mileage_scale.put(200, 0.20f);
         mileage_scale.put(300, 0.30f);
         mileage_scale.put(450, 0.5f);
-        policy = new ChargingPolicy(mileage_scale);
+
+        LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
+        damage_type.put(DamageType.Tyres,50f);
+        damage_type.put(DamageType.Machine,30f);
+
+        policy = new ChargingPolicy(mileage_scale,damage_type);
     }
 
     @Test

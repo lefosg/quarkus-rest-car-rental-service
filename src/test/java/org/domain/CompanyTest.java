@@ -17,8 +17,8 @@ class CompanyTest {
 
     @BeforeEach
     public void setup() {
-        company = new Company("etaireia1","123456789", "123456798",
-                "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",null);
+        company = new Company("AVIS","avis@gmail.com", "052147857", "2104578965",
+                "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
     }
 
 
@@ -29,14 +29,16 @@ class CompanyTest {
 
     @Test
     public void equalsDifferentCompany() {
-        Company company2 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",null);
+        Company company2 = new Company("AVIS","avis@gmail.com", "052147857", "2104578965",
+                "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
         assertEquals(company, company2);
     }
 
 
     @Test
     public void notEqualsDifferentCompany() {
-        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb",null);
+        Company company2 = new Company("SPEED","speed@gmail.com", "134321796",
+                "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
         assertNotEquals(company, company2);
     }
 
@@ -44,8 +46,9 @@ class CompanyTest {
 
     @Test
     public void checkDifferentPolicies(){
-        Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
-        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
+        Company company1 = new Company("AVIS","avis@gmail.com", "052147857", "2104578965",
+                "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
+        Company company2 = new Company("SPEED","speed@gmail.com", "134321796", "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
 
         LinkedHashMap<Integer, Float> mileage_scale1 = new LinkedHashMap<Integer, Float>();
         mileage_scale1.put(150, 0.10f);
@@ -79,7 +82,7 @@ class CompanyTest {
 
     @Test
     public void testGetAFM() {
-        assertEquals("GObbb", company.getAFM());
+        assertEquals("163498317", company.getAFM());
     }
 
     @Test
@@ -90,7 +93,7 @@ class CompanyTest {
 
     @Test
     public void testGetIBAN() {
-        assertEquals("GObbb", company.getIBAN());
+        assertEquals("GR2514526358789654", company.getIBAN());
     }
 
     @Test

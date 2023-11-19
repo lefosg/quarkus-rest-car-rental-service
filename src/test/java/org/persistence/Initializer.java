@@ -52,8 +52,8 @@ public class Initializer {
                 "234","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
 
         //1b. companies
-        Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","345","GObbb");
-        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","456","GObbb");
+        Company company1 = new Company("AVIS","avis@gmail.com", "052147857", "2104578965","ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
+        Company company2 = new Company("SPEED","speed@gmail.com", "134321796", "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
 
         Vehicle vehicle1 = new Vehicle("test",155,"test","test", VehicleType.SUV, new Money(10));
         Vehicle vehicle2 = new Vehicle("test",155,"test","test", VehicleType.SUV, new Money(10));

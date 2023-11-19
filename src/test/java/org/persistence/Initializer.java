@@ -45,11 +45,13 @@ public class Initializer {
         //create data
 
         //1a. customers
-        LocalDate date = LocalDate.of(2022, 11, 11);
-        Customer customer1 =new Customer("GObbb", "GObbb","GObbb","GObbb",
-                "123","GObbb","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
-        Customer customer2 =new Customer("GObbb", "GObbb", "GObbb","GObbb","GObbb",
-                "234","GObbb","GObbb", "GObbb","GObbb",date,"GObbb");
+        LocalDate date1 = LocalDate.of(2027, 11, 26);
+        Customer customer1 =new Customer("ΙΩΑΝΝΗΣ", "evangellou@gmail.com","johnjohn","6941603677",
+                "166008282","ΛΕΥΚΑΔΟΣ 22","ΑΘΗΝΑ","35896", "ΕΥΑΓΓΕΛΟΥ","7894665213797564",date1,"ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ");
+
+        LocalDate date2 = LocalDate.of(2026, 8, 5);
+        Customer customer2 =new Customer("ΝΙΚΟΣ", "nick7@yahoo.gr", "olympiakos","6924567813",
+                "054893175", "ΜΕΘΟΝΗΣ 6","ΠΕΙΡΑΙΑΣ","18545", "ΠΑΠΑΔΗΜΗΤΡΙΟΥ","1645923557481658",date2,"ΝΙΚΟΣ ΠΑΠΑΔΗΜΗΤΡΙΟΥ");
 
         //1b. companies
         Company company1 = new Company("AVIS","avis@gmail.com", "password123", "2104578965","ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");

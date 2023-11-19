@@ -13,7 +13,7 @@ public class Customer extends User{
     private String surname;
 
     //credit card info
-    @Column(name="number", length=12)
+    @Column(name="number", length=16)
     private String number;
 
     @Column(name="expirationDate", length=30)

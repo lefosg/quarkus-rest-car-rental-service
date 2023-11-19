@@ -37,5 +37,37 @@ class CompanyJPATest extends JPATest{
         });
     }
 
+    @Test
+    public void denySavingCompanyWithSameEmail() {
+        Company company1 = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
+                "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
+        Company company2 = new Company("SPEED","avis@gmail.com", "ilovecookies",
+                "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
+
+        Assertions.assertThrows(RollbackException.class, () -> {
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+            em.persist(company1);
+            em.persist(company2);
+            tx.commit();
+        });
+    }
+
+    @Test
+    public void denySavingCompanyWithSameAfmAndEmail() {
+        Company company1 = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
+                "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
+        Company company2 = new Company("SPEED","avis@gmail.com", "ilovecookies",
+                "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","163498317","GR3687254378963625");
+
+        Assertions.assertThrows(RollbackException.class, () -> {
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+            em.persist(company1);
+            em.persist(company2);
+            tx.commit();
+        });
+    }
+
 
 }

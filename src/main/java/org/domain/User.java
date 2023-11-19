@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name="USERS")
+@Table(name="USERS", uniqueConstraints = {
+        @UniqueConstraint(name = "email_afm", columnNames = {"email", "AFM"})
+})
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
     name="type",
@@ -38,7 +40,7 @@ public abstract class User{
     @Column(name="zipcode", length=5, nullable = false)
     private String zipcode;
 
-    @Column(name="AFM", length=30, nullable = false, unique = true)
+    @Column(name="AFM", length=30, nullable = false)
     private String AFM;
 
     public User(){ }

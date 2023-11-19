@@ -2720,3 +2720,6 @@ drop table VEHICLES [90107-224]
 	at org.h2.server.web.WebThread.process(WebThread.java:190)
 	at org.h2.server.web.WebThread.run(WebThread.java:103)
 	at java.base/java.lang.Thread.run(Thread.java:1623)
+2023-11-19 15:59:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NUMBER CHARACTER VARYING(12)": "'7894665213797564' (16)"; SQL statement:
+insert into USERS (AFM,city,email,name,password,phone,street,zipcode,expirationDate,holderName,number,surname,type,id) values (?,?,?,?,?,?,?,?,?,?,?,?,'Customer',?) [22001-220]

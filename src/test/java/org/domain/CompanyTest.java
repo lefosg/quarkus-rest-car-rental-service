@@ -17,7 +17,7 @@ class CompanyTest {
 
     @BeforeEach
     public void setup() {
-        company = new Company("AVIS","avis@gmail.com", "052147857", "2104578965",
+        company = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
                 "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
     }
 
@@ -29,26 +29,24 @@ class CompanyTest {
 
     @Test
     public void equalsDifferentCompany() {
-        Company company2 = new Company("AVIS","avis@gmail.com", "052147857", "2104578965",
+        Company company2 = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
                 "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
         assertEquals(company, company2);
     }
 
-
     @Test
     public void notEqualsDifferentCompany() {
-        Company company2 = new Company("SPEED","speed@gmail.com", "134321796",
+        Company company2 = new Company("SPEED","speed@gmail.com", "ilovecookies",
                 "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
         assertNotEquals(company, company2);
     }
 
-
-
     @Test
     public void checkDifferentPolicies(){
-        Company company1 = new Company("AVIS","avis@gmail.com", "052147857", "2104578965",
+        Company company1 = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
                 "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
-        Company company2 = new Company("SPEED","speed@gmail.com", "134321796", "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
+        Company company2 = new Company("SPEED","speed@gmail.com", "ilovecookies",
+                "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
 
         LinkedHashMap<Integer, Float> mileage_scale1 = new LinkedHashMap<Integer, Float>();
         mileage_scale1.put(150, 0.10f);

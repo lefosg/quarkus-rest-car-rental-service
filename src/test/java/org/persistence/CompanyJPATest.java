@@ -28,7 +28,6 @@ class CompanyJPATest extends JPATest{
         Company company2 = new Company("SPEED","speed@gmail.com", "134321796",
                 "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","163498317","GR3687254378963625");
 
-
         Assertions.assertThrows(RollbackException.class, () -> {
             EntityTransaction tx = em.getTransaction();
             tx.begin();

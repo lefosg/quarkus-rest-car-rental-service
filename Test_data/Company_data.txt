@@ -1,3 +1,3 @@
-company1 AVIS avis@gmail.com 052147857 2104578965 ΠΑΤΗΣΙΩΝ 37 ΑΘΗΝΑ 12478 163498317 GR2514526358789654
-company2 SPEED speed@gmail.com 134321796 2644125415 ΛΕΥΚΩΣΙΑΣ 66 ΠΑΤΡΑ 34785 999641227 GR3687254378963625
-company3 HOLYDAYCARS holydaycrs@gmail.com 698574123 ΜΑΚΕΔΟΝΙΑΣ 87 ΘΕΣΣΑΛΟΝΙΚΗ 47895 GR12564789652365
+company1 AVIS avis@gmail.com password123 2104578965 ΠΑΤΗΣΙΩΝ 37 ΑΘΗΝΑ 12478 163498317 GR2514526358789654
+company2 SPEED speed@gmail.com ilovecookies 2644125415 ΛΕΥΚΩΣΙΑΣ 66 ΠΑΤΡΑ 34785 999641227 GR3687254378963625
+company3 HOLYDAYCARS holydaycrs@gmail.com topcars123 ΜΑΚΕΔΟΝΙΑΣ 87 ΘΕΣΣΑΛΟΝΙΚΗ 47895 GR12564789652365

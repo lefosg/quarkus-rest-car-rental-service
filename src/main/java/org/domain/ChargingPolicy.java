@@ -49,6 +49,7 @@ public class ChargingPolicy {
 
     // domain logic
 
+    //todo: check for every input its domain range (eg, customer_miles <= 0 etc)
     public float calculateMileageCost(float customer_miles) {
         float sum_cost = 0, sum_miles=0;
         int count=1;

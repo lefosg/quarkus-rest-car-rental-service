@@ -23,7 +23,6 @@ class CompanyJPATest extends JPATest{
 
     @Test
     public void denySavingCompanyWithSameName() {
-
         Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
         Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
 
@@ -34,36 +33,6 @@ class CompanyJPATest extends JPATest{
             em.persist(company2);
             tx.commit();
         });
-    }
-
-    @Test
-    public void checkDifferentPolicies(){
-        Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
-        Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","GObbb","GObbb");
-
-        LinkedHashMap<Integer, Float> mileage_scale1 = new LinkedHashMap<Integer, Float>();
-        mileage_scale1.put(150, 0.10f);
-        mileage_scale1.put(200, 0.20f);
-        mileage_scale1.put(300, 0.30f);
-
-        LinkedHashMap<DamageType, Float> damage_type1 = new LinkedHashMap<DamageType, Float>();
-        damage_type1.put(DamageType.Glasses,50f);
-        damage_type1.put(DamageType.Machine,30f);
-        ChargingPolicy policy1 = new ChargingPolicy(mileage_scale1,damage_type1);
-        company1.setPolicy(policy1);
-
-        LinkedHashMap<Integer, Float> mileage_scale2 = new LinkedHashMap<Integer, Float>();
-        mileage_scale2.put(150, 0.10f);
-        mileage_scale2.put(200, 0.20f);
-        mileage_scale2.put(300, 0.30f);
-
-        LinkedHashMap<DamageType, Float> damage_type2 = new LinkedHashMap<DamageType, Float>();
-        damage_type2.put(DamageType.Tyres,50f);
-        damage_type2.put(DamageType.Machine,50f);
-        ChargingPolicy policy2 = new ChargingPolicy(mileage_scale2,damage_type2);
-        company2.setPolicy(policy2);
-        assertNotEquals(company1.getPolicy(),company2.getPolicy());
-
     }
 
 

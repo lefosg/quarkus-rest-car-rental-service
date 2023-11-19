@@ -55,6 +55,8 @@ public abstract class User{
 
     }
 
+    //todo: add login() method, register() is the constructor
+
     public String getAFM() {
         return AFM;
     }

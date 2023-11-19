@@ -4,16 +4,13 @@ import jakarta.persistence.*;
 import org.util.Money;
 import org.util.VehicleState;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @DiscriminatorValue("Company")
 public class Company extends User{
 
-
+    //todo: return afm here
 
     @Column(name="IBAN", length=30)
     private String IBAN;
@@ -33,7 +30,7 @@ public class Company extends User{
     private Money damage_cost;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="company")
-    private Set<Vehicle> vehicles = new HashSet<Vehicle>();
+    private List<Vehicle> vehicles = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
     private ChargingPolicy policy;
@@ -90,12 +87,12 @@ public class Company extends User{
         this.policy = policy;
     }
 
-    public Set<Vehicle> getVehicles() {
+    public List<Vehicle> getVehicles() {
         return vehicles;
     }
 
-    public void setVehicles(Vehicle vehicle) {
-        vehicles.add(vehicle);
+    public void setVehicles(List<Vehicle> vehicles) {
+        this.vehicles = vehicles;
     }
 
     public void addVehicle(Vehicle v) {

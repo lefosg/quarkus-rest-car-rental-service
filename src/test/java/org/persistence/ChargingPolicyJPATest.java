@@ -30,8 +30,6 @@ public class ChargingPolicyJPATest extends JPATest {
         mileage_scale.put(300, 0.30f);
         assertEquals(mileage_scale, policy.getMileageScale());
 
-
-
     }
 
 }

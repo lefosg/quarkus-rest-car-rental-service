@@ -15,6 +15,6 @@ class VehicleJPATest extends JPATest {
     @Test
     public void listVehicle() {
         List<Vehicle> vehicles = em.createQuery("select v from Vehicle v").getResultList();
-        assertEquals(1, vehicles.size());
+        assertEquals(2, vehicles.size());
     }
 }

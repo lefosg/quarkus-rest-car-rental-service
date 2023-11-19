@@ -9,6 +9,7 @@ import org.util.VehicleType;
 @Entity
 @Table(name="VEHICLES")
 public class Vehicle {
+    //todo: make some columns unique
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,7 +44,8 @@ public class Vehicle {
     @JoinColumn(name="company_id")
     private Company company;
 
-    public Vehicle(){}
+    public Vehicle() { }
+
     public Vehicle(String model,int year,String manufacturer,String plate_number, VehicleType vehicleType, Money fixed_cost){
         this.model=model;
         this.year=year;
@@ -54,6 +56,11 @@ public class Vehicle {
         this.count=0;
         this.money=fixed_cost;
     }
+
+
+
+
+    // getters & setters
 
     public String getManufacturer() {
         return manufacturer;
@@ -107,11 +114,17 @@ public class Vehicle {
         return company;
     }
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
     public String getModel() {
         return model;
     }
 
+    public void setModel(String model) {
+        this.model = model;
+    }
 
     public int getYear() {
         return year;
@@ -121,11 +134,4 @@ public class Vehicle {
         this.year = year;
     }
 
-//    public void setCompany(Company company) {
-//        this.company = company;
-//    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
 }

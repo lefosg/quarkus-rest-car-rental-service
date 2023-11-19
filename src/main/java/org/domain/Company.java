@@ -32,16 +32,12 @@ public class Company extends User{
     })
     private Money damage_cost;
 
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy="company")
-//    private Set<Vehicle> vehicles = new HashSet<Vehicle>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="company")
+    private Set<Vehicle> vehicles = new HashSet<Vehicle>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
     private ChargingPolicy policy;
 
-
-//    public void setVehicles(Vehicle vehicle) {
-//        vehicles.add(vehicle);
-//    }
 
     public Company() { }
 
@@ -89,11 +85,21 @@ public class Company extends User{
     public ChargingPolicy getPolicy() {
         return policy;
     }
-//    public Set<Vehicle> getVehicles() {
-//        return vehicles;
-//    }
+
     public void setPolicy(ChargingPolicy policy) {
         this.policy = policy;
+    }
+
+    public Set<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(Vehicle vehicle) {
+        vehicles.add(vehicle);
+    }
+
+    public void addVehicle(Vehicle v) {
+        this.vehicles.add(v);
     }
 
     @Override

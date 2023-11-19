@@ -30,7 +30,7 @@ public class Initializer {
         //2. policies
         em.createNativeQuery("delete from CHARGING_POLICIES").executeUpdate();
         //2. vehicles
-        em.createNativeQuery("delete from VEHICLES").executeUpdate();
+        //em.createNativeQuery("delete from VEHICLES").executeUpdate();
 
 
         tx.commit();
@@ -54,7 +54,7 @@ public class Initializer {
         Company company1 = new Company("etaireia1","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","345","GObbb");
         Company company2 = new Company("etaireia2","123456789", "123456798", "GObbb","GObbb","GObbb","GObbb","456","GObbb");
 
-        Vehicle vehicle1=new Vehicle("test",155,"test","test");
+        Vehicle vehicle1=new Vehicle("test",155,"test","test", VehicleType.SUV, new Money(10));
 
         //2. policies
         LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
@@ -73,11 +73,14 @@ public class Initializer {
         company1.setPolicy(policy1);
         company2.setPolicy(policy2);
 
+        company1.addVehicle(vehicle1);
 
         //persist
 
         EntityTransaction tx = em.getTransaction();
         tx.begin();
+
+        em.persist(vehicle1);
 
         em.persist(policy1);
         em.persist(policy2);
@@ -87,7 +90,6 @@ public class Initializer {
 
         em.persist(company1);
         em.persist(company2);
-
 
 
         tx.commit();

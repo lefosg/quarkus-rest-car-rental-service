@@ -13,39 +13,46 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    protected Integer Id;
+    protected Integer id;
 
     @Column(name="model",length =30, nullable = false)
     private String model;
-    @Column(name="year", length=30, nullable = false)
+
+    @Column(name="year_of_model", length=30, nullable = false)
     private int year;
+
     @Column(name="manufacturer",length =30, nullable = false)
     private String manufacturer;
+
     @Column(name="plate_number",length =30, nullable = false)
     private String plate_number;
-//    @Column(name="vehicle_type",length =30, nullable = false)
-//    private VehicleType vehicleType;
-//    @Column(name="vehicle_state",length =30, nullable = false)
-//    private VehicleState vehicleState;
-//    @Column(name="count_damages",length =30, nullable = false)
-//    private int count;
-//    @Column(name="fixed_charge",length = 30, nullable = false)
-//    private int money;
 
-    //@ManyToOne(fetch=FetchType.LAZY)
-    //@JoinColumn(name="company_id")
-    //private Company company;
+    @Column(name="vehicle_type",length =30, nullable = false)
+    private VehicleType vehicleType;
+
+    @Column(name="vehicle_state",length =30, nullable = false)
+    private VehicleState vehicleState;
+
+    @Column(name="count_damages",length =30, nullable = false)
+    private int count;
+
+    @Column(name="fixed_charge",length = 30, nullable = false)
+    private Money money;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="company_id")
+    private Company company;
 
     public Vehicle(){}
-    public Vehicle(String model,int year,String manufacturer,String plate_number){
+    public Vehicle(String model,int year,String manufacturer,String plate_number, VehicleType vehicleType, Money fixed_cost){
         this.model=model;
         this.year=year;
         this.manufacturer=manufacturer;
         this.plate_number=plate_number;
-//        this.vehicleType=vehicleType;
-//        this.vehicleState=vehicleState;
-//        this.count=count;
-//        this.money=money;
+        this.vehicleType=vehicleType;
+        this.vehicleState=VehicleState.Available;
+        this.count=0;
+        this.money=fixed_cost;
     }
 
     public String getManufacturer() {
@@ -64,44 +71,41 @@ public class Vehicle {
         this.plate_number = plate_number;
     }
 
-//    public VehicleType getVehicleType() {
-//        return vehicleType;
-//    }
-//
-//    public void setVehicleType(VehicleType vehicleType) {
-//        this.vehicleType = vehicleType;
-//    }
-//
-//    public VehicleState getVehicleState() {
-//        return vehicleState;
-//    }
-//
-//    public void setVehicleState(VehicleState vehicleState) {
-//        this.vehicleState = vehicleState;
-//    }
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
 
-//    public int getCount() {
-//        return count;
-//    }
-//
-//    public void setCount(int count) {
-//        this.count = count;
-//    }
-//
-//    public int getMoney() {
-//        return money;
-//    }
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
 
-//    public void setMoney(int money) {
-//        this.money = money;
-//    }
+    public VehicleState getVehicleState() {
+        return vehicleState;
+    }
 
-//    public Company getCompany() {
-//        return company;
-//    }
+    public void setVehicleState(VehicleState vehicleState) {
+        this.vehicleState = vehicleState;
+    }
 
+    public int getCount() {
+        return count;
+    }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
 
+    public Money getMoney() {
+        return money;
+    }
+
+    public void setMoney(Money money) {
+        this.money = money;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
 
 
     public String getModel() {

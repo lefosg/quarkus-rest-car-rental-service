@@ -23,9 +23,9 @@ class CompanyJPATest extends JPATest{
 
     @Test
     public void denySavingCompanyWithSameAFM() {
-        Company company1 = new Company("AVIS","avis@gmail.com", "052147857", "2104578965",
+        Company company1 = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
                 "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
-        Company company2 = new Company("SPEED","speed@gmail.com", "134321796",
+        Company company2 = new Company("SPEED","speed@gmail.com", "ilovecookies",
                 "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","163498317","GR3687254378963625");
 
         Assertions.assertThrows(RollbackException.class, () -> {

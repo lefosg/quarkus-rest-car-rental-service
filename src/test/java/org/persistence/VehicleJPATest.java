@@ -1,6 +1,7 @@
 package org.persistence;
 
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.RollbackException;
 import org.domain.Vehicle;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +22,7 @@ class VehicleJPATest extends JPATest {
     @Test
     public void listVehicle() {
         List<Vehicle> vehicles = em.createQuery("select v from Vehicle v").getResultList();
-        assertEquals(2, vehicles.size());
+        assertEquals(10, vehicles.size());
     }
 
     @Test
@@ -46,5 +47,17 @@ class VehicleJPATest extends JPATest {
             em.persist(vehicle2);
             tx.commit();
         });
+    }
+
+    @Test
+    public void fetchVehicleByPlateNumber() {
+        Query query = em.createQuery("select v from Vehicle v where v.plateNumber=:plateNumber");  //plateNumber is unique
+        query.setParameter("plateNumber", "PIP-4556");  //PIP-4556 is the opel corsa
+        List<Vehicle> vehicles = query.getResultList();
+
+        assertEquals(1, vehicles.size());
+
+        String manufacturer = vehicles.get(0).getManufacturer();
+        assertEquals("OPEL", manufacturer);
     }
 }

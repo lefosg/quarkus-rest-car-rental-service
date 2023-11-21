@@ -27,10 +27,10 @@ public class Vehicle {
     @Column(name="miles",length =30, nullable = false)
     private int miles;
 
-    @Column(name="plate_number",length =30, nullable = false)
+    @Column(name="plate_number",length =30, nullable = false, unique = true)
     private String plateNumber;
 
-    @Column(name="vehicle_type",length =30, nullable = false, unique = true)
+    @Column(name="vehicle_type",length =30, nullable = false)
     private VehicleType vehicleType;
 
     @Column(name="vehicle_state",length =30, nullable = false)
@@ -49,15 +49,15 @@ public class Vehicle {
     public Vehicle() { }
 
     public Vehicle(String manufacturer, String model, int year, int miles, String plate_number, VehicleType vehicleType, Money fixed_cost){
-        this.model=model;
-        this.year=year;
-        this.manufacturer=manufacturer;
+        this.model = model;
+        this.year = year;
+        this.manufacturer = manufacturer;
         this.miles = miles;
-        this.plateNumber =plate_number;
-        this.vehicleType=vehicleType;
-        this.fixedCharge =fixed_cost;
-        this.vehicleState=VehicleState.Available;
-        this.countDamages =0;
+        this.plateNumber = plate_number;
+        this.vehicleType = vehicleType;
+        this.fixedCharge = fixed_cost;
+        this.vehicleState = VehicleState.Available;
+        this.countDamages = 0;
     }
 
     // domain logic

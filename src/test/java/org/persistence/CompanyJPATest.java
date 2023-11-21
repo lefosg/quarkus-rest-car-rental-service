@@ -1,15 +1,20 @@
 package org.persistence;
 
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.RollbackException;
 import org.domain.ChargingPolicy;
 import org.domain.Company;
+import org.domain.Vehicle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.util.DamageType;
+import org.util.Money;
+import org.util.VehicleType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -69,9 +74,8 @@ class CompanyJPATest extends JPATest{
         });
     }
 
-    // policy
     @Test
-    public void validatePolicySaved() {
+    public void fetchPolicyFromFirstCompany() {
         LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
         mileage_scale.put(100, 0.10f);
         mileage_scale.put(200, 0.20f);
@@ -89,6 +93,64 @@ class CompanyJPATest extends JPATest{
         assertEquals(testPolicy, firstStored);
     }
 
-    //vehicles
+    @Test
+    public void fetchVehiclesByCompanyName() {
+        //we currently have only one company named "SPEED", and column not unique
+        Query query = em.createQuery("select c.vehicles from Company c where c.name=:name");
+        query.setParameter("name", "SPEED");
+        List<Vehicle> vehicles = query.getResultList();
+        assertEquals(5, vehicles.size());
+    }
+
+    @Test
+    public void fetchVehiclesByCompanyAFM() {
+        Query query = em.createQuery("select c.vehicles from Company c where c.AFM=:afm");
+        query.setParameter("afm", "163498317");
+        List<Vehicle> vehicles = query.getResultList();
+        assertEquals(6, vehicles.size());
+    }
+
+    @Test
+    public void fetchVehiclesByCompanyEmail() {
+        Query query = em.createQuery("select c.vehicles from Company c where c.email=:email");
+        query.setParameter("email", "speed@gmail.com");
+        List<Vehicle> vehicles = query.getResultList();
+        assertEquals(5, vehicles.size());
+    }
+
+    @Test
+    public void fetchWithPolicyAndVehiclesByAFM() {
+        Query query = em.createQuery("select c from Company c where c.AFM=:afm");
+        query.setParameter("afm", "163498317");
+        List<Company> result = query.getResultList();
+
+        assertEquals(1, result.size());
+
+        List<Vehicle> vehicles = result.get(0).getVehicles();
+        assertEquals(6, vehicles.size());
+
+        ChargingPolicy policy = result.get(0).getPolicy();
+        assertNotNull(policy);
+    }
+
+    @Test
+    public void fetchWithPolicyAndVehiclesByEmail() {
+        Query query = em.createQuery("select c from Company c where c.email=:email");
+        query.setParameter("email", "speed@gmail.com");
+        List<Company> result = query.getResultList();
+
+        assertEquals(1, result.size());
+
+        List<Vehicle> vehicles = result.get(0).getVehicles();
+        assertEquals(5, vehicles.size());
+
+        ChargingPolicy policy = result.get(0).getPolicy();
+        assertNotNull(policy);
+    }
+
+
+
+
+
 
 }

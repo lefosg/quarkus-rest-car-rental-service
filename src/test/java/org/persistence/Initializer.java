@@ -66,6 +66,8 @@ public class Initializer {
         Vehicle vehicle7 = new Vehicle("OPEL", "CORSA", 2018, 64000, "PIP-4556", VehicleType.Hatchback, new Money(60));
         Vehicle vehicle8 = new Vehicle("AUDI", "A7", 2021, 100000, "MMA-8745", VehicleType.Sedan, new Money(70));
         Vehicle vehicle9 = new Vehicle("NISSAN", "QASHQAI AUTOMATIC", 2023, 50000, "ZIK-6834", VehicleType.SUV, new Money(100));
+        Vehicle vehicle10 = new Vehicle("TOYOTA", "C-HR", 2022, 49000, "PAP-3333", VehicleType.SUV, new Money(80));
+        Vehicle vehicle11 = new Vehicle("VOLKSWAGEN", "POLO", 2018, 73000, "NIK-9012", VehicleType.Hatchback, new Money(50));
 
 
         //2. policies
@@ -84,27 +86,44 @@ public class Initializer {
         mileage_scale.put(150, 0.15f);
         mileage_scale.put(250, 0.25f);
         mileage_scale.put(350, 0.35f);
+
         ChargingPolicy policy2 = new ChargingPolicy(mileage_scale,damage_type);
 
         company1.setPolicy(policy1);
         company2.setPolicy(policy2);
 
-        // add vehicles in companies
+        // add vehicles in companies & add corresponding company to each vehicle
 
+        //company 1: vehicles 1, 3, 5, 8, 10
         company1.addVehicle(vehicle1);
         vehicle1.setCompany(company1);
-        company1.addVehicle(vehicle2);
-        vehicle2.setCompany(company1);
+        company1.addVehicle(vehicle3);
+        vehicle3.setCompany(company1);
+        company1.addVehicle(vehicle5);
+        vehicle5.setCompany(company1);
+        company1.addVehicle(vehicle8);
+        vehicle8.setCompany(company1);
+        company1.addVehicle(vehicle10);
+        vehicle10.setCompany(company1);
+        company1.addVehicle(vehicle11);
+        vehicle11.setCompany(company1);
+
+        //company 2: vehicles 2, 4, 6, 7, 9
+        company2.addVehicle(vehicle2);
+        vehicle2.setCompany(company2);
+        company2.addVehicle(vehicle4);
+        vehicle4.setCompany(company2);
+        company2.addVehicle(vehicle6);
+        vehicle6.setCompany(company2);
+        company2.addVehicle(vehicle7);
+        vehicle7.setCompany(company2);
+        company2.addVehicle(vehicle9);
+        vehicle9.setCompany(company2);
 
         //persist
 
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-
-        //em.persist(vehicle1);
-
-        //em.persist(policy1);
-        //em.persist(policy2);
 
         em.persist(customer1);
         em.persist(customer2);

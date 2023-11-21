@@ -44,7 +44,7 @@ public class Vehicle {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="company_id")
-    private Company company;
+    public Company company;
 
     public Vehicle() { }
 

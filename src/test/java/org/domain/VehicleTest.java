@@ -3,6 +3,7 @@ package org.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.Money;
+import org.util.VehicleState;
 import org.util.VehicleType;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,76 +39,106 @@ class VehicleTest {
     }
 
     @Test
-    void testGetManufacturer() {
+    public void testGetManufacturer() {
+        assertEquals("TOYOTA", vehicle.getManufacturer());
     }
 
     @Test
-    void testSetManufacturer() {
+    public void testSetManufacturer() {
+        vehicle.setManufacturer("TOYOTA");
+        assertEquals("TOYOTA", vehicle.getManufacturer());
     }
 
     @Test
-    void testGetPlateNumber() {
+    public void testGetPlateNumber() {
+        assertEquals("YMB-6325", vehicle.getPlateNumber());
     }
 
     @Test
-    void testSetPlateNumber() {
+    public void testSetPlateNumber() {
+        vehicle.setPlateNumber("YMB-6325");
+        assertEquals("YMB-6325", vehicle.getPlateNumber());
     }
 
     @Test
-    void testGetVehicleType() {
+   public void testGetVehicleType() {
+        assertEquals( VehicleType.Hatchback, vehicle.getVehicleType());
     }
 
     @Test
-    void testSetVehicleType() {
+    public void testSetVehicleType() {
+        vehicle.setVehicleType(VehicleType.Hatchback);
+        assertEquals(VehicleType.Hatchback, vehicle.getVehicleType());
     }
 
     @Test
-    void testGetVehicleState() {
+    public void testGetVehicleState() {
+        assertEquals(VehicleState.Available, vehicle.getVehicleState());
     }
 
     @Test
-    void testSetVehicleState() {
+    public void testSetVehicleState() {
+        vehicle.setVehicleState(VehicleState.Available);
+        assertEquals(VehicleState.Available, vehicle.getVehicleState());
+    }
+
+
+
+//Oute auto trexei!!!
+    ///// @Test
+    /////public void testGetCount() {
+    ///// assertEquals("0",vehicle.getCountDamages());
+    ///}
+
+
+   @Test
+    public void testSetCount() {
+    vehicle.setCountDamages(0);
+    assertEquals(0,vehicle.getCountDamages() );
     }
 
     @Test
-    void testGetCount() {
+        public void testGetFixedCharge() {
+        assertEquals(new Money(30), vehicle.getFixedCharge());
+    }
+
+        @Test
+        public void testSetFixedCharge() {
+        vehicle.setFixedCharge(new Money(30));
+        assertEquals(new Money(30), vehicle.getFixedCharge());
+    }
+//den jerw
+  ////  @Test
+ //   public void testGetCompany() {
+ //       assertEquals(//den jerw///, vehicle.getCompany());
+//    }
+
+
+//den jerw
+ //   @Test
+  //  public void testSetCompany() {
+  //  }
+
+    @Test
+    public void testGetModel() {
+        assertEquals("YARIS", vehicle.getModel());
     }
 
     @Test
-    void testSetCount() {
+    public void testSetModel() {
+        vehicle.setModel("YARIS");
+        assertEquals("YARIS", vehicle.getModel());
     }
 
-    @Test
-    void testGetFixedCharge() {
-    }
+ // @Test
+  //public void testGetYear() {
+ //   }
 
-    @Test
-    void testSetFixedCharge() {
-    }
-
-    @Test
-    void testGetCompany() {
-    }
-
-    @Test
-    void testSetCompany() {
-    }
-
-    @Test
-    void testGetModel() {
-    }
-
-    @Test
-    void testSetModel() {
-    }
-
-    @Test
-    void testGetYear() {
-    }
-
-    @Test
-    void testSetYear() {
-    }
+//    @Test
+  //  public void testSetYear() {
+  //  vehicle.setYear("2015");
+ //   assertEquals("2015", vehicle.getYear());
+ //   }
 
     @Test
     void testGetMiles() {

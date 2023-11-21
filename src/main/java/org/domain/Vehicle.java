@@ -9,12 +9,14 @@ import org.util.VehicleType;
 @Entity
 @Table(name="VEHICLES")
 public class Vehicle {
-    //todo: make some columns unique
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     protected Integer id;
+
+    @Column(name="manufacturer",length =30, nullable = false)
+    private String manufacturer;
 
     @Column(name="model",length =30, nullable = false)
     private String model;
@@ -22,23 +24,23 @@ public class Vehicle {
     @Column(name="year_of_model", length=30, nullable = false)
     private int year;
 
-    @Column(name="manufacturer",length =30, nullable = false)
-    private String manufacturer;
+    @Column(name="miles",length =30, nullable = false)
+    private int miles;
 
     @Column(name="plate_number",length =30, nullable = false)
-    private String plate_number;
+    private String plateNumber;
 
-    @Column(name="vehicle_type",length =30, nullable = false)
+    @Column(name="vehicle_type",length =30, nullable = false, unique = true)
     private VehicleType vehicleType;
 
     @Column(name="vehicle_state",length =30, nullable = false)
     private VehicleState vehicleState;
 
     @Column(name="count_damages",length =30, nullable = false)
-    private int count;
+    private int countDamages;
 
     @Column(name="fixed_charge",length = 30, nullable = false)
-    private Money money;
+    private Money fixedCharge;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="company_id")
@@ -46,16 +48,19 @@ public class Vehicle {
 
     public Vehicle() { }
 
-    public Vehicle(String model,int year,String manufacturer,String plate_number, VehicleType vehicleType, Money fixed_cost){
+    public Vehicle(String manufacturer, String model, int year, int miles, String plate_number, VehicleType vehicleType, Money fixed_cost){
         this.model=model;
         this.year=year;
         this.manufacturer=manufacturer;
-        this.plate_number=plate_number;
+        this.miles = miles;
+        this.plateNumber =plate_number;
         this.vehicleType=vehicleType;
+        this.fixedCharge =fixed_cost;
         this.vehicleState=VehicleState.Available;
-        this.count=0;
-        this.money=fixed_cost;
+        this.countDamages =0;
     }
+
+    // domain logic
 
 
 
@@ -70,12 +75,12 @@ public class Vehicle {
         this.manufacturer = manufacturer;
     }
 
-    public String getPlate_number() {
-        return plate_number;
+    public String getPlateNumber() {
+        return plateNumber;
     }
 
-    public void setPlate_number(String plate_number) {
-        this.plate_number = plate_number;
+    public void setPlateNumber(String plate_number) {
+        this.plateNumber = plate_number;
     }
 
     public VehicleType getVehicleType() {
@@ -95,19 +100,19 @@ public class Vehicle {
     }
 
     public int getCount() {
-        return count;
+        return countDamages;
     }
 
     public void setCount(int count) {
-        this.count = count;
+        this.countDamages = count;
     }
 
-    public Money getMoney() {
-        return money;
+    public Money getFixedCharge() {
+        return fixedCharge;
     }
 
-    public void setMoney(Money money) {
-        this.money = money;
+    public void setFixedCharge(Money money) {
+        this.fixedCharge = money;
     }
 
     public Company getCompany() {
@@ -134,4 +139,62 @@ public class Vehicle {
         this.year = year;
     }
 
+    public int getMiles() {
+        return miles;
+    }
+
+    public void setMiles(int miles) {
+        this.miles = miles;
+    }
+
+    public int getCountDamages() {
+        return countDamages;
+    }
+
+    public void setCountDamages(int count_damages) {
+        this.countDamages = count_damages;
+    }
+
+    //todo: define vehicle equality??
+    /**
+     * Checks vehicle equality based on year, miles, manufacturer,
+     * model, plate number, and vehicle type.
+     * It does not consider if they belong to the same company or not,
+     * their fixed cost, miles, availability, and count of damages
+     * @param o - a vehicle to compare
+     * @returns true if they are the same, false if not
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vehicle vehicle)) return false;
+        return  getYear() == vehicle.getYear()
+                && Objects.equals(getManufacturer(), vehicle.getManufacturer())
+                && Objects.equals(getModel(), vehicle.getModel())
+                && Objects.equals(getPlateNumber(), vehicle.getPlateNumber())
+                && getVehicleType() == vehicle.getVehicleType();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getManufacturer(), getModel(), getYear(), getMiles(), getPlateNumber(),
+                getVehicleType(), getVehicleState(), getCount(), getFixedCharge(), getCompany());
+    }
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "id=" + id +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", model='" + model + '\'' +
+                ", year=" + year +
+                ", miles=" + miles +
+                ", plate_number='" + plateNumber + '\'' +
+                ", vehicleType=" + vehicleType +
+                ", vehicleState=" + vehicleState +
+                ", count=" + countDamages +
+                ", money=" + fixedCharge +
+                ", company=" + company +
+                '}';
+    }
 }

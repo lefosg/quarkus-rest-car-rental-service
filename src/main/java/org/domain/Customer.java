@@ -1,8 +1,11 @@
 package org.domain;
 
 import jakarta.persistence.*;
+import org.util.Money;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -32,6 +35,37 @@ public class Customer extends User{
         this.expirationDate = expirationDate;
         this.holderName = holderName;
     }
+
+    // domain logic
+
+    /**
+     * Returns a list of vehicles available for renting the dates that the user gave as input
+     * @param startDate
+     * @param endDate
+     * @return a list of available vehicles
+     */
+    public List<Vehicle> viewAvailableCars(LocalDate startDate, LocalDate endDate) {
+
+
+        return new ArrayList<>();
+    }
+
+
+    /**
+     * Increases the <i>Company.income</i> (and depending on the case, <i>Company.damage_cost</i>) by <i>amount</i>.
+     * @param amount
+     */
+    public void pay(Money amount) {
+
+    }
+
+
+    @Override
+    public void dashboard() {
+
+    }
+
+    // getters & setters
 
     public void setSurname(String surname) {
         this.surname = surname;
@@ -76,7 +110,6 @@ public class Customer extends User{
                 '}';
     }
 
-    //todo: check all variables -> dimitris
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

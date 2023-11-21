@@ -57,8 +57,16 @@ public class Initializer {
         Company company1 = new Company("AVIS","avis@gmail.com", "password123", "2104578965","ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
         Company company2 = new Company("SPEED","speed@gmail.com", "ilovecookies", "2644125415","ΛΕΥΚΩΣΙΑΣ 66","ΠΑΤΡΑ","34785","999641227","GR3687254378963625");
 
-        Vehicle vehicle1 = new Vehicle("test",155,"test","test", VehicleType.SUV, new Money(10));
-        Vehicle vehicle2 = new Vehicle("test",155,"test","test", VehicleType.SUV, new Money(10));
+        Vehicle vehicle1 = new Vehicle("TOYOTA", "YARIS", 2015, 100000, "YMB-6325", VehicleType.Hatchback, new Money(30));
+        Vehicle vehicle2 = new Vehicle("VOLKSWAGEN", "T-ROC", 2016, 80000, "PMT-3013", VehicleType.SUV, new Money(50));
+        Vehicle vehicle3 = new Vehicle("RENAULT", "MEGANE", 2018, 50000, "KIK-2160", VehicleType.Sedan, new Money(40));
+        Vehicle vehicle4 = new Vehicle("MAZDA", "MX-5", 2016, 30000, "NAT-1234", VehicleType.Cabrio, new Money(50));
+        Vehicle vehicle5 = new Vehicle("MINI", "ONE D", 2016, 240000, "ZZE-7852", VehicleType.Mini, new Money(40));
+        Vehicle vehicle6 = new Vehicle("FIAT", "500 S", 2014, 92000, "HIK-9459", VehicleType.Hatchback, new Money(30));
+        Vehicle vehicle7 = new Vehicle("OPEL", "CORSA", 2018, 64000, "PIP-4556", VehicleType.Hatchback, new Money(60));
+        Vehicle vehicle8 = new Vehicle("AUDI", "A7", 2021, 100000, "MMA-8745", VehicleType.Sedan, new Money(70));
+        Vehicle vehicle9 = new Vehicle("NISSAN", "QASHQAI AUTOMATIC", 2023, 50000, "ZIK-6834", VehicleType.SUV, new Money(100));
+
 
         //2. policies
         LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
@@ -78,11 +86,10 @@ public class Initializer {
         mileage_scale.put(350, 0.35f);
         ChargingPolicy policy2 = new ChargingPolicy(mileage_scale,damage_type);
 
-
-
-
         company1.setPolicy(policy1);
         company2.setPolicy(policy2);
+
+        // add vehicles in companies
 
         company1.addVehicle(vehicle1);
         vehicle1.setCompany(company1);
@@ -94,10 +101,10 @@ public class Initializer {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        em.persist(vehicle1);
+        //em.persist(vehicle1);
 
-        em.persist(policy1);
-        em.persist(policy2);
+        //em.persist(policy1);
+        //em.persist(policy2);
 
         em.persist(customer1);
         em.persist(customer2);

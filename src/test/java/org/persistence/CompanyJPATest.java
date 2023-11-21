@@ -69,5 +69,26 @@ class CompanyJPATest extends JPATest{
         });
     }
 
+    // policy
+    @Test
+    public void validatePolicySaved() {
+        LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
+        mileage_scale.put(100, 0.10f);
+        mileage_scale.put(200, 0.20f);
+        mileage_scale.put(300, 0.30f);
+
+        LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
+        damage_type.put(DamageType.Glasses,50f);
+        damage_type.put(DamageType.Machine,30f);
+
+        ChargingPolicy testPolicy = new ChargingPolicy(mileage_scale,damage_type);
+
+        //query c.policy
+        ChargingPolicy firstStored = (ChargingPolicy) em.createQuery("select c.policy from Company c").getResultList().get(0);
+
+        assertEquals(testPolicy, firstStored);
+    }
+
+    //vehicles
 
 }

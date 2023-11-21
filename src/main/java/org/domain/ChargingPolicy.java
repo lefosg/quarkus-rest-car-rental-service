@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.util.DamageType;
+import org.util.VehicleType;
 
 import java.util.*;
 
@@ -26,11 +27,6 @@ public class ChargingPolicy {
 
 
     //todo: do sth with damage idk
-    //@ElementCollection
-    //private List<VehicleType> car_type;
-
-    //@ElementCollection
-    //private List<Integer> damage_cost_per_type;
     @ElementCollection(fetch = FetchType.EAGER)  // map is small, make it eager
     @CollectionTable(name = "policy_damage_cost", joinColumns = @JoinColumn(name = "policy_id"))
     @JoinColumn(name = "id")
@@ -40,8 +36,6 @@ public class ChargingPolicy {
 
     public ChargingPolicy() { }
 
-
-
     public ChargingPolicy(LinkedHashMap<Integer, Float> mileage_scale, LinkedHashMap<DamageType, Float> damage_type) {
         this.mileageScale = mileage_scale;
         this.damageType=damage_type;
@@ -49,7 +43,7 @@ public class ChargingPolicy {
 
     // domain logic
 
-    //todo: check for every input its domain range (eg, customer_miles <= 0 etc)
+    //todo: check it works & check for every input its domain range (eg, customer_miles <= 0 etc)
     public float calculateMileageCost(float customer_miles) {
         float sum_cost = 0, sum_miles=0;
         int count=1;
@@ -75,6 +69,10 @@ public class ChargingPolicy {
         return sum_cost;
     }
 
+    //fixme calculateDamageCost
+    public float calculateDamageCost(VehicleType vehicleType, DamageType damageType) {
+        return 0.0f;
+    }
 
 
     // getters & setters
@@ -93,14 +91,6 @@ public class ChargingPolicy {
         this.mileageScale = mileage_scale;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this==o) return  true;
-        if (!(o instanceof ChargingPolicy policy)) return false;
-        return Objects.equals(this.getMileageScale(), policy.getMileageScale()) &&
-                Objects.equals(this.getDamageType(), policy.getDamageType());
-    }
-
     public Long getId() {
         return id;
     }
@@ -109,4 +99,24 @@ public class ChargingPolicy {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this==o) return  true;
+        if (!(o instanceof ChargingPolicy policy)) return false;
+        return Objects.equals(this.getMileageScale(), policy.getMileageScale()) &&
+                Objects.equals(this.getDamageType(), policy.getDamageType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMileageScale(), getDamageType());
+    }
+
+    @Override
+    public String toString() {
+        return "ChargingPolicy{" +
+                "mileageScale=" + mileageScale +
+                ", damageType=" + damageType +
+                '}';
+    }
 }

@@ -1,16 +1,18 @@
 package org.domain;
 
 import jakarta.persistence.*;
+import org.util.DamageType;
 import org.util.Money;
 import org.util.VehicleState;
+import org.util.VehicleType;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Entity
 @DiscriminatorValue("Company")
 public class Company extends User{
-
-    //todo: return afm here
 
     @Column(name="IBAN", length=30)
     private String IBAN;
@@ -54,6 +56,62 @@ public class Company extends User{
         damage_cost = new Money(0);
         this.policy= policy;
     }
+
+    // domain logic
+
+
+    /**
+     * Given the miles a Customer has done with a rented vehicle, it calculates the
+     * mileage cost the Customer has to pay.
+     * @param miles
+     * @return the mileage cost
+     */
+    public Money calculateMileageCost(int miles) {
+        float mileage_cost = policy.calculateMileageCost(miles);
+        return new Money(mileage_cost);
+    }
+
+    /**
+     * If a Customer has cause damage on a rented vehicle, it calculates the cost to
+     * charge the Customer for the damage.
+     * @param vehicleType
+     * @param damageType
+     * @return the damage cost
+     */
+    public Money calculateDamageCost(VehicleType vehicleType, DamageType damageType) {
+        float damage_cost = policy.calculateDamageCost(vehicleType, damageType);
+        return new Money(damage_cost);
+    }
+
+
+
+    //todo: test calculateFixedCharge
+    /**
+     * Calculates the fixed cost for a rented vehicle
+     * @param startDate
+     * @param endDate
+     * @param vehicleID
+     * @return the fixed cost
+     */
+    public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, int vehicleID) {
+        //1. calculate #days this vehicle was rented
+        int days = (int) startDate.until(endDate, ChronoUnit.DAYS);
+
+        //2. get fixed cost for specific vehicle
+        double vehicle_fixed_cost = vehicles.get(vehicleID).getFixedCharge().getAmount();
+
+        //3. do the math
+        double cost = vehicle_fixed_cost * days;
+
+        return new Money(cost);
+    }
+
+    @Override
+    public void dashboard() {
+
+    }
+
+    // getters & setters
 
     public String getIBAN() {
         return IBAN;
@@ -110,7 +168,6 @@ public class Company extends User{
                 '}';
     }
 
-    //todo: check all variables -> DIMITRIS
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

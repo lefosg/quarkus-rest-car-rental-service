@@ -54,10 +54,32 @@ public abstract class User{
         this.street=street;
         this.city=city;
         this.zipcode=zipcode;
+    }
+
+    // domain logic
+
+    //fixme User.login, User.dashboard
+
+    /**
+     * Authorizes the user in the service
+     * @param username
+     * @param password
+     */
+    public void login(String username, String password) {
 
     }
 
-    //todo: add login() method, register() is the constructor
+    /**
+     * Displays profile info about the user
+     * If User == Company:
+     *      fetch company data, vehicles, rents
+     * If User == Customer:
+     *      fetch rents, maybe total amount spent as well?
+     */
+    public abstract void dashboard();
+
+
+    // getters & setters
 
     public String getAFM() {
         return AFM;

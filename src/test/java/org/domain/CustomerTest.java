@@ -15,8 +15,8 @@ class CustomerTest {
     public void setup() {
         SystemDateStub.setStub(date);
         LocalDate date1 = LocalDate.of(2027, 11, 26);
-        customer =new Customer("ΙΩΑΝΝΗΣ", "evangellou@gmail.com","johnjohn","6941603677",
-                "166008282","ΛΕΥΚΑΔΟΣ 22","ΑΘΗΝΑ","35896", "ΕΥΑΓΓΕΛΟΥ","7894665213797564",date1,"ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ");
+        customer = new Customer("ΙΩΑΝΝΗΣ", "evangellou@gmail.com", "johnjohn", "6941603677",
+                "166008282", "ΛΕΥΚΑΔΟΣ 22", "ΑΘΗΝΑ", "35896", "ΕΥΑΓΓΕΛΟΥ", "7894665213797564", date1, "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ");
 
     }
 
@@ -28,16 +28,16 @@ class CustomerTest {
     @Test
     public void equalsCustomerDifferentReference() {
         LocalDate date = LocalDate.of(2027, 11, 26);
-        Customer customer2 =new Customer("ΙΩΑΝΝΗΣ", "evangellou@gmail.com","johnjohn","6941603677",
-                "166008282","ΛΕΥΚΑΔΟΣ 22","ΑΘΗΝΑ","35896", "ΕΥΑΓΓΕΛΟΥ","7894665213797564",date,"ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ");
+        Customer customer2 = new Customer("ΙΩΑΝΝΗΣ", "evangellou@gmail.com", "johnjohn", "6941603677",
+                "166008282", "ΛΕΥΚΑΔΟΣ 22", "ΑΘΗΝΑ", "35896", "ΕΥΑΓΓΕΛΟΥ", "7894665213797564", date, "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ");
         assertEquals(customer, customer2);
     }
 
     @Test
     public void notEqualsCustomerDifferentReference() {
         LocalDate date = LocalDate.of(2026, 8, 5);
-        Customer customer2 =new Customer("ΝΙΚΟΣ", "evangellou@gmail.com", "olympiakos","6924567813",
-                "166008282", "ΜΕΘΟΝΗΣ 6","ΠΕΙΡΑΙΑΣ","18545", "ΠΑΠΑΔΗΜΗΤΡΙΟΥ","1645923557481658",date,"ΝΙΚΟΣ ΠΑΠΑΔΗΜΗΤΡΙΟΥ");
+        Customer customer2 = new Customer("ΝΙΚΟΣ", "evangellou@gmail.com", "olympiakos", "6924567813",
+                "166008282", "ΜΕΘΟΝΗΣ 6", "ΠΕΙΡΑΙΑΣ", "18545", "ΠΑΠΑΔΗΜΗΤΡΙΟΥ", "1645923557481658", date, "ΝΙΚΟΣ ΠΑΠΑΔΗΜΗΤΡΙΟΥ");
         assertNotEquals(customer, customer2);
     }
 
@@ -62,31 +62,33 @@ class CustomerTest {
 
 //todo: vaso
 
-//    @Test
-//    public void testSetHolderName() {
-//        customer.setHolderName("GObbb");
-//        assertEquals("GObbb", customer.getHolderName());
+    @Test
+    public void testSetHolderName() {
+        customer.setHolderName("ΝΙΚΟΣ ΠΑΠΑΔΗΜΗΤΡΙΟΥ");
+        assertEquals("ΝΙΚΟΣ ΠΑΠΑΔΗΜΗΤΡΙΟΥ", customer.getHolderName());
+    }
+
+    @Test
+    public void testGetSurname() {
+        assertEquals("ΕΥΑΓΓΕΛΟΥ", customer.getSurname());
+    }
+
+
+    @Test
+    public void testGetNumber() {
+        assertEquals("7894665213797564", customer.getNumber());
+
+    }
+///Αυτό το τέστ δεν τρέχει!!!
+    ///  @Test
+    ////       public void testGetExpirationDate() {
+    ///       assertEquals(date, customer.getExpirationDate());
+    ///   }
 //
-//    }
-//
-//    @Test
-//    public void testGetSurname() {
-//        assertEquals("GObbb", customer.getSurname());
-//    }
-//
-//    @Test
-//    public void testGetNumber() {
-//        assertEquals("GObbb", customer.getNumber());
-//
-//    }
-//
-//    @Test
-//    public void testGetExpirationDate() {
-//        assertEquals( date, customer.getExpirationDate());
-//    }
-//
-//    @Test
-//    public void testGetHolderName() {
-//        assertEquals("GObbb", customer.getHolderName());
-//    }
+
+
+    @Test
+    public void testGetHolderName() {
+        assertEquals("ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ", customer.getHolderName());
+    }
 }

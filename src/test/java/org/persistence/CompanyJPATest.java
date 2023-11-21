@@ -14,7 +14,6 @@ import org.util.VehicleType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -149,8 +148,84 @@ class CompanyJPATest extends JPATest{
     }
 
 
+    @Test
+    public void persistCompanyWithVehicle() {
+        Vehicle newVehicle = new Vehicle("PEUGEOT", "208", 2013, 141000,
+                "NAN-4067", VehicleType.Hatchback, new Money(40));
 
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
 
+        Query query = em.createQuery("select c from Company c where c.AFM=:afm");
+        query.setParameter("afm", "163498317");  // AVIS
+        List<Company> result = query.getResultList();
+
+        Company company = result.get(0);
+        company.addVehicle(newVehicle);
+
+        tx.commit();
+
+        assertNotNull(newVehicle.getId());
+
+        em.close();
+
+        em = JPAUtil.getCurrentEntityManager();
+
+        Vehicle savedVehicle = em.find(Vehicle.class, newVehicle.getId());
+        assertNotNull(savedVehicle);
+        assertEquals("PEUGEOT", savedVehicle.getManufacturer());
+
+    }
+
+    @Test
+    public void persistCompanyWithVehicleAndThenDeleteVehicle() {
+        Vehicle newVehicle = new Vehicle("PEUGEOT", "208", 2013, 141000,
+                "NAN-4067", VehicleType.Hatchback, new Money(40));
+
+        //persist
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+
+        Query query = em.createQuery("select c from Company c where c.AFM=:afm");
+        query.setParameter("afm", "163498317");  // AVIS
+        List<Company> result = query.getResultList();
+
+        Company company = result.get(0);
+
+        //before adding the vehicle, assert it has as many vehicles as it should
+        assertEquals(6, company.getVehicles().size());
+
+        company.addVehicle(newVehicle);
+
+        tx.commit();
+
+        assertNotNull(newVehicle.getId());
+
+        em.close();
+
+        //check persistence
+        em = JPAUtil.getCurrentEntityManager();
+        Vehicle savedVehicle = em.find(Vehicle.class, newVehicle.getId());
+
+        assertNotNull(savedVehicle);
+        assertEquals(7, company.getVehicles().size());
+
+        //delete
+        tx = em.getTransaction();
+        tx.begin();
+
+        company.removeVehicle(savedVehicle);
+
+        tx.commit();
+
+        em.close();
+
+        //check if vehicle still in list (shouldn't be)
+        em = JPAUtil.getCurrentEntityManager();
+
+        assertEquals(6, company.getVehicles().size());
+
+    }
 
 
 }

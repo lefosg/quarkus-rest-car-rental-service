@@ -155,6 +155,14 @@ public class Vehicle {
         this.countDamages = count_damages;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     //todo: define vehicle equality??
     /**
      * Checks vehicle equality based on year, miles, manufacturer,

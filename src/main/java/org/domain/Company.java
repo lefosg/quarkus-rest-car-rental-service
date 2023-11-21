@@ -106,10 +106,24 @@ public class Company extends User{
         return new Money(cost);
     }
 
+
     @Override
     public void dashboard() {
 
     }
+
+
+    public void addVehicle(Vehicle v) {
+        this.vehicles.add(v);
+    }
+
+    public void removeVehicle(Vehicle v) {
+        this.vehicles.remove(v);
+    }
+    public void removeVehicle(int index) {
+        this.vehicles.remove(index);
+    }
+
 
     // getters & setters
 
@@ -151,10 +165,6 @@ public class Company extends User{
 
     public void setVehicles(List<Vehicle> vehicles) {
         this.vehicles = vehicles;
-    }
-
-    public void addVehicle(Vehicle v) {
-        this.vehicles.add(v);
     }
 
     @Override

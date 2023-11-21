@@ -1,5 +1,6 @@
 package org.domain;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.Currency;
@@ -20,7 +21,6 @@ class CompanyTest {
         company = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
                 "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
     }
-
 
     @Test
     public void equalsSameCompany() {

@@ -50,6 +50,16 @@ public class Customer extends User{
         return new ArrayList<>();
     }
 
+    /**
+     * Creates a renting for a specific set of dates, and a specific vehicle.
+     * @param startDate
+     * @param endDate
+     * @param vehicle
+     */
+    public void rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle) {
+
+    }
+
 
     /**
      * Increases the <i>Company.income</i> (and depending on the case, <i>Company.damage_cost</i>) by <i>amount</i>.

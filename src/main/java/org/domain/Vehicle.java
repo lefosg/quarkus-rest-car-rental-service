@@ -99,11 +99,11 @@ public class Vehicle {
         this.vehicleState = vehicleState;
     }
 
-    public int getCount() {
+    public int getDamageCount() {
         return countDamages;
     }
 
-    public void setCount(int count) {
+    public void setDamageCount(int count) {
         this.countDamages = count;
     }
 
@@ -178,7 +178,7 @@ public class Vehicle {
     @Override
     public int hashCode() {
         return Objects.hash(getManufacturer(), getModel(), getYear(), getMiles(), getPlateNumber(),
-                getVehicleType(), getVehicleState(), getCount(), getFixedCharge(), getCompany());
+                getVehicleType(), getVehicleState(), getDamageCount(), getFixedCharge(), getCompany());
     }
 
     @Override

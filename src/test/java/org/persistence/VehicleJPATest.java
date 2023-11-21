@@ -22,7 +22,7 @@ class VehicleJPATest extends JPATest {
     @Test
     public void listVehicle() {
         List<Vehicle> vehicles = em.createQuery("select v from Vehicle v").getResultList();
-        assertEquals(10, vehicles.size());
+        assertEquals(11, vehicles.size());
     }
 
     @Test
@@ -59,5 +59,14 @@ class VehicleJPATest extends JPATest {
 
         String manufacturer = vehicles.get(0).getManufacturer();
         assertEquals("OPEL", manufacturer);
+    }
+
+    @Test
+    public void fetchVehiclesByManufacturer() {
+        Query query = em.createQuery("select v from Vehicle v where v.manufacturer=:manufacturer");  //plateNumber is unique
+        query.setParameter("manufacturer", "VOLKSWAGEN");  //PIP-4556 is the opel corsa
+        List<Vehicle> vehicles = query.getResultList();
+
+        assertEquals(2, vehicles.size());
     }
 }

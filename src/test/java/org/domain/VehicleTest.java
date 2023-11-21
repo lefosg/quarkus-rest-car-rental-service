@@ -140,19 +140,19 @@ class VehicleTest {
  //   assertEquals("2015", vehicle.getYear());
  //   }
 
-    @Test
-    void testGetMiles() {
+  //  @Test
+ //   void testGetMiles() {
     }
 
-    @Test
-    void testSetMiles() {
-    }
+ //   @Test
+ //   void testSetMiles() {
+ //   }
 
-    @Test
-    void testGetCountDamages() {
-    }
+ //   @Test
+ //   void testGetCountDamages() {
+  //  }
 
-    @Test
-    void testSetCountDamages() {
-    }
+   // @Test
+ //   void testSetCountDamages() {
+//    }
 }

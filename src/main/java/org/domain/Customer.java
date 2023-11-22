@@ -74,13 +74,17 @@ public class Customer extends User{
                         Thread.sleep(i);
                         System.out.print("Day: "+i);
                     }
-                } catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     // Handle the interruption if needed
-                }
+                    }
                 vehicle.setVehicleState(VehicleState.Service);
-                TechnicalCheck check = new TechnicalCheck(rent1);
-                rent1.calculateDamageCost(vehicle.getVehicleType(),check.checkForDamage());
+                returnVehicle(rent1,vehicle);
+//                TechnicalCheck check = new TechnicalCheck(rent1);
+//                rent1.calculateDamageCost(vehicle.getVehicleType(),check.checkForDamage());
+//                vehicle.setVehicleState(VehicleState.Available);
+                rent1.calculateTotalCost();
+                pay(rent1.getTotalCost(),rent1.getRentedVehicle().company);
 
             } else if  (startDate.isAfter(endDate)) {
                 System.out.println("Not good dates");
@@ -97,7 +101,10 @@ public class Customer extends User{
     /**
      * Finalizes the rent procedure
      */
-    public void returnVehicle() {
+    public void returnVehicle(Rent rent1,Vehicle vehicle) {
+        TechnicalCheck check = new TechnicalCheck(rent1);
+        rent1.calculateDamageCost(vehicle.getVehicleType(),check.checkForDamage());
+        vehicle.setVehicleState(VehicleState.Available);
         //technical check
     }
 
@@ -106,8 +113,10 @@ public class Customer extends User{
      * Increases the <i>Company.income</i> (and depending on the case, <i>Company.damage_cost</i>) by <i>amount</i>.
      * @param amount
      */
-    public void pay(Money amount) {
-
+    public void pay(Money amount,Company company) {
+        double amountValue = amount.getAmount();
+        Money money=new Money(company.getIncome().getAmount() +amountValue);
+        company.setIncome(money);
     }
 
 

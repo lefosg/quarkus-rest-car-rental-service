@@ -1,6 +1,8 @@
 package org.domain;
 
 import jakarta.persistence.*;
+
+import java.security.InvalidParameterException;
 import java.util.Objects;
 import org.util.Money;
 import org.util.VehicleState;
@@ -144,6 +146,9 @@ public class Vehicle {
     }
 
     public void setMiles(int miles) {
+        if (miles< 0 ){
+            throw new InvalidParameterException("Invalid Input");
+        }
         this.miles = miles;
     }
 

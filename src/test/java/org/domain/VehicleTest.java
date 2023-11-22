@@ -6,6 +6,8 @@ import org.util.Money;
 import org.util.VehicleState;
 import org.util.VehicleType;
 
+import java.security.InvalidParameterException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class VehicleTest {
@@ -38,6 +40,14 @@ class VehicleTest {
     }
 
     @Test
+    public void testNegativemiles(){
+        assertThrows(InvalidParameterException.class, ()->{
+            vehicle.setMiles(-1);
+        });
+    }
+
+
+    @Test
     public void testGetManufacturer() {
         assertEquals("TOYOTA", vehicle.getManufacturer());
     }
@@ -60,7 +70,7 @@ class VehicleTest {
     }
 
     @Test
-   public void testGetVehicleType() {
+    public void testGetVehicleType() {
         assertEquals( VehicleType.Hatchback, vehicle.getVehicleType());
     }
 
@@ -82,40 +92,29 @@ class VehicleTest {
     }
 
 
-     @Test
-        public void testGetCount() {
-         assertEquals(0,vehicle.getCountDamages());
+    @Test
+    public void testGetCount() {
+        assertEquals(0,vehicle.getCountDamages());
     }
 
 
     @Test
-        public void testSetCount() {
+    public void testSetCount() {
         vehicle.setCountDamages(0);
-       assertEquals(0,vehicle.getCountDamages() );
+        assertEquals(0,vehicle.getCountDamages() );
     }
 
     @Test
-        public void testGetFixedCharge() {
+    public void testGetFixedCharge() {
         assertEquals(new Money(30), vehicle.getFixedCharge());
     }
 
     @Test
-        public void testSetFixedCharge() {
+    public void testSetFixedCharge() {
         vehicle.setFixedCharge(new Money(30));
         assertEquals(new Money(30), vehicle.getFixedCharge());
     }
 
-    //den jerw
-  ////  @Test
- //   public void testGetCompany() {
- //       assertEquals(//den jerw///, vehicle.getCompany());
-//    }
-
-
-//den jerw
- //   @Test
-  //  public void testSetCompany() {
-  //  }
 
     @Test
     public void testGetModel() {
@@ -134,31 +133,31 @@ class VehicleTest {
 
     }
 
-   @Test
-   public void testSetYear() {
-    vehicle.setYear(2015);
-   assertEquals(2015, vehicle.getYear());
+    @Test
+    public void testSetYear() {
+        vehicle.setYear(2015);
+        assertEquals(2015, vehicle.getYear());
     }
 
     @Test
     public void testGetMiles() {
-       assertEquals(100000, vehicle.getMiles());
-  }
+        assertEquals(100000, vehicle.getMiles());
+    }
 
-   @Test
- public void testSetMiles() {
+    @Test
+    public void testSetMiles() {
         vehicle.setMiles(100000);
         assertEquals(100000, vehicle.getMiles());
-  }
+    }
 
 
     @Test
-        public void testGetCountDamages() {
+    public void testGetCountDamages() {
         assertEquals(0, vehicle.getDamageCount());
-   }
+    }
 
     @Test
-   public void testSetCountDamages() {
+    public void testSetCountDamages() {
         vehicle.setCountDamages(0);
         assertEquals(0, vehicle.getCountDamages());
     }

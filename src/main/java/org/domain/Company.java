@@ -84,16 +84,22 @@ public class Company extends User{
     }
 
 
-
     //todo: test calculateFixedCharge
     /**
      * Calculates the fixed cost for a rented vehicle
-     * @param startDate
-     * @param endDate
-     * @param vehicleID
+     * @param startDate OK
+     * @param endDate OK
+     * @param vehicleID ????
      * @return the fixed cost
      */
     public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, int vehicleID) {
+        //null
+        if (startDate.isAfter(endDate)) {
+            throw new RuntimeException("Έχετε δώσει μεταγενέστερη ημερομηνία έναρξης ενοικίασης");
+        } else if (endDate.isBefore(startDate)) {
+            throw new RuntimeException("Έχετε δώσει προγενέστερη ημερομηνία λήξης ενοικίασης");
+        }
+
         //1. calculate #days this vehicle was rented
         int days = (int) startDate.until(endDate, ChronoUnit.DAYS);
 
@@ -102,12 +108,9 @@ public class Company extends User{
 
         //3. do the math
         double cost = vehicle_fixed_cost * days;
-
         return new Money(cost);
     }
-
-
-    @Override
+        @Override
     public void dashboard() {
 
     }

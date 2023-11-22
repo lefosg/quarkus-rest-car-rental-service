@@ -117,10 +117,6 @@ public class Vehicle {
         return countDamages;
     }
 
-    public void setDamageCount(int count) {
-        this.countDamages = count;
-    }
-
     public Money getFixedCharge() {
         return fixedCharge;
     }

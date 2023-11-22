@@ -52,8 +52,8 @@ public class Company extends User{
                    String IBAN, ChargingPolicy policy) {
         super(name, email, password, phone, AFM, street, city, zipcode);
         this.IBAN = IBAN;
-        income = new Money(0);
-        damage_cost = new Money(0);
+        this.income = new Money(0);
+        this.damage_cost = new Money(0);
         this.policy= policy;
     }
 
@@ -84,12 +84,12 @@ public class Company extends User{
     }
 
 
-    //todo: test calculateFixedCharge
+    //todo: test calculateFixedCharge, is vehicleID a good choice..?
     /**
      * Calculates the fixed cost for a rented vehicle
-     * @param startDate OK
-     * @param endDate OK
-     * @param vehicleID ????
+     * @param startDate
+     * @param endDate
+     * @param vehicleID
      * @return the fixed cost
      */
     public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, int vehicleID) {

@@ -247,13 +247,14 @@ class CompanyJPATest extends JPATest{
 
         tx.commit();
 
-        query = em.createQuery("select v from Vehicle v where c.company_id=:company_id");
+        query = em.createQuery("select v from Vehicle v left join Company c where v.company_id=::id");
         query.setParameter("company_id", id);
         List<Company> comp = query.getResultList();
 
         assertEquals(0, comp.size());
 
     }
+
 
 
 }

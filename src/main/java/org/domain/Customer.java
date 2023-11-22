@@ -25,6 +25,9 @@ public class Customer extends User{
     @Column(name="holderName", length=25)
     private String holderName;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="customer")
+    private List<Rent> rents = new ArrayList<>();
+
     public Customer() { }
 
     public Customer(String name, String email, String password, String phone, String AFM, String street, String city, String zipcode,
@@ -45,8 +48,7 @@ public class Customer extends User{
      * @return a list of available vehicles
      */
     public List<Vehicle> viewAvailableCars(LocalDate startDate, LocalDate endDate) {
-
-
+        //placeholder
         return new ArrayList<>();
     }
 
@@ -57,6 +59,13 @@ public class Customer extends User{
      * @param vehicle
      */
     public void rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle) {
+
+    }
+
+    /**
+     * Finalizes the rent procedure
+     */
+    public void returnVehicle() {
 
     }
 
@@ -73,6 +82,10 @@ public class Customer extends User{
     @Override
     public void dashboard() {
 
+    }
+
+    public void addRent(Rent rent) {
+        this.rents.add(rent);
     }
 
     // getters & setters
@@ -107,6 +120,14 @@ public class Customer extends User{
 
     public String getHolderName(){
         return holderName;
+    }
+
+    public List<Rent> getRents() {
+        return rents;
+    }
+
+    public void setRents(List<Rent> rents) {
+        this.rents = rents;
     }
 
     @Override

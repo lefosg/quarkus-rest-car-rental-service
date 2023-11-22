@@ -6,6 +6,7 @@ import org.util.Money;
 import org.util.VehicleState;
 import org.util.VehicleType;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -93,15 +94,17 @@ public class Company extends User{
      * also check if the vehicle is not available at this time
      * @return the fixed cost
      */
+
     public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, Money money) {
-      //  if (startDate==null){
-        //    throw new RuntimeException("Εισάγετε ημερομηνία έναρξης ενοικίασης");
-       // }
-      //  else
-        //    if (endDate==null){
-         //   throw new RuntimeException("Δεν έχετε εισάγει ημερομηνία λήξης ενοικίασης");
-       // }
-        if (startDate.isAfter(endDate)) {
+       if (startDate==null){
+           throw  new NullPointerException();
+       }
+       else
+            if (endDate==null){
+            throw new NullPointerException();
+        }
+        else if (startDate.isAfter(endDate)) {
+
             throw new RuntimeException("Έχετε δώσει μεταγενέστερη ημερομηνία έναρξης ενοικίασης");
         } else if (endDate.isBefore(startDate)) {
             throw new RuntimeException("Έχετε δώσει προγενέστερη ημερομηνία λήξης ενοικίασης");
@@ -134,7 +137,7 @@ public class Company extends User{
 
     // getters & setters
 
-    public String getIBAN() {
+    public  String getIBAN() {
         return IBAN;
     }
 

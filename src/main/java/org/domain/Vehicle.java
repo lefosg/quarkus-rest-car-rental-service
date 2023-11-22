@@ -3,9 +3,11 @@ package org.domain;
 import jakarta.persistence.*;
 
 import java.security.InvalidParameterException;
+import java.time.Year;
 import java.util.Objects;
 
 import org.hibernate.annotations.Cascade;
+import org.jboss.resteasy.reactive.server.model.DelegatingServerRestHandler;
 import org.util.Money;
 import org.util.VehicleState;
 import org.util.VehicleType;
@@ -89,6 +91,9 @@ public class Vehicle {
     }
 
     public void setPlateNumber(String plate_number) {
+        if (plate_number == null) {
+            throw new NullPointerException();
+        }
         this.plateNumber = plate_number;
     }
 
@@ -121,6 +126,12 @@ public class Vehicle {
     }
 
     public void setFixedCharge(Money money) {
+        if (money == null) {
+            throw new NullPointerException();
+        }
+       // else if (money < 0) {
+          //  throw new InvalidParameterException("Negative Input");
+       // }
         this.fixedCharge = money;
     }
 
@@ -145,6 +156,13 @@ public class Vehicle {
     }
 
     public void setYear(int year) {
+        if (year < 0) {
+            throw new InvalidParameterException("Invalid Input");
+        }
+       // else
+       //     if (year ==  null{
+        //    throw new NullPointerException();
+      //  }
         this.year = year;
     }
 

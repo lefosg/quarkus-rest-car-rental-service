@@ -7,6 +7,7 @@ import org.util.Money;
 import org.util.RentState;
 import org.util.VehicleType;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -115,6 +116,9 @@ public class Rent {
     }
 
     public void setStartDate(LocalDate startDate) {
+        if (startDate.isBefore(LocalDate.now())){
+            throw new RuntimeException("Έχετε δώσει προγενέστερη ημερομηνία έναρξης ενοικίασης");
+        }
         this.startDate = startDate;
     }
 

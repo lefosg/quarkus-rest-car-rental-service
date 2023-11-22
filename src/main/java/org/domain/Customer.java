@@ -2,11 +2,15 @@ package org.domain;
 
 import jakarta.persistence.*;
 import org.util.Money;
+import org.util.VehicleState;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static java.lang.Thread.sleep;
 
 @Entity
 @DiscriminatorValue("Customer")
@@ -59,6 +63,34 @@ public class Customer extends User{
      * @param vehicle
      */
     public void rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle) {
+            //check
+            if (vehicle.getVehicleState() == VehicleState.Available && startDate.isBefore(endDate)){
+                Rent rent1=new Rent(startDate,endDate,vehicle,this);
+                vehicle.setVehicleState(VehicleState.Rented);
+                int daysDifference =Period.between(startDate,endDate).getDays()+1;
+                //sleep
+                try {
+                    for(int i=0;i<daysDifference;i++) {
+                        Thread.sleep(i);
+                        System.out.print("Day: "+i);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    // Handle the interruption if needed
+                }
+                vehicle.setVehicleState(VehicleState.Service);
+                TechnicalCheck check = new TechnicalCheck(rent1);
+                rent1.calculateDamageCost(vehicle.getVehicleType(),check.checkForDamage());
+
+            } else if  (startDate.isAfter(endDate)) {
+                System.out.println("Not good dates");
+            } else if (vehicle.getVehicleState()!=VehicleState.Available) {
+                System.out.println("The vehicle is not available");
+            }
+            //return && random for damage_type
+
+
+            //pay to company
 
     }
 
@@ -66,7 +98,7 @@ public class Customer extends User{
      * Finalizes the rent procedure
      */
     public void returnVehicle() {
-
+        //technical check
     }
 
 

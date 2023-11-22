@@ -66,7 +66,7 @@ public class Company extends User{
      * @param miles
      * @return the mileage cost
      */
-    public Money calculateMileageCost(int miles) {
+    public Money calculateMileageCost(float miles) {
         float mileage_cost = policy.calculateMileageCost(miles);
         return new Money(mileage_cost);
     }
@@ -89,10 +89,11 @@ public class Company extends User{
      * Calculates the fixed cost for a rented vehicle
      * @param startDate
      * @param endDate
-     * @param vehicleID
+     * @param money
+     * also check if the vehicle is not available at this time
      * @return the fixed cost
      */
-    public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, int vehicleID) {
+    public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, Money money) {
       //  if (startDate==null){
         //    throw new RuntimeException("Εισάγετε ημερομηνία έναρξης ενοικίασης");
        // }
@@ -109,11 +110,8 @@ public class Company extends User{
         //1. calculate #days this vehicle was rented
         int days = (int) startDate.until(endDate, ChronoUnit.DAYS);
 
-        //2. get fixed cost for specific vehicle
-        double vehicle_fixed_cost = vehicles.get(vehicleID).getFixedCharge().getAmount();
-
         //3. do the math
-        double cost = vehicle_fixed_cost * days;
+        double cost = money.getAmount() * days;
         return new Money(cost);
     }
         @Override

@@ -86,12 +86,12 @@ public class Rent {
         this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(vehicleType, damageType);
     }
 
-    public void calculateMileageCost(int miles) {
+    public void calculateMileageCost(float miles) {
         this.mileageCost = this.rentedVehicle.getCompany().calculateMileageCost(miles);
     }
 
     public void calculateFixedCost() {
-        this.fixedCost = this.rentedVehicle.getCompany().calculateFixedCharge(this.startDate, this.endDate, this.rentedVehicle.getId());
+        this.fixedCost = this.rentedVehicle.getCompany().calculateFixedCharge(this.startDate, this.endDate, this.rentedVehicle.getFixedCharge());
     }
 
     public void calculateTotalCost() {

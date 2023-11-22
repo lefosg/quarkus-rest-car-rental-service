@@ -34,7 +34,6 @@ class VehicleTest {
     public void notEqualsVehicleDifferentReference() {
         Vehicle vehicle1 = new Vehicle("VOLKSWAGEN", "T-ROC", 2016, 80000,
                 "PMT-3013", VehicleType.SUV, new Money(50));
-
         assertNotEquals(vehicle, vehicle1);
     }
 
@@ -83,18 +82,16 @@ class VehicleTest {
     }
 
 
-
-//Oute auto trexei!!!
-    ///// @Test
-    /////public void testGetCount() {
-    ///// assertEquals("0",vehicle.getCountDamages());
-    ///}
+     @Test
+        public void testGetCount() {
+         assertEquals(0,vehicle.getCountDamages());
+    }
 
 
-   @Test
-    public void testSetCount() {
-    vehicle.setCountDamages(0);
-    assertEquals(0,vehicle.getCountDamages() );
+    @Test
+        public void testSetCount() {
+        vehicle.setCountDamages(0);
+       assertEquals(0,vehicle.getCountDamages() );
     }
 
     @Test
@@ -102,12 +99,13 @@ class VehicleTest {
         assertEquals(new Money(30), vehicle.getFixedCharge());
     }
 
-        @Test
+    @Test
         public void testSetFixedCharge() {
         vehicle.setFixedCharge(new Money(30));
         assertEquals(new Money(30), vehicle.getFixedCharge());
     }
-//den jerw
+
+    //den jerw
   ////  @Test
  //   public void testGetCompany() {
  //       assertEquals(//den jerw///, vehicle.getCompany());
@@ -130,29 +128,38 @@ class VehicleTest {
         assertEquals("YARIS", vehicle.getModel());
     }
 
- // @Test
-  //public void testGetYear() {
- //   }
+    @Test
+    public void testGetYear() {
+        assertEquals(2015, vehicle.getYear());
 
-//    @Test
-  //  public void testSetYear() {
-  //  vehicle.setYear("2015");
- //   assertEquals("2015", vehicle.getYear());
- //   }
-
-  //  @Test
- //   void testGetMiles() {
     }
 
- //   @Test
- //   void testSetMiles() {
- //   }
+   @Test
+   public void testSetYear() {
+    vehicle.setYear(2015);
+   assertEquals(2015, vehicle.getYear());
+    }
 
- //   @Test
- //   void testGetCountDamages() {
-  //  }
+    @Test
+    public void testGetMiles() {
+       assertEquals(100000, vehicle.getMiles());
+  }
 
-   // @Test
- //   void testSetCountDamages() {
-//    }
+   @Test
+ public void testSetMiles() {
+        vehicle.setMiles(100000);
+        assertEquals(100000, vehicle.getMiles());
+  }
+
+
+    @Test
+        public void testGetCountDamages() {
+        assertEquals(0, vehicle.getDamageCount());
+   }
+
+    @Test
+   public void testSetCountDamages() {
+        vehicle.setCountDamages(0);
+        assertEquals(0, vehicle.getCountDamages());
+    }
 }

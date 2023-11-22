@@ -66,6 +66,9 @@ public class Rent {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private TechnicalCheck technicalCheck;
+
 
     public Rent() { }
 
@@ -177,6 +180,14 @@ public class Rent {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public TechnicalCheck getTechnicalCheck() {
+        return technicalCheck;
+    }
+
+    public void setTechnicalCheck(TechnicalCheck technicalCheck) {
+        this.technicalCheck = technicalCheck;
     }
 
     @Override

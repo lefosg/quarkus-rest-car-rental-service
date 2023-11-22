@@ -51,6 +51,8 @@ public class Vehicle {
     @JoinColumn(name="company_id")
     public Company company;
 
+
+
     //should vehicle know its rents?
 
     public Vehicle() { }

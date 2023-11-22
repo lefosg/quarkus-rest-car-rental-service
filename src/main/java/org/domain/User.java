@@ -81,6 +81,15 @@ public abstract class User{
 
     // getters & setters
 
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getAFM() {
         return AFM;
     }

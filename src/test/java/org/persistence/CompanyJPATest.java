@@ -228,4 +228,32 @@ class CompanyJPATest extends JPATest{
     }
 
 
+    @Test
+    public void deleteCompanyDeletesVehicles() {
+
+        //first get the company id
+        Query query = em.createQuery("select c from Company c where c.AFM=:afm");
+        query.setParameter("afm", "163498317");  // AVIS
+        Company company = (Company) query.getResultList().get(0);
+        assertNotNull(company);
+        long id = company.getId();
+
+        //delete the company
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+
+        em.createNativeQuery("delete from USERS u where u.AFM="+id).executeUpdate();
+        //deletion should cascade, and delete vehicles as well
+
+        tx.commit();
+
+        query = em.createQuery("select v from Vehicle v where c.company_id=:company_id");
+        query.setParameter("company_id", id);
+        List<Company> comp = query.getResultList();
+
+        assertEquals(0, comp.size());
+
+    }
+
+
 }

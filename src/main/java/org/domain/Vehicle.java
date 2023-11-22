@@ -2,6 +2,8 @@ package org.domain;
 
 import jakarta.persistence.*;
 import java.util.Objects;
+
+import org.hibernate.annotations.Cascade;
 import org.util.Money;
 import org.util.VehicleState;
 import org.util.VehicleType;
@@ -43,6 +45,7 @@ public class Vehicle {
     private Money fixedCharge;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     @JoinColumn(name="company_id")
     public Company company;
 

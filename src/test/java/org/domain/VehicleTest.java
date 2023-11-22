@@ -44,8 +44,8 @@ class VehicleTest {
 
     @Test
     public void testSetManufacturer() {
-        vehicle.setManufacturer("TOYOTA");
-        assertEquals("TOYOTA", vehicle.getManufacturer());
+        vehicle.setManufacturer("VOLVO");
+        assertEquals("VOLVO", vehicle.getManufacturer());
     }
 
     @Test

@@ -93,13 +93,13 @@ public class Company extends User{
      * @return the fixed cost
      */
     public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, int vehicleID) {
-        if (startDate==null){
-            throw new RuntimeException("Εισάγετε ημερομηνία έναρξης ενοικίασης");
-        }
-        else
-            if (endDate==null){
-            throw new RuntimeException("Δεν έχετε εισάγει ημερομηνία λήξης ενοικίασης");
-        }
+      //  if (startDate==null){
+        //    throw new RuntimeException("Εισάγετε ημερομηνία έναρξης ενοικίασης");
+       // }
+      //  else
+        //    if (endDate==null){
+         //   throw new RuntimeException("Δεν έχετε εισάγει ημερομηνία λήξης ενοικίασης");
+       // }
         if (startDate.isAfter(endDate)) {
             throw new RuntimeException("Έχετε δώσει μεταγενέστερη ημερομηνία έναρξης ενοικίασης");
         } else if (endDate.isBefore(startDate)) {

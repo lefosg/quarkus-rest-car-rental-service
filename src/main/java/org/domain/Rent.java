@@ -57,11 +57,12 @@ public class Rent {
     })
     private Money totalCost;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    //cascade persists?
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id")
     private Vehicle rentedVehicle;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

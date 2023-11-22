@@ -51,6 +51,8 @@ public class Vehicle {
     @JoinColumn(name="company_id")
     public Company company;
 
+    //should vehicle know its rents?
+
     public Vehicle() { }
 
     public Vehicle(String manufacturer, String model, int year, int miles, String plate_number, VehicleType vehicleType, Money fixed_cost){

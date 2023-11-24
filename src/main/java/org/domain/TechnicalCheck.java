@@ -35,11 +35,12 @@ public class TechnicalCheck {
         int number = random.nextInt(10) + 1;
         if( number==1 ){
             return calcDamage();
-        } else if(number>8 && rent.getRentedVehicle().getCountDamages()>=1){
+        } else if(number>8 && rent.getRentedVehicle().getCountOfRents()>=1) {
             return calcDamage();
-        } else if(number>6 && rent.getRentedVehicle().getCountDamages()>=2){
+        } else if(number>6 && rent.getRentedVehicle().getCountOfRents()>=2){
             return calcDamage();
         }
+        rent.getRentedVehicle().setCountOfRents(rent.getRentedVehicle().getCountOfRents()+1);
         return DamageType.NoDamage;
     }
 

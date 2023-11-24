@@ -56,12 +56,6 @@ public class Customer extends User{
     public List<Vehicle> viewAvailableVehicles(LocalDate startDate, LocalDate endDate) {
         //placeholders
         List<Vehicle> availableVehicles = new ArrayList<>();
-        Vehicle vehicle1 = new Vehicle("TOYOTA", "YARIS", 2015, 100000, "YMB-6325", VehicleType.Hatchback, new Money(30));
-        Vehicle vehicle2 = new Vehicle("VOLKSWAGEN", "T-ROC", 2016, 80000, "PMT-3013", VehicleType.SUV, new Money(50));
-        Vehicle vehicle3 = new Vehicle("RENAULT", "MEGANE", 2018, 50000, "KIK-2160", VehicleType.Sedan, new Money(40));
-        availableVehicles.add(vehicle1);
-        availableVehicles.add(vehicle2);
-        availableVehicles.add(vehicle3);
         return availableVehicles;
     }
 
@@ -89,9 +83,9 @@ public class Customer extends User{
      */
     public void returnVehicle(Vehicle vehicle, float miles) {
         Rent rent1 = null;
-        for(int i=this.rents.size(); i >= 0; i--) {
+        for(int i=this.rents.size(); i > 0; i--) {
             if (this.rents.get(i-1).getRentedVehicle().equals(vehicle)) {
-                rent1 = this.rents.get(i);
+                rent1 = this.rents.get(i-1);
             }
         }
         rent1.calculateCosts(miles);

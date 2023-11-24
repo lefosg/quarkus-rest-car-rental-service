@@ -33,12 +33,12 @@ public class Company extends User{
     })
     private Money damage_cost;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="company")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private List<Vehicle> vehicles = new ArrayList<>();
-
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
     private ChargingPolicy policy;
+
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy="company")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private List<Vehicle> vehicles = new ArrayList<>();
 
 
     public Company() { }

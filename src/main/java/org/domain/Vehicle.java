@@ -7,6 +7,8 @@ import java.time.Year;
 import java.util.Objects;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.jboss.resteasy.reactive.server.model.DelegatingServerRestHandler;
 import org.util.Money;
 import org.util.VehicleState;
@@ -49,6 +51,8 @@ public class Vehicle {
     private Money fixedCharge;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN, org.hibernate.annotations.CascadeType.PERSIST})
     @JoinColumn(name="company_id")
     public Company company;
 

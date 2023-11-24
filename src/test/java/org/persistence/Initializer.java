@@ -94,7 +94,7 @@ public class Initializer {
 
         // add vehicles in companies & add corresponding company to each vehicle
 
-        //company 1: vehicles 1, 3, 5, 8, 10
+        //company 1: vehicles 1, 3, 5, 8, 10, 11
         company1.addVehicle(vehicle1);
         vehicle1.setCompany(company1);
         company1.addVehicle(vehicle3);

@@ -248,14 +248,18 @@ class CompanyJPATest extends JPATest{
 
         tx.commit();
 
+        em.close();
+
+        em = JPAUtil.getCurrentEntityManager();
+
         Company deletedCompany = em.find(Company.class, id);
 
         assertNull(deletedCompany);
-//        query = em.createQuery("select v from Vehicle v left join Company c where v.company_id=:id");
-//        query.setParameter("company_id", id);
-//        List<Company> comp = query.getResultList();
-//
-//        assertEquals(0, comp.size());
+        query = em.createQuery("select v from Vehicle v");
+
+        List<Vehicle> vehicles = query.getResultList();
+
+        assertEquals(5, vehicles.size());
 
     }
 

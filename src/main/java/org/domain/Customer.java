@@ -2,7 +2,9 @@ package org.domain;
 
 import jakarta.persistence.*;
 import org.util.Money;
+import org.util.RentState;
 import org.util.VehicleState;
+import org.util.VehicleType;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -51,9 +53,16 @@ public class Customer extends User{
      * @param endDate
      * @return a list of available vehicles
      */
-    public List<Vehicle> viewAvailableCars(LocalDate startDate, LocalDate endDate) {
-        //placeholder
-        return new ArrayList<>();
+    public List<Vehicle> viewAvailableVehicles(LocalDate startDate, LocalDate endDate) {
+        //placeholders
+        List<Vehicle> availableVehicles = new ArrayList<>();
+        Vehicle vehicle1 = new Vehicle("TOYOTA", "YARIS", 2015, 100000, "YMB-6325", VehicleType.Hatchback, new Money(30));
+        Vehicle vehicle2 = new Vehicle("VOLKSWAGEN", "T-ROC", 2016, 80000, "PMT-3013", VehicleType.SUV, new Money(50));
+        Vehicle vehicle3 = new Vehicle("RENAULT", "MEGANE", 2018, 50000, "KIK-2160", VehicleType.Sedan, new Money(40));
+        availableVehicles.add(vehicle1);
+        availableVehicles.add(vehicle2);
+        availableVehicles.add(vehicle3);
+        return availableVehicles;
     }
 
     /**
@@ -65,53 +74,36 @@ public class Customer extends User{
     public void rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle) {
             //check
             if (vehicle.getVehicleState() == VehicleState.Available && startDate.isBefore(endDate)){
-                Rent rent1=new Rent(startDate,endDate,vehicle,this);
-                vehicle.setVehicleState(VehicleState.Rented);
-                int daysDifference =Period.between(startDate,endDate).getDays()+1;
-                //sleep
-                try {
-                    for(int i=0;i<daysDifference;i++) {
-                        Thread.sleep(i);
-                        System.out.print("Day: "+i);
-                    }
-                    } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    // Handle the interruption if needed
-                    }
-                vehicle.setVehicleState(VehicleState.Service);
-                returnVehicle(rent1,vehicle);
-//                TechnicalCheck check = new TechnicalCheck(rent1);
-//                rent1.calculateDamageCost(vehicle.getVehicleType(),check.checkForDamage());
-//                vehicle.setVehicleState(VehicleState.Available);
-                rent1.calculateTotalCost();
-                pay(rent1.getTotalCost(),rent1.getRentedVehicle().company);
-
+                Rent rent1 = new Rent(startDate,endDate,vehicle,this);
+                this.rents.add(rent1);
             } else if  (startDate.isAfter(endDate)) {
-                System.out.println("Not good dates");
+                throw new RuntimeException("Not good dates");
             } else if (vehicle.getVehicleState()!=VehicleState.Available) {
-                System.out.println("The vehicle is not available");
+                throw new RuntimeException("The vehicle is not available");
             }
-            //return && random for damage_type
-
-
-            //pay to company
-
     }
 
     /**
-     * Finalizes the rent procedure
+     * @param vehicle
+     * @param miles
      */
-    public void returnVehicle(Rent rent1,Vehicle vehicle) {
-        TechnicalCheck check = new TechnicalCheck(rent1);
-        rent1.calculateDamageCost(vehicle.getVehicleType(),check.checkForDamage());
-        vehicle.setVehicleState(VehicleState.Available);
-        //technical check
+    public void returnVehicle(Vehicle vehicle, float miles) {
+        Rent rent1 = null;
+        for(int i=this.rents.size(); i >= 0; i--) {
+            if (this.rents.get(i-1).getRentedVehicle().equals(vehicle)) {
+                rent1 = this.rents.get(i);
+            }
+        }
+        rent1.calculateCosts(miles);
+        pay(rent1.getTotalCost(), rent1.getRentedVehicle().getCompany());
+        rent1.setRentState(RentState.Finished);
     }
 
 
     /**
      * Increases the <i>Company.income</i> (and depending on the case, <i>Company.damage_cost</i>) by <i>amount</i>.
      * @param amount
+     * @param company
      */
     public void pay(Money amount,Company company) {
         double amountValue = amount.getAmount();

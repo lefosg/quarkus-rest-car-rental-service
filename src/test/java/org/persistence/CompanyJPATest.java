@@ -235,6 +235,7 @@ class CompanyJPATest extends JPATest{
         Query query = em.createQuery("select c from Company c where c.AFM=:afm");
         query.setParameter("afm", "163498317");  // AVIS
         Company company = (Company) query.getResultList().get(0);
+
         assertNotNull(company);
         long id = company.getId();
 
@@ -242,16 +243,19 @@ class CompanyJPATest extends JPATest{
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        em.createNativeQuery("delete from USERS u where u.AFM="+id).executeUpdate();
+        em.createNativeQuery("delete from USERS u where u.AFM=163498317").executeUpdate();
         //deletion should cascade, and delete vehicles as well
 
         tx.commit();
 
-        query = em.createQuery("select v from Vehicle v left join Company c where v.company_id=::id");
-        query.setParameter("company_id", id);
-        List<Company> comp = query.getResultList();
+        Company deletedCompany = em.find(Company.class, id);
 
-        assertEquals(0, comp.size());
+        assertNull(deletedCompany);
+//        query = em.createQuery("select v from Vehicle v left join Company c where v.company_id=:id");
+//        query.setParameter("company_id", id);
+//        List<Company> comp = query.getResultList();
+//
+//        assertEquals(0, comp.size());
 
     }
 

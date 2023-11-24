@@ -49,13 +49,8 @@ public class Vehicle {
     private Money fixedCharge;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     @JoinColumn(name="company_id")
     public Company company;
-
-
-
-    //should vehicle know its rents?
 
     public Vehicle() { }
 

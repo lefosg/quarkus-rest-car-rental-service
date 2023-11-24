@@ -2,13 +2,11 @@ package org.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;
-import org.util.DamageType;
-import org.util.Money;
-import org.util.RentState;
-import org.util.VehicleType;
+import org.util.*;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
@@ -79,25 +77,42 @@ public class Rent {
         this.rentedVehicle = vehicle;
         this.customer = customer;
         this.rentState = RentState.Pending;  //by default rent is initiated, meaning pending
+        this.rentedVehicle.setVehicleState(VehicleState.Rented);
+        this.rentedVehicle.setVehicleState(VehicleState.Service);
     }
 
     // domain logic
 
-    public void calculateDamageCost(VehicleType vehicleType, DamageType damageType) {
-        this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(vehicleType, damageType);
+    private void calculateDamageCost() {
+        TechnicalCheck check = new TechnicalCheck(this);
+        DamageType damageType = check.checkForDamage();
+        this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(rentedVehicle.getVehicleType(), damageType);
+        rentedVehicle.setVehicleState(VehicleState.Available);
+
     }
 
-    public void calculateMileageCost(float miles) {
+    private void calculateMileageCost(float miles) {
         this.mileageCost = this.rentedVehicle.getCompany().calculateMileageCost(miles);
     }
 
-    public void calculateFixedCost() {
+    private void calculateFixedCost() {
         this.fixedCost = this.rentedVehicle.getCompany().calculateFixedCharge(this.startDate, this.endDate, this.rentedVehicle.getFixedCharge());
     }
 
-    public void calculateTotalCost() {
+    private void calculateTotalCost() {
         double total = fixedCost.getAmount() + mileageCost.getAmount() + damageCost.getAmount();
         totalCost = new Money(total);
+    }
+
+    public void calculateCosts(float miles) {
+        this.calculateMileageCost(miles);
+        this.calculateDamageCost();
+        this.calculateFixedCost();
+        this.calculateTotalCost();
+    }
+
+    public int getDurationInDays() {
+        return (int) this.startDate.until(this.endDate, ChronoUnit.DAYS);
     }
 
     // getters & setters

@@ -3,6 +3,7 @@ package org.domain;
 import jakarta.persistence.*;
 import org.util.DamageType;
 import org.util.Money;
+import org.util.VehicleState;
 import org.util.VehicleType;
 
 import java.util.Random;
@@ -29,18 +30,20 @@ public class TechnicalCheck {
     //domain logic
 
     public DamageType checkForDamage() {
+        rent.getRentedVehicle().setVehicleState(VehicleState.Service);
         Random random= new Random();
         int number = random.nextInt(10) + 1;
-        if(number==1 ){
+        if( number==1 ){
             return calcDamage();
-        }else if(number>8 && rent.getRentedVehicle().getCountDamages()>1){
+        } else if(number>8 && rent.getRentedVehicle().getCountDamages()>=1){
             return calcDamage();
-        }else if(number>6 && rent.getRentedVehicle().getCountDamages()>2){
+        } else if(number>6 && rent.getRentedVehicle().getCountDamages()>=2){
             return calcDamage();
         }
         return DamageType.NoDamage;
     }
-    public DamageType calcDamage(){
+
+    private DamageType calcDamage(){
         rent.getRentedVehicle().setCountDamages(rent.getRentedVehicle().getCountDamages()+1);
         Random damage= new Random();
         int numberOfType= damage.nextInt(5)+1;

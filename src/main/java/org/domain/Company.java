@@ -1,6 +1,7 @@
 package org.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 import org.util.DamageType;
 import org.util.Money;
 import org.util.VehicleState;
@@ -32,7 +33,8 @@ public class Company extends User{
     })
     private Money damage_cost;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="company")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="company")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Vehicle> vehicles = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
@@ -113,7 +115,7 @@ public class Company extends User{
         //1. calculate #days this vehicle was rented
         int days = (int) startDate.until(endDate, ChronoUnit.DAYS);
 
-        //3. do the math
+        //2. do the math
         double cost = money.getAmount() * days;
         return new Money(cost);
     }

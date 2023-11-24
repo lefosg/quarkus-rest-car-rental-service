@@ -120,6 +120,25 @@ public class Initializer {
         company2.addVehicle(vehicle9);
         vehicle9.setCompany(company2);
 
+
+        //
+
+//        List<Vehicle> cars = customer1.viewAvailableVehicles(date2, date1);
+//        Vehicle car = cars.get(0);
+//        customer1.rent(date2, date1, car);
+//
+//        try{
+//            //for (int i=0; i<customer1.getRents())
+//            Thread.sleep(4000);
+//            //calculate random miles
+//
+//        } catch (Exception e ) {
+//            e.printStackTrace();
+//        }
+//        float max=500, min=50;
+//        float miles = (float) Math.floor(Math.random() *(max - min + 1) + min);
+//        customer1.returnVehicle(car, miles);
+
         //persist
 
         EntityTransaction tx = em.getTransaction();

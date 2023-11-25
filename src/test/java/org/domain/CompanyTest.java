@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.util.Currency;
 import org.util.DamageType;
 import org.util.Money;
+import org.util.VehicleType;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -20,6 +21,22 @@ class CompanyTest {
     public void setup() {
         company = new Company("AVIS","avis@gmail.com", "password123", "2104578965",
                 "ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
+
+        LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
+        mileage_scale.put(100, 0.10f);
+        mileage_scale.put(200, 0.20f);
+        mileage_scale.put(300, 0.30f);
+
+        LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
+        damage_type.put(DamageType.Glasses,50f);
+        damage_type.put(DamageType.Machine,200f);
+        damage_type.put(DamageType.Tyres,100f);
+        damage_type.put(DamageType.Scratches,15f);
+        damage_type.put(DamageType.Interior,40f);
+
+        ChargingPolicy policy = new ChargingPolicy(mileage_scale,damage_type);
+
+        company.setPolicy(policy);
     }
 
     @Test
@@ -73,8 +90,90 @@ class CompanyTest {
 
     }
 
+    @Test
+    public void calculateMileageCostNegativeMiles() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            company.calculateMileageCost(-1);
+        });
+    }
 
+    @Test
+    public void calculateMileageCostZeroMiles() {
+        Money cost = company.calculateMileageCost(0);
+        assertEquals(new Money(0), cost);
+    }
 
+    @Test
+    public void calculateMileageCostScale1() {
+        Money cost = company.calculateMileageCost(50);
+        assertEquals(new Money(5), cost);
+        //boundary case
+        cost = company.calculateMileageCost(100);
+        assertEquals(new Money(10), cost);
+    }
+
+    @Test
+    public void calculateMileageCostScale2() {
+        Money cost = company.calculateMileageCost(150);
+        assertEquals(new Money(20), cost);
+        //boundary case
+        cost = company.calculateMileageCost(200);
+        assertEquals(new Money(30), cost);
+    }
+
+    @Test
+    public void calculateMileageCostScale3() {
+        Money cost = company.calculateMileageCost(250);
+        assertEquals(new Money(45), cost);
+        //boundary case
+        cost = company.calculateMileageCost(300);
+        assertEquals(new Money(60), cost);
+    }
+
+    @Test
+    public void calculateMileageCostLastScale() {
+        //fixme last scale
+        //over last scale case
+        Money cost = company.calculateMileageCost(350);
+        assertEquals(new Money(400), cost);
+    }
+
+    @Test
+    public void calculateDamageCostNullDamageType() {
+        assertThrows(NullPointerException.class, () -> {
+            company.calculateDamageCost(VehicleType.Hatchback, null);
+        });
+    }
+
+    @Test
+    public void calculateDamageCostNoDamageType() {
+        assertThrows(NullPointerException.class, () -> {
+            company.calculateDamageCost(VehicleType.Hatchback, DamageType.NoDamage);
+        });
+    }
+
+    @Test
+    public void calculateDamageCostAllDamageTypes() {
+        Money cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Glasses);
+        assertEquals(cost, new Money(50));
+
+        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Machine);
+        assertEquals(cost, new Money(200));
+
+        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Tyres);
+        assertEquals(cost, new Money(100));
+
+        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Scratches);
+        assertEquals(cost, new Money(15));
+
+        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Interior);
+        assertEquals(cost, new Money(40));
+    }
+
+    @Test
+    public void calculateFixedCharge() {
+
+    }
 
     // getters & setters
 

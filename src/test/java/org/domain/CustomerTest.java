@@ -41,6 +41,25 @@ class CustomerTest {
         assertNotEquals(customer, customer2);
     }
 
+
+    @Test
+    void rent() {
+    }
+
+    @Test
+    void returnVehicle() {
+    }
+
+    @Test
+    void pay() {
+    }
+
+
+
+
+
+    // getters & setters
+
     @Test
     public void testSetSurname() {
         customer.setSurname("ΠΑΠΑΓΕΩΡΓΙΟΥ");
@@ -77,18 +96,12 @@ class CustomerTest {
     @Test
     public void testGetNumber() {
         assertEquals("7894665213797564", customer.getNumber());
-
     }
-///Αυτό το τέστ δεν τρέχει!!!
-    ///  @Test
-    ////       public void testGetExpirationDate() {
-    ///       assertEquals(date, customer.getExpirationDate());
-    ///   }
-//
-
 
     @Test
     public void testGetHolderName() {
         assertEquals("ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ", customer.getHolderName());
     }
+
+
 }

@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.util.DamageType;
+import org.util.Money;
 import org.util.VehicleType;
 
 import java.util.*;
@@ -45,6 +46,12 @@ public class ChargingPolicy {
 
     //todo: check it works & check for every input its domain range (eg, customer_miles <= 0 etc)
     public float calculateMileageCost(float customer_miles) {
+        if (customer_miles < 0 ) {
+            throw new IllegalArgumentException("[!] ChargingPolicy.calculateMileageCost\n\tnegative number in miles parameter");
+        }
+        if (customer_miles == 0) {
+            return 0;
+        }
         float sum_cost = 0, sum_miles=0;
         int count=1;
 
@@ -71,7 +78,7 @@ public class ChargingPolicy {
 
     //fixme calculateDamageCost
     public float calculateDamageCost(VehicleType vehicleType, DamageType damageType) {
-        return 0.0f;
+        return this.damageType.get(damageType);
     }
 
 

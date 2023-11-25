@@ -31,7 +31,7 @@ public class Customer extends User{
     @Column(name="holderName", length=25)
     private String holderName;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="customer")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true, mappedBy="customer")
     private List<Rent> rents = new ArrayList<>();
 
     public Customer() { }

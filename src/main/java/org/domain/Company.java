@@ -70,6 +70,9 @@ public class Company extends User{
      * @return the mileage cost
      */
     public Money calculateMileageCost(float miles) {
+        if (miles < 0 ) {
+            throw new IllegalArgumentException("[!] Company.calculateMileageCost: negative number in miles parameter");
+        }
         float mileage_cost = policy.calculateMileageCost(miles);
         return new Money(mileage_cost);
     }
@@ -82,6 +85,14 @@ public class Company extends User{
      * @return the damage cost
      */
     public Money calculateDamageCost(VehicleType vehicleType, DamageType damageType) {
+        if (vehicleType == null) {
+            throw new NullPointerException("[!] Company.calculateDamageCost: vehicleType is null");
+        } else if (damageType == null) {
+            throw new NullPointerException("[!] Company.calculateDamageCost: damageType is null");
+        }
+        if (damageType == DamageType.NoDamage) {
+            throw new InvalidParameterException("[!] Company.calculateDamageCost: damageType is NoDamage");
+        }
         float damage_cost = policy.calculateDamageCost(vehicleType, damageType);
         return new Money(damage_cost);
     }
@@ -98,22 +109,21 @@ public class Company extends User{
      */
 
     public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, Money money) {
-       if (startDate==null){
-           throw  new NullPointerException();
-       }
-       else
-            if (endDate==null){
-            throw new NullPointerException();
+        if (startDate==null){
+            throw  new NullPointerException("[!] Company.calculateFixedCharge: startDate is null");
+        } else if (endDate==null){
+            throw new NullPointerException("[!] Company.calculateFixedCharge: endDate is null");
+        } else if (money == null) {
+            throw new NullPointerException("[!] Company.calculateFixedCharge: money is null");
         }
-        else if (startDate.isAfter(endDate)) {
-
+        if (startDate.isAfter(endDate)) {
             throw new RuntimeException("Έχετε δώσει μεταγενέστερη ημερομηνία έναρξης ενοικίασης");
         } else if (endDate.isBefore(startDate)) {
             throw new RuntimeException("Έχετε δώσει προγενέστερη ημερομηνία λήξης ενοικίασης");
         }
 
         //1. calculate #days this vehicle was rented
-        int days = (int) startDate.until(endDate, ChronoUnit.DAYS);
+        int days = (int) startDate.until(endDate, ChronoUnit.DAYS)+1;
 
         //2. do the math
         double cost = money.getAmount() * days;

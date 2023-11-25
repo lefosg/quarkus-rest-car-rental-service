@@ -20,9 +20,8 @@ public class TechnicalCheck {
     @OneToOne(fetch = FetchType.LAZY)
     private Rent rent;
 
-    public TechnicalCheck(){
+    public TechnicalCheck() { }
 
-    }
     public TechnicalCheck(Rent rent) {
         this.rent = rent;
     }

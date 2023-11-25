@@ -56,7 +56,6 @@ public class Rent {
     })
     private Money totalCost;
 
-    //cascade persists?
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id")
     private Vehicle rentedVehicle;

@@ -120,6 +120,11 @@ public class Initializer {
         company2.addVehicle(vehicle9);
         vehicle9.setCompany(company2);
 
+        customer1.rent(date2,date1,vehicle1);
+        float max=500, min=50;
+        float miles = (float) Math.floor(Math.random() *(max - min + 1) + min);
+        customer1.returnVehicle(vehicle1, miles);
+
 
         //
 

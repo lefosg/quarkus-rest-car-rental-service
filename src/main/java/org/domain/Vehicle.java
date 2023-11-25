@@ -47,6 +47,9 @@ public class Vehicle {
     @Column(name="count_damages",length =30, nullable = false)
     private int countDamages;
 
+    @Column(name="count_rents",length =30, nullable = false)
+    private int countOfRents;
+
     @Column(name="fixed_charge",length = 30, nullable = false)
     private Money fixedCharge;
 
@@ -68,6 +71,7 @@ public class Vehicle {
         this.fixedCharge = fixed_cost;
         this.vehicleState = VehicleState.Available;
         this.countDamages = 0;
+        this.countOfRents=0;
     }
 
     // domain logic
@@ -76,6 +80,14 @@ public class Vehicle {
 
 
     // getters & setters
+
+    public int getCountOfRents() {
+        return countOfRents;
+    }
+
+    public void setCountOfRents(int countOfRents) {
+        this.countOfRents = countOfRents;
+    }
 
     public String getManufacturer() {
         return manufacturer;

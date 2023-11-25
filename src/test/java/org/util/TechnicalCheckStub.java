@@ -16,7 +16,7 @@ public class TechnicalCheckStub implements TechnicalCheck {
 
     @Override
     public DamageType checkForDamage() {
-        System.out.println(count);
+        //System.out.println(count);
         count++;
         if (count == 0) {
             return DamageType.NoDamage;

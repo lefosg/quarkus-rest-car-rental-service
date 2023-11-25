@@ -84,7 +84,32 @@ class RentTest {
 
     @Test
     public void calculateCosts() {
+        rent.setTechnicalCheck(new TechnicalCheckStub(rent));
+        float miles = 150;
 
+        rent.calculateCosts(miles);  //NoDamage, MileageCost: 20 + FixedCost: 180 = 200
+        Money total = rent.getTotalCost();
+        assertEquals(new Money(200), total);
+
+        rent.calculateCosts(miles);  //Tyres, MileageCost: 20 + FixedCost: 180 + DamageCost: 60  = 260
+        total = rent.getTotalCost();
+        assertEquals(new Money(260), total);
+
+        rent.calculateCosts(miles);  //Machine, .. + DamageCost: 70 = 270
+        total = rent.getTotalCost();
+        assertEquals(new Money(270), total);
+
+        rent.calculateCosts(miles);  //Glasses
+        total = rent.getTotalCost();
+        assertEquals(new Money(250), total);
+
+        rent.calculateCosts(miles);  //Scratches
+        total = rent.getTotalCost();
+        assertEquals(new Money(210), total);
+
+        rent.calculateCosts(miles);  //Interior
+        total = rent.getTotalCost();
+        assertEquals(new Money(220), total);
     }
 
     private Vehicle createVehicle1() {

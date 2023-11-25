@@ -1,10 +1,8 @@
 package org.domain;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 import org.util.*;
 
-import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -65,7 +63,7 @@ public class Rent {
     private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private TechnicalCheck technicalCheck;
+    private TechnicalCheck technicalCheckImpl;
 
 
     public Rent() { }
@@ -75,20 +73,17 @@ public class Rent {
         this.endDate = endDate;
         this.rentedVehicle = vehicle;
         this.customer = customer;
-        this.rentState = RentState.Pending;  //by default rent is initiated, meaning pending
+        this.rentState = RentState.Pending;  //by default rent is initiated to pending state
         this.rentedVehicle.setVehicleState(VehicleState.Rented);
-        this.rentedVehicle.setVehicleState(VehicleState.Service);
+        this.technicalCheckImpl = new TechnicalCheckImpl(this);
     }
 
     // domain logic
 
     private void calculateDamageCost() {
-        TechnicalCheck check = new TechnicalCheck(this);
-        DamageType damageType = check.checkForDamage();
+        DamageType damageType = technicalCheckImpl.checkForDamage();
         this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(rentedVehicle.getVehicleType(), damageType);
         rentedVehicle.setVehicleState(VehicleState.Available);
-
-
     }
 
     private void calculateMileageCost(float miles) {
@@ -112,7 +107,7 @@ public class Rent {
     }
 
     public int getDurationInDays() {
-        return (int) this.startDate.until(this.endDate, ChronoUnit.DAYS);
+        return (int) this.startDate.until(this.endDate, ChronoUnit.DAYS)+1;
     }
 
     // getters & setters
@@ -202,11 +197,11 @@ public class Rent {
     }
 
     public TechnicalCheck getTechnicalCheck() {
-        return technicalCheck;
+        return technicalCheckImpl;
     }
 
-    public void setTechnicalCheck(TechnicalCheck technicalCheck) {
-        this.technicalCheck = technicalCheck;
+    public void setTechnicalCheck(TechnicalCheck technicalCheckImpl) {
+        this.technicalCheckImpl = technicalCheckImpl;
     }
 
     @Override

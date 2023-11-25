@@ -91,7 +91,7 @@ public class Company extends User{
             throw new NullPointerException("[!] Company.calculateDamageCost: damageType is null");
         }
         if (damageType == DamageType.NoDamage) {
-            throw new InvalidParameterException("[!] Company.calculateDamageCost: damageType is NoDamage");
+            return new Money(0);
         }
         float damage_cost = policy.calculateDamageCost(vehicleType, damageType);
         return new Money(damage_cost);
@@ -104,13 +104,13 @@ public class Company extends User{
      * @param startDate
      * @param endDate
      * @param money
-     * also check if the vehicle is not available at this time
      * @return the fixed cost
+     * also check if the vehicle is not available at this time
      */
 
     public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, Money money) {
         if (startDate==null){
-            throw  new NullPointerException("[!] Company.calculateFixedCharge: startDate is null");
+            throw new NullPointerException("[!] Company.calculateFixedCharge: startDate is null");
         } else if (endDate==null){
             throw new NullPointerException("[!] Company.calculateFixedCharge: endDate is null");
         } else if (money == null) {
@@ -129,6 +129,7 @@ public class Company extends User{
         double cost = money.getAmount() * days;
         return new Money(cost);
     }
+
         @Override
     public void dashboard() {
 

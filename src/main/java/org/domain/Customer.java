@@ -6,6 +6,7 @@ import org.util.RentState;
 import org.util.VehicleState;
 import org.util.VehicleType;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -66,34 +67,58 @@ public class Customer extends User{
      * @param vehicle
      */
     public void rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle) {
-            //check
-            if (vehicle.getVehicleState() == VehicleState.Available && startDate.isBefore(endDate)){
-                Rent rent1 = new Rent(startDate,endDate,vehicle,this);
-                this.rents.add(rent1);
-            } else if  (startDate.isAfter(endDate)) {
-                throw new RuntimeException("Not good dates");
-            } else if (vehicle.getVehicleState()!=VehicleState.Available) {
-                throw new RuntimeException("The vehicle is not available");
-            }
+        //input check
+        if (startDate == null) {
+            throw new NullPointerException("[!] Customer.rent: startDate is null");
+        } else if (endDate == null) {
+            throw new NullPointerException("[!] Customer.rent: endDate is null");
+        } else if (vehicle == null) {
+            throw new NullPointerException("[!] Customer.rent: vehicle is null");
+        }
+        if  (startDate.isAfter(endDate)) {
+            throw new RuntimeException("Not good dates");
+        }
+        if (vehicle.getVehicleState() != VehicleState.Available) {
+            throw new RuntimeException("The vehicle is not available");
+        }
+        //make the rent
+        Rent rent1 = new Rent(startDate,endDate,vehicle,this);
+        this.rents.add(rent1);
     }
 
     /**
+     * Returns the vehicle to the company.
+     * Charges for the customer are calculated.
+     * Costs for possible damages are calculated (Vehicle state is set to Service temporarily).
+     * Vehicle state is set back to Available.
+     * The customer pays.
      * @param vehicle
      * @param miles
      */
     public void returnVehicle(Vehicle vehicle, float miles) {
-        Rent rent1 = null;
+        //input check
+        if (vehicle == null) {
+            throw new NullPointerException("[!] Customer.returnVehicle: vehicle is null");
+        }
+        if (miles < 0) {
+            throw new InvalidParameterException("[!] Customer.returnVehicle: miles is negative ("+miles+")");
+        }
+
+        Rent rent = null;
+        //Customer may have done several rents, e.g. one 16/7-19/7 and one 20/7-22/7, but the day of the booking may be 10/7,
+        //so all of them are still pending. Search to find for which rent the customer wants to return the vehicle
         for(int i=this.rents.size(); i > 0; i--) {
             if (this.rents.get(i-1).getRentedVehicle().equals(vehicle)) {
-                rent1 = this.rents.get(i-1);
+                rent = this.rents.get(i-1);
             }
         }
-        rent1.calculateCosts(miles);
-        pay(rent1.getTotalCost(), rent1.getRentedVehicle().getCompany());
-        rent1.setRentState(RentState.Finished);
+        //check if there is any rent ongoing with this vehicle
+        assert rent != null : "[!] Customer.returnVehicle: rent searched for is null";
+        rent.calculateCosts(miles);
+        pay(rent.getTotalCost(), rent.getRentedVehicle().getCompany());
+        rent.setRentState(RentState.Finished);
     }
-
-
+    
     /**
      * Increases the <i>Company.income</i> (and depending on the case, <i>Company.damage_cost</i>) by <i>amount</i>.
      * @param amount
@@ -104,7 +129,6 @@ public class Customer extends User{
         Money money=new Money(company.getIncome().getAmount() +amountValue);
         company.setIncome(money);
     }
-
 
     @Override
     public void dashboard() {

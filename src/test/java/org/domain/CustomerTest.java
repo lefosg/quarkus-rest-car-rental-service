@@ -2,8 +2,11 @@ package org.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.util.SystemDateStub;
+import org.util.*;
+
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
@@ -44,10 +47,73 @@ class CustomerTest {
 
     @Test
     void rent() {
+        LocalDate startDate = LocalDate.of(2023, 11, 10);
+        LocalDate endDate = LocalDate.of(2023, 11, 15);
+        Vehicle vehicle = createVehicle1();
+        customer.rent(startDate, endDate, vehicle);
+        assertEquals(1, customer.getRents().size());
+    }
+
+    @Test
+    void rentFalseInput() {
+        LocalDate startDate = LocalDate.of(2023, 11, 10);
+        LocalDate endDate = LocalDate.of(2023, 11, 15);
+        Vehicle vehicle = createVehicle1();
+
+        //null input
+        assertThrows(NullPointerException.class, () -> {
+            customer.rent(null, endDate, vehicle);
+            customer.rent(startDate, null, vehicle);
+            customer.rent(startDate, endDate, null);
+        });
+
+        //invalid input
+        assertThrows(RuntimeException.class, () -> {
+            customer.rent(endDate, startDate, vehicle);
+
+            vehicle.setVehicleState(VehicleState.Rented);
+            customer.rent(startDate, endDate, vehicle);
+
+            Vehicle vehicle2 = createVehicle2();
+            vehicle2.setVehicleState(VehicleState.Rented);
+            customer.rent(startDate, endDate, vehicle2);
+
+        });
+
     }
 
     @Test
     void returnVehicle() {
+        //must create company with charging policy to call the Customer.pay method inside Customer.returnVehicle
+        Company company = createCompany();
+        Vehicle vehicle = createVehicle2();
+
+        company.addVehicle(vehicle);
+        vehicle.setCompany(company);
+
+        float miles = 100;
+        LocalDate startDate = LocalDate.of(2023, 11, 10);
+        LocalDate endDate = LocalDate.of(2023, 11, 15);
+        customer.rent(startDate, endDate, vehicle);
+        customer.returnVehicle(vehicle, miles);
+
+        //assertEquals(RentState.Finished, customer.getRents().get(0).getRentState());
+    }
+
+    @Test
+    public void returnVehicleWithoutRenting() {
+        Vehicle vehicle = createVehicle2();
+        float miles = 100;
+        //customer.rent has not been called, so no such vehicle can be returned
+        assertThrows(AssertionError.class, () -> {
+            customer.returnVehicle(vehicle, miles);
+        });
+    }
+
+    @Test
+    void returnVehicleFalseData() {
+
+
     }
 
     @Test
@@ -56,7 +122,38 @@ class CustomerTest {
 
 
 
+    private Vehicle createVehicle1() {
+        return new Vehicle("TOYOTA", "YARIS", 2015, 100000,
+                "YMB-6325", VehicleType.Hatchback, new Money(30));
+    }
 
+    private Vehicle createVehicle2() {
+        return new Vehicle("VOLKSWAGEN", "T-ROC", 2016, 80000,
+                "PMT-3013", VehicleType.SUV, new Money(50));
+    }
+
+    private Company createCompany() {
+        Company company = new Company("AVIS","avis@gmail.com", "password123",
+                "2104578965","ΠΑΤΗΣΙΩΝ 37","ΑΘΗΝΑ","12478","163498317","GR2514526358789654");
+
+        LinkedHashMap<Integer, Float> mileage_scale = new LinkedHashMap<Integer, Float>();
+        mileage_scale.put(100, 0.10f);
+        mileage_scale.put(200, 0.20f);
+        mileage_scale.put(300, 0.30f);
+
+        LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
+        damage_type.put(DamageType.Glasses,50f);
+        damage_type.put(DamageType.Machine,70f);
+        damage_type.put(DamageType.Tyres,60f);
+        damage_type.put(DamageType.Scratches,10f);
+        damage_type.put(DamageType.Interior,20f);
+
+        ChargingPolicy policy = new ChargingPolicy(mileage_scale,damage_type);
+
+        company.setPolicy(policy);
+
+        return company;
+    }
 
     // getters & setters
 

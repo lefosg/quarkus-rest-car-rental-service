@@ -21,15 +21,15 @@ public class TechnicalCheckStub extends TechnicalCheck {
     public DamageType checkForDamage() {
         //System.out.println(count);
         count++;
-        if (count == 0) {
+        if (count%6 == 0) {
             return DamageType.NoDamage;
-        } else if (count == 1) {
+        } else if (count%6 == 1) {
             return DamageType.Tyres;
-        } else if (count == 2) {
+        } else if (count%6 == 2) {
             return DamageType.Machine;
-        } else if (count == 3) {
+        } else if (count%6 == 3) {
             return DamageType.Glasses;
-        } else if (count == 4) {
+        } else if (count%6 == 4) {
             return DamageType.Scratches;
         } else {
             return DamageType.Interior;

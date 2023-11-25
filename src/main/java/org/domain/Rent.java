@@ -1,6 +1,9 @@
 package org.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.util.*;
 
 import java.time.LocalDate;
@@ -63,7 +66,10 @@ public class Rent {
     private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private TechnicalCheck technicalCheckImpl;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN, org.hibernate.annotations.CascadeType.PERSIST})
+    @JoinColumn(name="technical_check_id")
+    private TechnicalCheck technicalCheck;
 
 
     public Rent() { }
@@ -75,13 +81,13 @@ public class Rent {
         this.customer = customer;
         this.rentState = RentState.Pending;  //by default rent is initiated to pending state
         this.rentedVehicle.setVehicleState(VehicleState.Rented);
-        this.technicalCheckImpl = new TechnicalCheckImpl(this);
+        this.technicalCheck = new TechnicalCheckImpl(this);
     }
 
     // domain logic
 
     private void calculateDamageCost() {
-        DamageType damageType = technicalCheckImpl.checkForDamage();
+        DamageType damageType = technicalCheck.checkForDamage();
         this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(rentedVehicle.getVehicleType(), damageType);
         rentedVehicle.setVehicleState(VehicleState.Available);
     }
@@ -197,11 +203,11 @@ public class Rent {
     }
 
     public TechnicalCheck getTechnicalCheck() {
-        return technicalCheckImpl;
+        return technicalCheck;
     }
 
     public void setTechnicalCheck(TechnicalCheck technicalCheckImpl) {
-        this.technicalCheckImpl = technicalCheckImpl;
+        this.technicalCheck = technicalCheckImpl;
     }
 
     @Override

@@ -34,8 +34,9 @@ class RentTest {
         company.addVehicle(vehicle);
         vehicle.setCompany(company);
 
-
         rent = new Rent(startDate, endDate, vehicle, customer);
+        rent.setTechnicalCheck(new TechnicalCheckStub(rent));
+
     }
 
     @Test
@@ -63,10 +64,10 @@ class RentTest {
 
     @Test
     public void calculateDamageCost() throws Exception {
-        rent.setTechnicalCheck(new TechnicalCheckStub(rent));
 
         Method calculateDamageCost = Rent.class.getDeclaredMethod("calculateDamageCost");
         calculateDamageCost.setAccessible(true);
+        rent.setTechnicalCheck(new TechnicalCheckStub(rent));
 
         calculateDamageCost.invoke(rent);  //NoDamage
         assertEquals(new Money(0), rent.getDamageCost());
@@ -117,11 +118,6 @@ class RentTest {
                 "YMB-6325", VehicleType.Hatchback, new Money(30));
     }
 
-    private Vehicle createVehicle2() {
-        return new Vehicle("VOLKSWAGEN", "T-ROC", 2016, 80000,
-                "PMT-3013", VehicleType.SUV, new Money(50));
-    }
-
     private Customer createCustomer() {
         return new Customer("ΙΩΑΝΝΗΣ", "evangellou@gmail.com","johnjohn","6941603677",
                 "166008282","ΛΕΥΚΑΔΟΣ 22","ΑΘΗΝΑ","35896", "ΕΥΑΓΓΕΛΟΥ",
@@ -144,6 +140,7 @@ class RentTest {
         damage_type.put(DamageType.Tyres,60f);
         damage_type.put(DamageType.Scratches,10f);
         damage_type.put(DamageType.Interior,20f);
+        damage_type.put(DamageType.NoDamage,0f);
 
         ChargingPolicy policy = new ChargingPolicy(mileage_scale,damage_type);
 

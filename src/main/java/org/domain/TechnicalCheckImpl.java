@@ -7,17 +7,8 @@ import org.util.VehicleState;
 
 import java.util.Random;
 
-@Entity
-@Table(name = "TECHICAL_CHECK")
-public class TechnicalCheckImpl implements TechnicalCheck {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    protected Integer id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Rent rent;
+@DiscriminatorValue("Impl")
+public class TechnicalCheckImpl extends TechnicalCheck {
 
     public TechnicalCheckImpl() { }
 
@@ -53,11 +44,4 @@ public class TechnicalCheckImpl implements TechnicalCheck {
 
     //getters & setters
 
-    public Rent getRent() {
-        return rent;
-    }
-
-    public void setRent(Rent rent) {
-        this.rent = rent;
-    }
 }

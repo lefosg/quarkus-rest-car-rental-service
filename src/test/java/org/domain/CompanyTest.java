@@ -149,9 +149,8 @@ class CompanyTest {
 
     @Test
     public void calculateDamageCostNoDamageType() {
-        assertThrows(InvalidParameterException.class, () -> {
-            company.calculateDamageCost(VehicleType.Hatchback, DamageType.NoDamage);
-        });
+        Money m = company.calculateDamageCost(VehicleType.Hatchback, DamageType.NoDamage);
+        assertEquals(new Money(0), m);
     }
 
     @Test

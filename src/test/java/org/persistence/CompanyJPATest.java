@@ -83,6 +83,10 @@ class CompanyJPATest extends JPATest{
         LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
         damage_type.put(DamageType.Glasses,50f);
         damage_type.put(DamageType.Machine,30f);
+        damage_type.put(DamageType.Scratches,90f);
+        damage_type.put(DamageType.Interior,40f);
+        damage_type.put(DamageType.Tyres,60f);
+        damage_type.put(DamageType.NoDamage,0f);
 
         ChargingPolicy testPolicy = new ChargingPolicy(mileage_scale,damage_type);
 
@@ -233,7 +237,7 @@ class CompanyJPATest extends JPATest{
 
         //first get the company id
         Query query = em.createQuery("select c from Company c where c.AFM=:afm");
-        query.setParameter("afm", "163498317");  // AVIS
+        query.setParameter("afm", "999641227");  // AVIS
         Company company = (Company) query.getResultList().get(0);
 
         assertNotNull(company);
@@ -243,7 +247,7 @@ class CompanyJPATest extends JPATest{
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        em.createNativeQuery("delete from USERS u where u.AFM=163498317").executeUpdate();
+        em.createNativeQuery("delete from USERS u where u.AFM=999641227").executeUpdate();
         //deletion should cascade, and delete vehicles as well
 
         tx.commit();
@@ -259,7 +263,7 @@ class CompanyJPATest extends JPATest{
 
         List<Vehicle> vehicles = query.getResultList();
 
-        assertEquals(5, vehicles.size());
+        assertEquals(6, vehicles.size());
 
     }
 

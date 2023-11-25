@@ -34,6 +34,10 @@ public class ChargingPolicyJPATest extends JPATest {
         LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
         damage_type.put(DamageType.Glasses,50f);
         damage_type.put(DamageType.Machine,30f);
+        damage_type.put(DamageType.Scratches,90f);
+        damage_type.put(DamageType.Interior,40f);
+        damage_type.put(DamageType.Tyres,60f);
+        damage_type.put(DamageType.NoDamage,0f);
 
         ChargingPolicy testPolicy = new ChargingPolicy(mileage_scale,damage_type);
 

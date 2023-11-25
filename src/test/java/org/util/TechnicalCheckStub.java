@@ -1,17 +1,20 @@
 package org.util;
 
+import jakarta.persistence.DiscriminatorValue;
 import org.domain.Rent;
 import org.domain.TechnicalCheck;
 
-public class TechnicalCheckStub implements TechnicalCheck {
+@DiscriminatorValue("Stub")
+public class TechnicalCheckStub extends TechnicalCheck {
 
-    private Rent rent;
     private static int count=-1;
 
-    public TechnicalCheckStub() { }
+    public TechnicalCheckStub() {
+        super();
+    }
 
     public TechnicalCheckStub(Rent rent) {
-        this.rent = rent;
+        super(rent);
     }
 
     @Override

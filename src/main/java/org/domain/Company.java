@@ -90,9 +90,9 @@ public class Company extends User{
         } else if (damageType == null) {
             throw new NullPointerException("[!] Company.calculateDamageCost: damageType is null");
         }
-        if (damageType == DamageType.NoDamage) {
-            return new Money(0);
-        }
+        //if (damageType == DamageType.NoDamage) {
+        //    return new Money(0);
+        //}
         float damage_cost = policy.calculateDamageCost(vehicleType, damageType);
         return new Money(damage_cost);
     }

@@ -26,6 +26,11 @@ public class Initializer {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
+        em.createNativeQuery("delete from TECHICAL_CHECK").executeUpdate();
+
+        em.createNativeQuery("delete from RENTS").executeUpdate();
+        //technical checks
+        //rents
         // vehicles
         em.createNativeQuery("delete from VEHICLES").executeUpdate();
         // users => companies & customers
@@ -79,6 +84,10 @@ public class Initializer {
         LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
         damage_type.put(DamageType.Glasses,50f);
         damage_type.put(DamageType.Machine,30f);
+        damage_type.put(DamageType.Scratches,90f);
+        damage_type.put(DamageType.Interior,40f);
+        damage_type.put(DamageType.Tyres,60f);
+        damage_type.put(DamageType.NoDamage,0f);
 
         ChargingPolicy policy1 = new ChargingPolicy(mileage_scale,damage_type);
 

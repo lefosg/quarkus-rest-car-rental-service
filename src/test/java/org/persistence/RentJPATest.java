@@ -42,21 +42,35 @@ public class RentJPATest extends JPATest{
         // Delete the rent
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        em.createNativeQuery("delete from RENTS r where r.VEHICLE_ID = :id").setParameter("id", id);
+        em.createNativeQuery("delete from RENTS r where r.VEHICLE_ID = :id").setParameter("id", id).executeUpdate();
         tx.commit();
-        em.close();
-        em = JPAUtil.getCurrentEntityManager();
         // Check if the vehicle still exists
         List<Vehicle> vehicle1 = em.createQuery("select v from Vehicle v where v.ID = :id").setParameter("id", id).getResultList();
         Query query = em.createQuery("select r from Rent r");
         List<Rent> newRents = query.getResultList();
         assertEquals(vehicle1.size(), 1);
-        assertEquals(newRents.size(),0);
+        assertEquals(newRents.size(),1);
 
     }
 
     @Test
     public void deleteRentDropsTechnicalCheck() {
+        List<Rent> rents = em.createQuery("select r from Rent r").getResultList();
+        List<TechnicalCheck> check = em.createQuery("select c from TechnicalCheck c").getResultList();
+        assertEquals(rents.size(),2);
+        assertEquals(check.size(),2);
+        Rent rent=new Rent();
+        rent=rents.get(0);
+        int id=rent.getId();
+        // Delete the rent
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.createNativeQuery("delete from RENTS r where id = :id").setParameter("id", id).executeUpdate();
+        tx.commit();
+        // TechnicalCheck is 1
+        List<TechnicalCheck> newCheck = em.createQuery("select c from TechnicalCheck c").getResultList();
+        assertEquals(newCheck.size(),1);
+
 
     }
 

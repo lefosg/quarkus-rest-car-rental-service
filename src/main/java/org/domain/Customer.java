@@ -92,6 +92,7 @@ public class Customer extends User{
      * Costs for possible damages are calculated (Vehicle state is set to Service temporarily).
      * Vehicle state is set back to Available.
      * The customer pays.
+     * Rent state is set to Finished, Vehicle state is set to Available, and Vehicle miles are updated
      * @param vehicle
      * @param miles
      */
@@ -117,7 +118,10 @@ public class Customer extends User{
         rent.calculateCosts(miles);
         Money amount = new Money(rent.getFixedCost().getAmount() + rent.getMileageCost().getAmount());
         pay(amount, rent.getDamageCost(), rent.getRentedVehicle().getCompany());
+        //finalize rent
         rent.setRentState(RentState.Finished);
+        rent.getRentedVehicle().setVehicleState(VehicleState.Available);
+        rent.getRentedVehicle().setMiles(rent.getRentedVehicle().getMiles() + miles);
     }
 
     /**

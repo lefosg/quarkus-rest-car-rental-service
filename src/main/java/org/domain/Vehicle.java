@@ -33,7 +33,7 @@ public class Vehicle {
     private int year;
 
     @Column(name="miles",length =30, nullable = false)
-    private int miles;
+    private float miles;
 
     @Column(name="plate_number",length =30, nullable = false, unique = true)
     private String plateNumber;
@@ -173,11 +173,11 @@ public class Vehicle {
         this.year = year;
     }
 
-    public int getMiles() {
+    public float getMiles() {
         return miles;
     }
 
-    public void setMiles(int miles) {
+    public void setMiles(float miles) {
         if (miles< 0 ){
             throw new InvalidParameterException("Invalid Input");
         }

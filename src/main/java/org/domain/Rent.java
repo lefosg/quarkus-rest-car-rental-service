@@ -89,7 +89,6 @@ public class Rent {
     private void calculateDamageCost() {
         DamageType damageType = technicalCheck.checkForDamage();
         this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(damageType);
-        rentedVehicle.setVehicleState(VehicleState.Available);
     }
 
     private void calculateMileageCost(float miles) {

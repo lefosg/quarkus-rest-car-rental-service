@@ -78,27 +78,27 @@ class CustomerTest {
             Vehicle vehicle2 = createVehicle2();
             vehicle2.setVehicleState(VehicleState.Rented);
             customer.rent(startDate, endDate, vehicle2);
-
         });
-
     }
 
     @Test
     void returnVehicle() {
-        //must create company with charging policy to call the Customer.pay method inside Customer.returnVehicle
+        //prerequisites: must create company with a charging policy to call the Customer.pay method inside Customer.returnVehicle
         Company company = createCompany();
         Vehicle vehicle = createVehicle2();
-
         company.addVehicle(vehicle);
         vehicle.setCompany(company);
 
         float miles = 100;
+        float initialVehicleMiles = vehicle.getMiles();
         LocalDate startDate = LocalDate.of(2023, 11, 10);
         LocalDate endDate = LocalDate.of(2023, 11, 15);
         customer.rent(startDate, endDate, vehicle);
         customer.returnVehicle(vehicle, miles);
 
-        //assertEquals(RentState.Finished, customer.getRents().get(0).getRentState());
+        assertEquals(RentState.Finished, customer.getRents().get(0).getRentState());
+        assertEquals(initialVehicleMiles+miles, customer.getRents().get(0).getRentedVehicle().getMiles());
+        assertEquals(VehicleState.Available, customer.getRents().get(0).getRentedVehicle().getVehicleState());
     }
 
     @Test

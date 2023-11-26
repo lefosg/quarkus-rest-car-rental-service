@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;
 import org.util.DamageType;
 import org.util.Money;
-import org.util.VehicleState;
 import org.util.VehicleType;
 
-import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -80,25 +78,18 @@ public class Company extends User{
     /**
      * If a Customer has cause damage on a rented vehicle, it calculates the cost to
      * charge the Customer for the damage.
-     * @param vehicleType
      * @param damageType
      * @return the damage cost
      */
-    public Money calculateDamageCost(VehicleType vehicleType, DamageType damageType) {
-        if (vehicleType == null) {
-            throw new NullPointerException("[!] Company.calculateDamageCost: vehicleType is null");
-        } else if (damageType == null) {
+    public Money calculateDamageCost(DamageType damageType) {
+        if (damageType == null) {
             throw new NullPointerException("[!] Company.calculateDamageCost: damageType is null");
         }
-        //if (damageType == DamageType.NoDamage) {
-        //    return new Money(0);
-        //}
-        float damage_cost = policy.calculateDamageCost(vehicleType, damageType);
+        float damage_cost = policy.calculateDamageCost(damageType);
         return new Money(damage_cost);
     }
 
 
-    //todo: test calculateFixedCharge, is vehicleID a good choice..?
     /**
      * Calculates the fixed cost for a rented vehicle
      * @param startDate

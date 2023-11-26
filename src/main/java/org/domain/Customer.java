@@ -115,19 +115,33 @@ public class Customer extends User{
         //check if there is any rent ongoing with this vehicle
         assert rent != null : "[!] Customer.returnVehicle: rent searched for is null";
         rent.calculateCosts(miles);
-        pay(rent.getTotalCost(), rent.getRentedVehicle().getCompany());
+        Money amount = new Money(rent.getFixedCost().getAmount() + rent.getMileageCost().getAmount());
+        pay(amount, rent.getDamageCost(), rent.getRentedVehicle().getCompany());
         rent.setRentState(RentState.Finished);
     }
-    
+
     /**
      * Increases the <i>Company.income</i> (and depending on the case, <i>Company.damage_cost</i>) by <i>amount</i>.
      * @param amount
+     * @param damages
      * @param company
      */
-    public void pay(Money amount,Company company) {
+    public void pay(Money amount, Money damages, Company company) {
+        //input check
+        if (amount == null) {
+            throw new NullPointerException("[!] Customer.pay: money amount is null");
+        } else if (company == null) {
+            throw new NullPointerException("[!] Customer.pay: damages amount is null");
+        } else if (damages == null) {
+            throw new NullPointerException("[!] Customer.pay: company is null");
+        }
         double amountValue = amount.getAmount();
-        Money money=new Money(company.getIncome().getAmount() +amountValue);
-        company.setIncome(money);
+        Money newCompanyIncome = new Money(company.getIncome().getAmount() + amountValue);
+        company.setIncome(newCompanyIncome);
+
+        double damageAmountValue = damages.getAmount();
+        Money newCompanyDamageCosts = new Money(company.getDamage_cost().getAmount() + damageAmountValue);
+        company.setDamage_cost(newCompanyDamageCosts);
     }
 
     @Override

@@ -58,7 +58,7 @@ public abstract class User{
 
     // domain logic
 
-    //fixme User.login, User.dashboard
+    //future todo User.login, User.dashboard
 
     /**
      * Authorizes the user in the service

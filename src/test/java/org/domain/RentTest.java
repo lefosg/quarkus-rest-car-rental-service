@@ -7,7 +7,6 @@ import org.util.Money;
 import org.util.TechnicalCheckStub;
 import org.util.VehicleType;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
@@ -28,7 +27,7 @@ class RentTest {
         endDate = LocalDate.of(2023, 10, 10);
 
         customer = createCustomer();
-        vehicle = createVehicle1();
+        vehicle = createVehicle();
         company = createCompany();
 
         company.addVehicle(vehicle);
@@ -44,7 +43,13 @@ class RentTest {
         assertEquals(6, rent.getDurationInDays());
     }
 
-    //three next methods are private methods, however we want to test them
+    @Test
+    public void getDurationInDaysSameDate() {
+        Rent rent = new Rent(startDate, startDate, vehicle, customer);
+        assertEquals(1, rent.getDurationInDays());
+    }
+
+    //three next methods are private methods in Rent, however we want to test them
     @Test
     public void calculateFixedCost() throws Exception {
         Method calculateFixedCost = Rent.class.getDeclaredMethod("calculateFixedCost");
@@ -64,10 +69,10 @@ class RentTest {
 
     @Test
     public void calculateDamageCost() throws Exception {
+        rent.setTechnicalCheck(new TechnicalCheckStub(rent));
 
         Method calculateDamageCost = Rent.class.getDeclaredMethod("calculateDamageCost");
         calculateDamageCost.setAccessible(true);
-        rent.setTechnicalCheck(new TechnicalCheckStub(rent));
 
         calculateDamageCost.invoke(rent);  //NoDamage
         assertEquals(new Money(0), rent.getDamageCost());
@@ -113,7 +118,7 @@ class RentTest {
         assertEquals(new Money(220), total);
     }
 
-    private Vehicle createVehicle1() {
+    private Vehicle createVehicle() {
         return new Vehicle("TOYOTA", "YARIS", 2015, 100000,
                 "YMB-6325", VehicleType.Hatchback, new Money(30));
     }
@@ -135,12 +140,12 @@ class RentTest {
         mileage_scale.put(300, 0.30f);
 
         LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
-        damage_type.put(DamageType.Glasses,50f);
-        damage_type.put(DamageType.Machine,70f);
+        damage_type.put(DamageType.NoDamage,0f);
         damage_type.put(DamageType.Tyres,60f);
+        damage_type.put(DamageType.Machine,70f);
+        damage_type.put(DamageType.Glasses,50f);
         damage_type.put(DamageType.Scratches,10f);
         damage_type.put(DamageType.Interior,20f);
-        damage_type.put(DamageType.NoDamage,0f);
 
         ChargingPolicy policy = new ChargingPolicy(mileage_scale,damage_type);
 

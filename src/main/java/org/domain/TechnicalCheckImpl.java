@@ -38,7 +38,7 @@ public class TechnicalCheckImpl extends TechnicalCheck {
         Random damage= new Random();
         int numberOfType= damage.nextInt(5)+1;
         DamageType damageType = DamageType.values()[numberOfType];
-        rent.setDamageCost(new Money(rent.getRentedVehicle().getCompany().getPolicy().calculateDamageCost(rent.getRentedVehicle().getVehicleType(),damageType)));
+        rent.setDamageCost(new Money(rent.getRentedVehicle().getCompany().getPolicy().calculateDamageCost(damageType)));
         return damageType;
     }
 

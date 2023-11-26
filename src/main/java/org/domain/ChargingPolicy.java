@@ -5,8 +5,6 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.util.DamageType;
-import org.util.Money;
-import org.util.VehicleType;
 
 import java.util.*;
 
@@ -27,7 +25,6 @@ public class ChargingPolicy {
     private Map<Integer, Float> mileageScale;
 
 
-    //todo: do sth with damage idk
     @ElementCollection(fetch = FetchType.EAGER)  // map is small, make it eager
     @CollectionTable(name = "policy_damage_cost", joinColumns = @JoinColumn(name = "policy_id"))
     @JoinColumn(name = "id")
@@ -44,7 +41,6 @@ public class ChargingPolicy {
 
     // domain logic
 
-    //todo: check it works & check for every input its domain range (eg, customer_miles <= 0 etc)
     public float calculateMileageCost(float customer_miles) {
         if (customer_miles < 0 ) {
             throw new IllegalArgumentException("[!] ChargingPolicy.calculateMileageCost\n\tnegative number in miles parameter");
@@ -76,8 +72,7 @@ public class ChargingPolicy {
         return sum_cost;
     }
 
-    //fixme calculateDamageCost
-    public float calculateDamageCost(VehicleType vehicleType, DamageType damageType) {
+    public float calculateDamageCost(DamageType damageType) {
         return this.damageType.get(damageType);
     }
 

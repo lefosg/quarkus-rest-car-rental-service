@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.*;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 
@@ -112,12 +113,75 @@ class CustomerTest {
 
     @Test
     void returnVehicleFalseData() {
+        assertThrows(NullPointerException.class, () -> {
+            float miles = 100;
+            customer.returnVehicle(null, miles);
+        });
 
-
+        assertThrows(InvalidParameterException.class, () -> {
+            float miles = -5;
+            customer.returnVehicle(createVehicle1(), miles);
+        });
     }
 
     @Test
-    void pay() {
+    void payFixNumbers() {
+        //pay directly, without calling customer.rent before
+        Company company = createCompany();
+        Money amount = new Money(5);
+        Money damages = new Money(10);
+        customer.pay(amount, damages, company);
+        Money company_total = new Money(company.getIncome().getAmount() + company.getDamage_cost().getAmount());
+        assertEquals(new Money(15), company_total);
+    }
+
+    @Test
+    void payAfterRent() {
+        //instantiate a company and a vehicle
+        Company company = createCompany();
+        Vehicle vehicle = createVehicle1();
+        company.addVehicle(vehicle);
+        vehicle.setCompany(company);
+
+        LocalDate startDate = LocalDate.of(2023, 11, 10);
+        LocalDate endDate = LocalDate.of(2023, 11, 15);
+        //first make a rent and pay without damage costs
+        customer.rent(startDate, endDate, vehicle);
+        customer.getRents().get(0).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(0)));
+        float miles = 150;
+        customer.returnVehicle(vehicle, miles);  //customer.pay is called inside here, automatically all costs are calculated (mileage: 180, fixed: 20, total: 200)
+
+        Money compIncome = company.getIncome();
+        Money compDamageCosts = company.getDamage_cost();
+        assertEquals(new Money(200), compIncome);
+        assertEquals(new Money(0), compDamageCosts);
+
+        //now this customer.rent call will consider a damage type of Tyres, damage cost should be 60
+        //to make it easier, for now, set company income and damage costs to zero
+        company.setIncome(new Money(0));
+        company.setDamage_cost(new Money(0));
+        customer.rent(startDate, endDate, vehicle);
+        customer.getRents().get(1).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(1)));
+        customer.returnVehicle(vehicle, miles);
+        compIncome = company.getIncome();
+        compDamageCosts = company.getDamage_cost();
+
+        assertEquals(new Money(200), compIncome);
+        assertEquals(new Money(60), compDamageCosts);
+
+        //make again the same rent to see that company total money accumulates
+        //now the stub should return a damage type of machine, which costs 70, so 60 from before + 70 now = 130, and the income should just double (200 before + 200 now)
+        customer.rent(startDate, endDate, vehicle);
+        customer.getRents().get(1).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(1)));
+        customer.returnVehicle(vehicle, miles);
+        compIncome = company.getIncome();
+        compDamageCosts = company.getDamage_cost();
+
+        assertEquals(new Money(400), compIncome);
+        assertEquals(new Money(130), compDamageCosts);
+
+        ((TechnicalCheckStub) customer.getRents().get(0).getTechnicalCheck()).clear();
+
     }
 
 
@@ -147,6 +211,7 @@ class CustomerTest {
         damage_type.put(DamageType.Tyres,60f);
         damage_type.put(DamageType.Scratches,10f);
         damage_type.put(DamageType.Interior,20f);
+        damage_type.put(DamageType.NoDamage,0f);
 
         ChargingPolicy policy = new ChargingPolicy(mileage_scale,damage_type);
 
@@ -176,7 +241,6 @@ class CustomerTest {
         assertEquals(date, customer.getExpirationDate());
     }
 
-//todo: vaso
 
     @Test
     public void testSetHolderName() {

@@ -26,13 +26,13 @@ class CurrencyConverterTest {
 
     @Test
     public void converterEurToUsd(){
-        cnv.currencyConverter(moneyEUR);
+        cnv.convertCurrency(moneyEUR);
         assertEquals(moneyEUR.getCurrency(),USD);
     }
 
     @Test
     public void converterUsdToEur(){
-        cnv.currencyConverter(moneyUSD);
+        cnv.convertCurrency(moneyUSD);
         assertEquals(moneyUSD.getCurrency(),EUR);
     }
 }

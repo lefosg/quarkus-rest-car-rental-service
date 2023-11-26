@@ -4,10 +4,14 @@ import jakarta.persistence.DiscriminatorValue;
 import org.domain.Rent;
 import org.domain.TechnicalCheck;
 
+/**
+ * A stub for the TechnicalCheck abstract class. Used for testing the damage costs
+ * for rents.
+ */
 @DiscriminatorValue("Stub")
 public class TechnicalCheckStub extends TechnicalCheck {
 
-    private static int count=-1;
+    int count=-1;
 
     public TechnicalCheckStub() {
         super();
@@ -17,6 +21,11 @@ public class TechnicalCheckStub extends TechnicalCheck {
         super(rent);
     }
 
+    /**
+     * Every time it is called, it returns a damage type according to a counter.
+     * The order of returns is the same as with the if statements below.
+     * @return the damage type of the broken vehicle
+     */
     @Override
     public DamageType checkForDamage() {
         //System.out.println(count);
@@ -34,6 +43,10 @@ public class TechnicalCheckStub extends TechnicalCheck {
         } else {
             return DamageType.Interior;
         }
+    }
+
+    public void clear() {
+        count = -1;
     }
 
     public Rent getRent() {

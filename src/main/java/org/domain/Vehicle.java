@@ -200,7 +200,6 @@ public class Vehicle {
         this.id = id;
     }
 
-    //todo: define vehicle equality??
     /**
      * Checks vehicle equality based on year, miles, manufacturer,
      * model, plate number, and vehicle type.

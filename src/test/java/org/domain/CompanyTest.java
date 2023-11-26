@@ -35,6 +35,7 @@ class CompanyTest {
         damage_type.put(DamageType.Tyres,100f);
         damage_type.put(DamageType.Scratches,15f);
         damage_type.put(DamageType.Interior,40f);
+        damage_type.put(DamageType.NoDamage,0f);
 
         ChargingPolicy policy = new ChargingPolicy(mileage_scale,damage_type);
 
@@ -143,31 +144,31 @@ class CompanyTest {
     @Test
     public void calculateDamageCostNullDamageType() {
         assertThrows(NullPointerException.class, () -> {
-            company.calculateDamageCost(VehicleType.Hatchback, null);
+            company.calculateDamageCost(null);
         });
     }
 
     @Test
     public void calculateDamageCostNoDamageType() {
-        Money m = company.calculateDamageCost(VehicleType.Hatchback, DamageType.NoDamage);
+        Money m = company.calculateDamageCost(DamageType.NoDamage);
         assertEquals(new Money(0), m);
     }
 
     @Test
     public void calculateDamageCostAllDamageTypes() {
-        Money cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Glasses);
+        Money cost = company.calculateDamageCost(DamageType.Glasses);
         assertEquals(cost, new Money(50));
 
-        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Machine);
+        cost = company.calculateDamageCost(DamageType.Machine);
         assertEquals(cost, new Money(200));
 
-        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Tyres);
+        cost = company.calculateDamageCost(DamageType.Tyres);
         assertEquals(cost, new Money(100));
 
-        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Scratches);
+        cost = company.calculateDamageCost(DamageType.Scratches);
         assertEquals(cost, new Money(15));
 
-        cost = company.calculateDamageCost(VehicleType.Hatchback, DamageType.Interior);
+        cost = company.calculateDamageCost(DamageType.Interior);
         assertEquals(cost, new Money(40));
     }
 

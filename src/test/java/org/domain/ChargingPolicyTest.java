@@ -4,9 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.DamageType;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,8 +21,12 @@ class ChargingPolicyTest {
         mileage_scale.put(450, 0.5f);
 
         LinkedHashMap<DamageType, Float> damage_type = new LinkedHashMap<DamageType, Float>();
-        damage_type.put(DamageType.Tyres,50f);
-        damage_type.put(DamageType.Machine,30f);
+        damage_type.put(DamageType.Glasses,50f);
+        damage_type.put(DamageType.Machine,70f);
+        damage_type.put(DamageType.Tyres,60f);
+        damage_type.put(DamageType.Scratches,10f);
+        damage_type.put(DamageType.Interior,20f);
+        damage_type.put(DamageType.NoDamage,0f);
 
         policy = new ChargingPolicy(mileage_scale,damage_type);
     }
@@ -33,6 +35,11 @@ class ChargingPolicyTest {
     public void calculatesMilesChargingCorrectly() {
         float cost = policy.calculateMileageCost(550);
         assertEquals(185f, cost);
+    }
+
+    @Test
+    public void calculateDamageCost() {
+        assertEquals(50, policy.calculateDamageCost(DamageType.Glasses));
     }
 
 }

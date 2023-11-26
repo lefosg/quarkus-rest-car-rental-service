@@ -39,9 +39,11 @@ public class Vehicle {
     private String plateNumber;
 
     @Column(name="vehicle_type",length =30, nullable = false)
+    @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
 
     @Column(name="vehicle_state",length =30, nullable = false)
+    @Enumerated(EnumType.STRING)
     private VehicleState vehicleState;
 
     @Column(name="count_damages",length =30, nullable = false)
@@ -55,7 +57,7 @@ public class Vehicle {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN, org.hibernate.annotations.CascadeType.PERSIST})
+    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
     @JoinColumn(name="company_id")
     public Company company;
 

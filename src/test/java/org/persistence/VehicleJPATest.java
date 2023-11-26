@@ -70,44 +70,4 @@ class VehicleJPATest extends JPATest {
 
         assertEquals(2, vehicles.size());
     }
-
-    @Test
-    public void persistVehicleWithCompany() {
-        Company company = new Company("HOLYDAYCARS", "holydaycrs@gmail.com", "topcars123", "2218603784",
-                "ΜΑΚΕΔΟΝΙΑΣ 87", "ΘΕΣΣΑΛΟΝΙΚΗ", "47895", "998678010","GR12564789652365");
-        Vehicle vehicle = new Vehicle("TOYOTA", "AYGO", 2015, 100000,
-                "YMO-2222", VehicleType.Mini, new Money(30));
-
-        //first create a new vehicle that is not persisted, and persist it without company
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        em.persist(vehicle);
-        tx.commit();
-
-        //persist the company with the new vehicle
-        tx = em.getTransaction();
-        tx.begin();
-
-        Query query = em.createQuery("select v from Vehicle v where v.plateNumber=:plateNumber");  //plateNumber is unique
-        query.setParameter("plateNumber", "YMO-2222");  //PIP-4556 is the opel corsa
-        List<Vehicle> result = query.getResultList();
-
-        assertEquals(1, result.size());
-        vehicle.setCompany(company);  //company now persisted with vehicle, thanks to @Cascade(Persists) in Vehicle
-
-        tx.commit();
-
-        assertNotNull(company.getId());
-
-        em.close();
-
-        em = JPAUtil.getCurrentEntityManager();
-
-        Company savedCompany = em.find(Company.class, company.getId());
-        assertNotNull(savedCompany);
-        assertEquals("HOLYDAYCARS", savedCompany.getName());
-    }
-
-
-
 }

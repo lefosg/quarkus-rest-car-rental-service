@@ -7,6 +7,7 @@ import org.util.VehicleState;
 
 import java.util.Random;
 
+@Entity
 @DiscriminatorValue("Impl")
 public class TechnicalCheckImpl extends TechnicalCheck {
 
@@ -16,6 +17,10 @@ public class TechnicalCheckImpl extends TechnicalCheck {
         this.rent = rent;
     }
 
+    @Column(name = "damageType")
+    @Enumerated(EnumType.STRING)
+    private DamageType damageType;
+
     //domain logic
 
     public DamageType checkForDamage() {
@@ -23,13 +28,17 @@ public class TechnicalCheckImpl extends TechnicalCheck {
         Random random= new Random();
         int number = random.nextInt(10) + 1;
         if( number==1 ){
-            return calcDamage();
+            this.damageType = calcDamage();
+            return damageType;
         } else if(number>8 && rent.getRentedVehicle().getCountOfRents()>=1) {
-            return calcDamage();
+            this.damageType = calcDamage();
+            return damageType;
         } else if(number>6 && rent.getRentedVehicle().getCountOfRents()>=2){
-            return calcDamage();
+            this.damageType = calcDamage();
+            return damageType;
         }
         rent.getRentedVehicle().setCountOfRents(rent.getRentedVehicle().getCountOfRents()+1);
+        this.damageType = DamageType.NoDamage;
         return DamageType.NoDamage;
     }
 
@@ -44,4 +53,7 @@ public class TechnicalCheckImpl extends TechnicalCheck {
 
     //getters & setters
 
+    public DamageType getDamageType() {
+        return damageType;
+    }
 }

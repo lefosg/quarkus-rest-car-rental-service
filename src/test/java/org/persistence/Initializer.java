@@ -48,7 +48,7 @@ public class Initializer {
 
 
         //create data
-
+        //1. users
         //1a. customers
         LocalDate date1 = LocalDate.of(2027, 11, 26);
         Customer customer1 =new Customer("ΙΩΑΝΝΗΣ", "evangellou@gmail.com","johnjohn","6941603677",
@@ -129,10 +129,15 @@ public class Initializer {
         company2.addVehicle(vehicle9);
         vehicle9.setCompany(company2);
 
+        //instantiate some rents
         customer1.rent(date2,date1,vehicle1);
         float max=500, min=50;
         float miles = (float) Math.floor(Math.random() *(max - min + 1) + min);
         customer1.returnVehicle(vehicle1, miles);
+
+        customer2.rent(date2,date1,vehicle5);
+        miles = (float) Math.floor(Math.random() *(max - min + 1) + min);
+        customer2.returnVehicle(vehicle5, miles);
 
 
         //

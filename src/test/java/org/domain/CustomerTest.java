@@ -3,11 +3,9 @@ package org.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.*;
-
 import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
@@ -76,8 +74,25 @@ class CustomerTest {
             customer.rent(startDate, endDate, vehicle);
 
             Vehicle vehicle2 = createVehicle2();
-            vehicle2.setVehicleState(VehicleState.Rented);
+            vehicle2.setVehicleState(VehicleState.Rented);  //manually set vehicle state to rented
             customer.rent(startDate, endDate, vehicle2);
+        });
+    }
+
+    @Test
+    public void denyRentingAlreadyRentedVehicle() {
+        //instantiate a vehicle
+        Company company = createCompany();
+        Vehicle vehicle1 = createVehicle1();
+
+        company.addVehicle(vehicle1);
+        vehicle1.setCompany(company);
+
+        LocalDate startDate = LocalDate.of(2023, 11, 10);
+        LocalDate endDate = LocalDate.of(2023, 11, 15);
+        assertThrows(RuntimeException.class, () -> {
+            customer.rent(startDate, endDate, vehicle1);
+            customer.rent(startDate, endDate, vehicle1);
         });
     }
 
@@ -181,10 +196,7 @@ class CustomerTest {
         assertEquals(new Money(130), compDamageCosts);
 
         ((TechnicalCheckStub) customer.getRents().get(0).getTechnicalCheck()).clear();
-
     }
-
-
 
     private Vehicle createVehicle1() {
         return new Vehicle("TOYOTA", "YARIS", 2015, 100000,

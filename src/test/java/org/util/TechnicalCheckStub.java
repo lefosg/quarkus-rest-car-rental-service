@@ -1,6 +1,7 @@
 package org.util;
 
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import org.domain.Rent;
 import org.domain.TechnicalCheck;
 
@@ -8,6 +9,7 @@ import org.domain.TechnicalCheck;
  * A stub for the TechnicalCheck abstract class. Used for testing the damage costs
  * for rents.
  */
+@Entity
 @DiscriminatorValue("Stub")
 public class TechnicalCheckStub extends TechnicalCheck {
 

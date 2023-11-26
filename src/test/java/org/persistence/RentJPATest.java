@@ -25,7 +25,7 @@ public class RentJPATest extends JPATest{
     @Test
     public void getNumberOfRents() {
         List<Rent> rents = em.createQuery("select r from Rent r").getResultList();
-        assertEquals(1, rents.size());
+        assertEquals(2, rents.size());
     }
 
     @Test
@@ -52,6 +52,11 @@ public class RentJPATest extends JPATest{
         List<Rent> newRents = query.getResultList();
         assertEquals(vehicle1.size(), 1);
         assertEquals(newRents.size(),0);
+
+    }
+
+    @Test
+    public void deleteRentDropsTechnicalCheck() {
 
     }
 

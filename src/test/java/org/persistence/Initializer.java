@@ -26,7 +26,7 @@ public class Initializer {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        em.createNativeQuery("delete from TECHICAL_CHECK").executeUpdate();
+        em.createNativeQuery("delete from TECHNICAL_CHECK").executeUpdate();
 
         em.createNativeQuery("delete from RENTS").executeUpdate();
         //technical checks
@@ -130,12 +130,16 @@ public class Initializer {
         vehicle9.setCompany(company2);
 
         //instantiate some rents
-        customer1.rent(date2,date1,vehicle1);
+        LocalDate startDate = LocalDate.of(2023, 12, 5);
+        LocalDate endDate = LocalDate.of(2023, 12, 10);
+        customer1.rent(startDate,endDate,vehicle1);
         float max=500, min=50;
         float miles = (float) Math.floor(Math.random() *(max - min + 1) + min);
         customer1.returnVehicle(vehicle1, miles);
 
-        customer2.rent(date2,date1,vehicle5);
+        startDate = LocalDate.of(2023, 12, 15);
+        endDate = LocalDate.of(2023, 12, 25);
+        customer2.rent(startDate,endDate,vehicle5);
         miles = (float) Math.floor(Math.random() *(max - min + 1) + min);
         customer2.returnVehicle(vehicle5, miles);
 

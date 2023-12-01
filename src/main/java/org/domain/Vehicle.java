@@ -9,7 +9,6 @@ import java.util.Objects;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.jboss.resteasy.reactive.server.model.DelegatingServerRestHandler;
 import org.util.Money;
 import org.util.VehicleState;
 import org.util.VehicleType;

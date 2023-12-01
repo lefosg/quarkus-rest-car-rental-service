@@ -7,7 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.util.DamageType;
 
 @Entity
-@Table(name = "TECHICAL_CHECK")
+@Table(name = "TECHNICAL_CHECK")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
         name="type",

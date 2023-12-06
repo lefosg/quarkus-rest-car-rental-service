@@ -17,7 +17,7 @@ public class ChargingPolicy {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ElementCollection(fetch = FetchType.EAGER)  // map is small, make it eager
+    @ElementCollection(fetch = FetchType.LAZY)  // map is small, make it eager
     @CollectionTable(name = "policy_mileage_scale", joinColumns = @JoinColumn(name = "policy_id"))
     @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -25,7 +25,7 @@ public class ChargingPolicy {
     private Map<Integer, Float> mileageScale;
 
 
-    @ElementCollection(fetch = FetchType.EAGER)  // map is small, make it eager
+    @ElementCollection(fetch = FetchType.LAZY)  // map is small, make it eager
     @CollectionTable(name = "policy_damage_cost", joinColumns = @JoinColumn(name = "policy_id"))
     @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)

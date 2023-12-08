@@ -2,6 +2,7 @@ package org.util;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import org.domain.Rent;
 import org.domain.TechnicalCheck;
 
@@ -13,6 +14,7 @@ import org.domain.TechnicalCheck;
 @DiscriminatorValue("Stub")
 public class TechnicalCheckStub extends TechnicalCheck {
 
+    @Transient
     int count=-1;
 
     public TechnicalCheckStub() {
@@ -51,11 +53,4 @@ public class TechnicalCheckStub extends TechnicalCheck {
         count = -1;
     }
 
-    public Rent getRent() {
-        return rent;
-    }
-
-    public void setRent(Rent rent) {
-        this.rent = rent;
-    }
 }

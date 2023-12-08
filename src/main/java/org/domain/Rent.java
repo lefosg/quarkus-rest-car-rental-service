@@ -36,12 +36,16 @@ public class Rent {
     })
     private Money fixedCost;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name="amount",column=@Column(name="mileageCost_amount")),
-            @AttributeOverride(name="currency",column=@Column(name="mileageCost_currency")),
-    })
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name="amount",column=@Column(name="mileageCost_amount")),
+//            @AttributeOverride(name="currency",column=@Column(name="mileageCost_currency")),
+//    })
+    @Transient
     private Money mileageCost;
+
+    @Column(name="miles")
+    private float miles;
 
     @Embedded
     @AttributeOverrides({
@@ -92,6 +96,7 @@ public class Rent {
     }
 
     private void calculateMileageCost(float miles) {
+        this.miles = miles;
         this.mileageCost = this.rentedVehicle.getCompany().calculateMileageCost(miles);
     }
 
@@ -207,6 +212,15 @@ public class Rent {
 
     public void setTechnicalCheck(TechnicalCheck technicalCheckImpl) {
         this.technicalCheck = technicalCheckImpl;
+    }
+
+    public float getMiles() {
+        return miles;
+    }
+
+    public void setMiles(float miles) {
+        this.miles = miles;
+        calculateMileageCost(miles);
     }
 
     @Override

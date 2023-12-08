@@ -31,7 +31,7 @@ public class Company extends User{
     })
     private Money damage_cost;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  //policy not to big... make FetchType eager
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ChargingPolicy policy;
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy="company")

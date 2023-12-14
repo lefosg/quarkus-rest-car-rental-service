@@ -6,9 +6,10 @@ import io.quarkus.security.identity.request.UsernamePasswordAuthenticationReques
 import jakarta.enterprise.context.RequestScoped;
 import org.domain.Company;
 import org.domain.Customer;
+import org.domain.Vehicle;
 
 import java.util.List;
 
 @RequestScoped
-public class VehicleRepository implements PanacheRepositoryBase<VehicleRepository,Integer>{
+public class VehicleRepository implements PanacheRepositoryBase<Vehicle,Integer>{
 }

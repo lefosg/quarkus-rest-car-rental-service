@@ -20,15 +20,15 @@ import java.util.List;
 @RequestScoped
 public class CompanyResource {
 
-    //@Inject
-    //CompanyRepository companyRepository;
+    @Inject
+    CompanyRepository companyRepository;
 
 
-    //@GET
-//    @Transactional
-//    public List<Company> listAllCompanies() {
-//        return companyRepository.listAll();
-//    }
+    @GET
+  @Transactional
+    public List<Company> listAllCompanies() {
+        return companyRepository.listAll();
+    }
 
     @GET
     @Transactional

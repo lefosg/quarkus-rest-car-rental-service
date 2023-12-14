@@ -1,19 +1,11 @@
-package org.persistence;
+package org.old.jpa;
 
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
-import jakarta.persistence.RollbackException;
 import org.domain.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.util.DamageType;
-import org.util.Money;
-import org.util.VehicleType;
-
-import java.time.LocalDate;
 
 
-import java.util.LinkedHashMap;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,15 +1,11 @@
-package org.persistence;
+package org.old.jpa;
 
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.RollbackException;
 import org.domain.ChargingPolicy;
 import org.junit.jupiter.api.Test;
 import org.util.DamageType;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

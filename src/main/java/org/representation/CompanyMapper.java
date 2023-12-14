@@ -11,7 +11,7 @@ import java.util.List;
     uses = ChargingPolicyMapper.class)
 public abstract class CompanyMapper {
 
-    public abstract CompanyRepresentation toRepresentation(Company company);
-    public abstract List<CompanyRepresentation> toRepresentationList(List<Company> company);
+    //public abstract CompanyRepresentation toRepresentation(Company company);
+    //public abstract List<CompanyRepresentation> toRepresentationList(List<Company> company);
 
 }

@@ -1,4 +1,4 @@
-package org.persistence;
+package org.old.jpa;
 
 import org.domain.User;
 import org.junit.jupiter.api.Test;

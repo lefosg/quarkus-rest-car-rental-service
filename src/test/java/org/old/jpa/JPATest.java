@@ -1,4 +1,4 @@
-package org.persistence;
+package org.old.jpa;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;

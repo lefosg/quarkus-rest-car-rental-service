@@ -1,4 +1,4 @@
-package org.persistence;
+package org.old.jpa;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -8,7 +8,6 @@ import org.domain.Customer;
 import org.domain.Vehicle;
 import org.util.DamageType;
 import org.util.Money;
-import org.util.VehicleState;
 import org.util.VehicleType;
 
 import java.time.LocalDate;

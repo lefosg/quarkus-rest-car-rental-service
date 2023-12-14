@@ -15,7 +15,8 @@ class CompanyResourceTest extends IntegrationBase {
         String a = when().get("/company")
                 .then()
                 .extract().asString();
-        assertEquals("all companies 0_0", a);
+
+        assertEquals("A", a);
     }
 
 }

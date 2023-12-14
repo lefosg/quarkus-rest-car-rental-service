@@ -1,7 +1,6 @@
-package org.persistence;
+package org.old.jpa;
 
 import org.domain.TechnicalCheck;
-import org.domain.TechnicalCheckImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.persistence;
+package org.old.jpa;
 
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;

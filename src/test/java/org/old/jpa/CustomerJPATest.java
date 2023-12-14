@@ -1,11 +1,9 @@
-package org.persistence;
+package org.old.jpa;
 
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.RollbackException;
-import org.domain.Company;
 import org.domain.Customer;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

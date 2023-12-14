@@ -1,4 +1,4 @@
-package org.persistence;
+package org.old.jpa;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

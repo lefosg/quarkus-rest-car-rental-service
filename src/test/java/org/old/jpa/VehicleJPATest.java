@@ -1,22 +1,16 @@
-package org.persistence;
+package org.old.jpa;
 
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.RollbackException;
-import org.domain.Company;
 import org.domain.Vehicle;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.domain.Customer;
 import org.junit.jupiter.api.Test;
 import org.util.Money;
 import org.util.VehicleType;
 
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
 
 class VehicleJPATest extends JPATest {
 

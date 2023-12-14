@@ -6,10 +6,16 @@ import java.time.LocalDate;
 
 @RegisterForReflection
 public class CustomerRepresentation {
-public String  surname;
-public String number;
-public LocalDate expirationDate;
-public String holderName;
-
-
+    public Integer id;
+    public String name;
+    public String AFM;
+    public String email;
+    public String phone;
+    public String surname;
+    public String number;
+    public LocalDate expirationDate;
+    public String holderName;
+    public String city;
+    public String street;
+    public String zipcode;
 }

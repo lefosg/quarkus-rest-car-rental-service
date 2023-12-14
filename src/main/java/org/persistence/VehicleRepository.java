@@ -9,5 +9,6 @@ import org.domain.Customer;
 
 import java.util.List;
 
+@RequestScoped
 public class VehicleRepository implements PanacheRepositoryBase<VehicleRepository,Integer>{
 }

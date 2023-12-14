@@ -6,9 +6,10 @@ import io.quarkus.security.identity.request.UsernamePasswordAuthenticationReques
 import jakarta.enterprise.context.RequestScoped;
 import org.domain.Company;
 import org.domain.Customer;
+import org.domain.Rent;
 
 import java.util.List;
 
 @RequestScoped
-public class RentRepository implements PanacheRepositoryBase<RentRepository, Integer>{
+public class RentRepository implements PanacheRepositoryBase<Rent, Integer>{
 }

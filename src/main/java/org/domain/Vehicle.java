@@ -60,7 +60,10 @@ public class Vehicle {
     @JoinColumn(name="company_id")
     public Company company;
 
-    public Vehicle() { }
+    public Vehicle() {
+        this.countDamages = 0;
+        this.countOfRents=0;
+    }
 
     public Vehicle(String manufacturer, String model, int year, int miles, String plate_number, VehicleType vehicleType, Money fixed_cost){
         this.model = model;

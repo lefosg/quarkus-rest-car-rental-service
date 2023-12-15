@@ -39,7 +39,10 @@ public class Company extends User{
     private List<Vehicle> vehicles = new ArrayList<>();
 
 
-    public Company() { }
+    public Company() {
+        income = new Money(0);
+        damage_cost = new Money(0);
+    }
 
     public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM,
                    String IBAN) {

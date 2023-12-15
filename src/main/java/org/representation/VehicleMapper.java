@@ -14,4 +14,6 @@ public abstract class VehicleMapper {
 
     public abstract VehicleRepresentation toRepresentation(Vehicle vehicle);
     public abstract List<VehicleRepresentation> toRepresentationList(List<Vehicle> vehicle);
+
+    public abstract Vehicle toModel(VehicleRepresentation representation);
 }

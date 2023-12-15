@@ -4,8 +4,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.*;
 import org.domain.Company;
 import org.persistence.CompanyRepository;
 import org.representation.CompanyMapper;
@@ -13,6 +12,7 @@ import org.representation.CompanyRepresentation;
 import org.representation.VehicleMapper;
 import org.representation.VehicleRepresentation;
 
+import java.net.URI;
 import java.util.List;
 
 @Path("company")
@@ -29,6 +29,9 @@ public class CompanyResource {
 
     @Inject
     VehicleMapper vehicleMapper;
+
+    @Context
+    UriInfo uriInfo;
 
     // ---------- GET ----------
 
@@ -63,7 +66,7 @@ public class CompanyResource {
 //    }
 
     @GET
-    @Path("{companyId}/vehicles")
+    @Path("{companyId}:[0-9]+/vehicles")
     @Transactional
     public List<VehicleRepresentation> listCompanyVehicles(@PathParam("companyId") String companyId) {
         Company company = companyRepository.findById(Integer.parseInt(companyId));
@@ -76,5 +79,30 @@ public class CompanyResource {
 
     // ---------- PUT ----------
 
+    @PUT
+    @Transactional
+    public Response create(CompanyRepresentation representation) {
+        if (representation.id == null || companyRepository.findById(representation.id) != null) {  //if id is null or already exists
+            throw new NotFoundException("[!] PUT /company\n\tCould not create company, id not found");
+        }
+
+        Company company = companyMapper.toModel(representation);
+        companyRepository.persist(company);
+        URI uri = UriBuilder.fromResource(CompanyResource.class).path(String.valueOf(company.getId())).build();
+        return Response.created(uri).entity(companyMapper.toRepresentation(company)).build();
+    }
+
+    @PUT
+    @Transactional
+    @Path("/{companyId:[0-9]+}")
+    public Response update(@PathParam("companyId") Integer companyId, CompanyRepresentation representation) {
+        if (! companyId.equals(representation.id)) {
+            throw new RuntimeException("[!] PUT /company\n\tCould not update company, id mismatching");
+        }
+
+        Company company = companyMapper.toModel(representation);
+        companyRepository.getEntityManager().merge(company);
+        return Response.noContent().build();
+    }
 
 }

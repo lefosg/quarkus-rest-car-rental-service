@@ -9,6 +9,7 @@ import org.domain.Company;
 import org.domain.Customer;
 import org.domain.Vehicle;
 import org.util.VehicleState;
+import org.util.VehicleType;
 
 import java.util.List;
 
@@ -62,5 +63,13 @@ public class VehicleRepository implements PanacheRepositoryBase<Vehicle,Integer>
         return find("select vehicle from Vehicle vehicle where vehicle.vehicleState = :vehicleState",
                 Parameters.with("vehicleState",vehicleState).map()).list();
     }
+    public List<Vehicle> findByvehicleType(VehicleType vehicleType) {
+        if (vehicleType == null)
+            return listAll();
+
+        return find("select vehicle from Vehicle vehicle where vehicle.vehicleType = :vehicleType",
+                Parameters.with("vehicleType",vehicleType).map()).list();
+    }
+
 
 }

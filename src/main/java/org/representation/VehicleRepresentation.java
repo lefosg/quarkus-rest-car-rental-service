@@ -15,7 +15,5 @@ public class VehicleRepresentation {
     public String plateNumber;
     public VehicleType vehicleType;
     public VehicleState vehicleState;
-    public int countDamages;
-    public int countOfRents;
     public Money fixedCharge;
 }

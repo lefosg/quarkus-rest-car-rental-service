@@ -3,15 +3,13 @@ package org.resource;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.domain.Company;
 import org.persistence.CompanyRepository;
-
+import org.representation.CompanyMapper;
+import org.representation.CompanyRepresentation;
 import java.util.List;
 
 @Path("company")
@@ -23,17 +21,20 @@ public class CompanyResource {
     @Inject
     CompanyRepository companyRepository;
 
-
-    @GET
-  @Transactional
-    public List<Company> listAllCompanies() {
-        return companyRepository.listAll();
-    }
+    @Inject
+    CompanyMapper companyMapper;
 
     @GET
     @Transactional
-    public String test() {
-        return "A";
+    public List<CompanyRepresentation> listAllCompanies() {
+        return companyMapper.toRepresentationList(companyRepository.listAll());
+    }
+
+    @GET
+    @Path("{companyId}")  //fixme? regex
+    @Transactional
+    public CompanyRepresentation listCompanyById(@PathParam("companyId") String companyId) {
+        return companyMapper.toRepresentation(companyRepository.findById(Integer.parseInt(companyId)));
     }
 
 }

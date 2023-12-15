@@ -13,25 +13,25 @@ import org.persistence.CustomerRepository;
 
 import java.util.List;
 
-//@Path("customer")
+@Path("customer")
 
- //   @Consumes(MediaType.APPLICATION_JSON)
- //   @Produces(MediaType.APPLICATION_JSON)
-//    @RequestScoped
-//    public class CustomerResource {
- //       @Inject
-    //    CustomerRepository customerRepository;
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RequestScoped
+    public class CustomerResource {
+        @Inject
+        CustomerRepository customerRepository;
 
-    //    @GET
-   //     @Transactional
-   //     public List<Customer> listAllCustomers() {
-     //       return customerRepository.listAll();
-    //    }
+        @GET
+        @Transactional
+        public List<Customer> listAllCustomers() {
+            return customerRepository.listAll();
+        }
 
-     //   @GET
-//@Transactional
-     //   public String test() {
-     //       return "PELATES";
-    //    }
- //   }
+        //@GET
+       // @Transactional
+        //public String test() {
+       //     return "PELATES";
+       // }
+    }
 

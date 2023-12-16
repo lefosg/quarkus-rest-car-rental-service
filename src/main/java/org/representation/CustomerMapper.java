@@ -24,7 +24,6 @@ public abstract class CustomerMapper {
     @Mapping(source = "city", target = "city")
     @Mapping(source = "surname", target = "surname")
     @Mapping(source = "number", target = "number")
-    @Mapping(source = "city", target = "city")
     @Mapping(source = "street", target = "street")
     @Mapping(source = "zipcode", target = "zipcode")
     @Mapping(source = "holderName", target = "holderName")

@@ -24,7 +24,5 @@ public abstract class VehicleMapper {
     @Mapping(source = "plateNumber", target = "plateNumber")
     @Mapping(source = "vehicleType", target = "vehicleType")
     @Mapping(source = "vehicleState", target = "vehicleState")
-
-
     public abstract Vehicle toModel(VehicleRepresentation representation);
 }

@@ -42,6 +42,36 @@ public class VehicleResourceTest extends IntegrationBase {
     }
 
     @Test
+    public void listByManufacturerValid() {
+        List<VehicleRepresentation> vehicles = when().get("/vehicle?manufacturer="+vehManufacturer)
+                .then()
+                .extract()
+                .as(new TypeRef<List<VehicleRepresentation>>() {});
+
+        assertEquals(2, vehicles.size());
+    }
+
+    @Test
+    public void listByManufacturerUnknown() {
+        List<VehicleRepresentation> vehicles = when().get("/vehicle?manufacturer=MASERATI")
+                .then()
+                .extract()
+                .as(new TypeRef<List<VehicleRepresentation>>() {});
+
+        assertEquals(0, vehicles.size());
+    }
+
+    @Test
+    public void listByManufacturerInvalid() {
+        List<VehicleRepresentation> vehicles = when().get("/vehicle?manufacturer=")
+                .then()
+                .extract()
+                .as(new TypeRef<List<VehicleRepresentation>>() {});
+
+        assertEquals(11, vehicles.size());
+    }
+
+    @Test
     public void listVehicleIdValid() {
         VehicleRepresentation vehicle = when().get("/vehicle/" + vehId)
                 .then()

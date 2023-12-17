@@ -26,7 +26,7 @@ public class VehicleRepository implements PanacheRepositoryBase<Vehicle,Integer>
 
 
     public List<Vehicle> findByManufacturer(String manufacturer) {
-        if (manufacturer == null)
+        if (manufacturer == null || manufacturer.equals(""))
             return listAll();
 
         return find("select vehicle from Vehicle vehicle where vehicle.manufacturer = :manufacturer",

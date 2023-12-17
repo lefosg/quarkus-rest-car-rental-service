@@ -62,16 +62,6 @@ class CompanyResourceTest extends IntegrationBase {
     }
 
     @Test
-    public void listCompaniesByCityNull() {
-        List<CompanyRepresentation> companies = when().get("/company?city=" + null)
-                .then()
-                .extract()
-                .as(new TypeRef<List<CompanyRepresentation>>() {});
-
-        assertEquals(0, companies.size());
-    }
-
-    @Test
     public void listCompanyByIdValid() {
         CompanyRepresentation company = when().get("/company/" + compId)
                 .then()

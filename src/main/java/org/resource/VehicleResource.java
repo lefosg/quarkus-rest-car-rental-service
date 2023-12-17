@@ -37,8 +37,8 @@ public class VehicleResource {
 
     @GET
     @Transactional
-    public List<VehicleRepresentation> listAllVehicles() {
-        return vehicleMapper.toRepresentationList(vehicleRepository.listAll());
+    public List<VehicleRepresentation> listAllVehicles(@DefaultValue("") @QueryParam("manufacturer") String manufacturer) {
+        return vehicleMapper.toRepresentationList(vehicleRepository.findByManufacturer(manufacturer));
     }
 
     @GET

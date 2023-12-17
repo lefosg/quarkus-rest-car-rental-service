@@ -15,6 +15,4 @@ public class CompanyRepresentation {
     public String street;
     public String zipcode;
     public ChargingPolicyRepresentation policy;
-
-
 }

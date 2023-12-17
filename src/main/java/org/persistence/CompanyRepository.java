@@ -11,7 +11,7 @@ import java.util.List;
 public class CompanyRepository implements PanacheRepositoryBase<Company, Integer> {
 
     public List<Company> findByCity(String city) {
-        if (city == null)
+        if (city == null || city.equals(""))
             return listAll();
 
         return find("select company from Company company where company.city = :city",

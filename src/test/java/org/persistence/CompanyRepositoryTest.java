@@ -23,6 +23,6 @@ class CompanyRepositoryTest {
 
     @Test
     void findNonExistingId() {
-           assertEquals(null, companyRepository.findById(2022));
+        assertNull(companyRepository.findById(2022));
     }
 }

@@ -37,8 +37,8 @@ public class CompanyResource {
 
     @GET
     @Transactional
-    public List<CompanyRepresentation> listAllCompanies() {
-        return companyMapper.toRepresentationList(companyRepository.listAll());
+    public List<CompanyRepresentation> listAllCompanies(@DefaultValue("") @QueryParam("city") String city) {
+        return companyMapper.toRepresentationList(companyRepository.findByCity(city));  //find by city will check for empty strings etc
     }
 
     @GET

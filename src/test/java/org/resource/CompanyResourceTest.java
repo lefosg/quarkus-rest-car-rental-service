@@ -42,6 +42,36 @@ class CompanyResourceTest extends IntegrationBase {
     }
 
     @Test
+    public void listCompaniesByCityValid() {
+        List<CompanyRepresentation> companies = when().get("/company?city=ΑΘΗΝΑ")
+                .then()
+                .extract()
+                .as(new TypeRef<List<CompanyRepresentation>>() {});
+
+        assertEquals(1, companies.size());
+    }
+
+    @Test
+    public void listCompaniesByCityInvalid() {
+        List<CompanyRepresentation> companies = when().get("/company?city=ΚΟΖΑΝΗ")  //ΚΟΖΑΝΗ not in db
+                .then()
+                .extract()
+                .as(new TypeRef<List<CompanyRepresentation>>() {});
+
+        assertEquals(0, companies.size());
+    }
+
+    @Test
+    public void listCompaniesByCityNull() {
+        List<CompanyRepresentation> companies = when().get("/company?city=" + null)
+                .then()
+                .extract()
+                .as(new TypeRef<List<CompanyRepresentation>>() {});
+
+        assertEquals(0, companies.size());
+    }
+
+    @Test
     public void listCompanyByIdValid() {
         CompanyRepresentation company = when().get("/company/" + compId)
                 .then()
@@ -67,6 +97,7 @@ class CompanyResourceTest extends IntegrationBase {
 
         assertEquals(6, vehicles.size());
     }
+
 
     // ---------- PUT ----------
 

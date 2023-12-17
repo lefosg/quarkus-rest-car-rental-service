@@ -16,7 +16,7 @@ public abstract class User{
 
     @Id
     @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
 
     @Column(name="name", length=30, nullable = false)
@@ -154,4 +154,18 @@ public abstract class User{
         this.zipcode = zipcode;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", AFM='" + AFM + '\'' +
+                '}';
+    }
 }

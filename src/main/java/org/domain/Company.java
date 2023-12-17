@@ -31,11 +31,10 @@ public class Company extends User{
     })
     private Money damage_cost;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ChargingPolicy policy;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy="company")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy="company", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<Vehicle> vehicles = new ArrayList<>();
 
 
@@ -191,7 +190,7 @@ public class Company extends User{
                 ", IBAN='" + IBAN + '\'' +
                 ", income=" + income +
                 ", damage_cost=" + damage_cost +
-                ", id=" + id +
+                super.toString() +
                 '}';
     }
 

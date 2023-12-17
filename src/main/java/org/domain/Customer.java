@@ -206,7 +206,7 @@ public class Customer extends User{
                 ", number='" + number + '\'' +
                 ", expirationDate=" + expirationDate +
                 ", holderName='" + holderName + '\'' +
-                ", id=" + id +
+                super.toString() +
                 '}';
     }
 

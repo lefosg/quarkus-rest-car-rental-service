@@ -23,6 +23,7 @@ public abstract class CustomerMapper {
     @Mapping(source = "phone", target = "phone")
     @Mapping(source = "city", target = "city")
     @Mapping(source = "surname", target = "surname")
+    @Mapping(source = "password", target = "password")
     @Mapping(source = "number", target = "number")
     @Mapping(source = "street", target = "street")
     @Mapping(source = "zipcode", target = "zipcode")

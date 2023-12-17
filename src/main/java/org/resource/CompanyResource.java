@@ -53,23 +53,11 @@ public class CompanyResource {
         return companyMapper.toRepresentation(company);
     }
 
-//    @GET  //fixme
-//    @Path("{city: [A-Z]+}")
-//    @Transactional
-//    public List<CompanyRepresentation> listCompaniesByCity(@PathParam("city") String city) {
-//        List<Company> companies = companyRepository.findByCity(city);
-//        if (companies == null) {
-//            throw new NotFoundException("[!] GET /company/"+city+"\n\tCould not find companies in city " + city);
-//        }
-//
-//        return companyMapper.toRepresentationList(companies);
-//    }
-
     @GET
-    @Path("{companyId}:[0-9]+/vehicles")
+    @Path("{companyId: [0-9]+}/vehicles")
     @Transactional
-    public List<VehicleRepresentation> listCompanyVehicles(@PathParam("companyId") String companyId) {
-        Company company = companyRepository.findById(Integer.parseInt(companyId));
+    public List<VehicleRepresentation> listCompanyVehicles(@PathParam("companyId") Integer companyId) {
+        Company company = companyRepository.findById(companyId);
 
         if (company ==  null) {
             throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");
@@ -77,13 +65,16 @@ public class CompanyResource {
         return vehicleMapper.toRepresentationList(company.getVehicles());
     }
 
+
+    //todo add methods with query params (city)
+
     // ---------- PUT ----------
 
     @PUT
     @Transactional
     public Response create(CompanyRepresentation representation) {
-        if (representation.id == null || companyRepository.findById(representation.id) != null) {  //if id is null or already exists
-            throw new NotFoundException("[!] PUT /company\n\tCould not create company, id not found");
+        if (representation.id == null ||  companyRepository.findById(representation.id) != null ) {  //if id is null or already exists
+            throw new NotFoundException("[!] PUT /company\n\tCould not create company, invalid id");
         }
 
         Company company = companyMapper.toModel(representation);
@@ -103,6 +94,31 @@ public class CompanyResource {
         Company company = companyMapper.toModel(representation);
         companyRepository.getEntityManager().merge(company);
         return Response.noContent().build();
+    }
+
+
+    // ---------- DELETE ----------
+
+    @DELETE
+    @Transactional
+    public Response deleteAllCompanies() {
+        companyRepository.deleteAll();
+        return Response.status(200).build();
+    }
+
+    @DELETE
+    @Transactional
+    @Path("{companyId: [0-9]+}")
+    public Response deleteCompany(@PathParam("companyId") Integer companyId) {
+        if (companyId == null || companyRepository.findById(companyId) == null) {
+            throw new NotFoundException("[!] DELETE /company" + companyId + "\n\tCould not find company with id " + companyId);
+        }
+
+        boolean deleted = companyRepository.deleteById(companyId);
+        if (!deleted) {
+            throw new RuntimeException("[!] DELETE /company" + companyId + "\n\tCould not delete company with id " + companyId);
+        }
+        return Response.status(200).build();
     }
 
 }

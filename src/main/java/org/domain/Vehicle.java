@@ -18,7 +18,7 @@ import org.util.VehicleType;
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     protected Integer id;
 
@@ -55,14 +55,15 @@ public class Vehicle {
     private Money fixedCharge;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+    //@OnDelete(action = OnDeleteAction.CASCADE)
+    //@Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
     @JoinColumn(name="company_id")
     public Company company;
 
     public Vehicle() {
         this.countDamages = 0;
         this.countOfRents=0;
+        this.vehicleState = VehicleState.Available;
     }
 
     public Vehicle(String manufacturer, String model, int year, int miles, String plate_number, VehicleType vehicleType, Money fixed_cost){

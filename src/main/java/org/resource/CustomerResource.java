@@ -10,6 +10,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.domain.Customer;
 import org.persistence.CustomerRepository;
+import org.representation.CustomerMapper;
+import org.representation.CustomerRepresentation;
 
 import java.util.List;
 
@@ -22,10 +24,13 @@ import java.util.List;
         @Inject
         CustomerRepository customerRepository;
 
+        @Inject
+        CustomerMapper customerMapper;
+
         @GET
         @Transactional
-        public List<Customer> listAllCustomers() {
-            return customerRepository.listAll();
+        public List<CustomerRepresentation> listAllCustomers() {
+            return customerMapper.toRepresentationList(customerRepository.listAll());
         }
 
         //@GET

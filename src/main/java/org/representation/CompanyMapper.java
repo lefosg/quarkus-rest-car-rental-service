@@ -20,6 +20,7 @@ public abstract class CompanyMapper {
     public abstract List<CompanyRepresentation> toRepresentationList(List<Company> company);
 
     @Mapping(source = "name", target = "name")
+    @Mapping(source = "password", target = "password")
     @Mapping(source = "id", target = "id")
     @Mapping(source = "email", target = "email")
     @Mapping(source = "phone", target = "phone")

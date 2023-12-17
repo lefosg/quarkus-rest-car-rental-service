@@ -12,6 +12,7 @@ public class CustomerRepresentation {
     public String email;
     public String phone;
     public String surname;
+    public String password;
     public String number;
     public LocalDate expirationDate;
     public String holderName;

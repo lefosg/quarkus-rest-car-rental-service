@@ -20,4 +20,9 @@ class CompanyRepositoryTest {
         List<Company> companies = companyRepository.findByCity("ΑΘΗΝΑ");
         assertEquals(1, companies.size());
     }
+
+    @Test
+    void findNonExistingId() {
+           assertEquals(null, companyRepository.findById(2022));
+    }
 }

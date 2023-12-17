@@ -6,6 +6,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 public class CompanyRepresentation {
     public Integer id;
     public String name;
+    public String password;
     public String IBAN;
     public String AFM;
     public String email;
@@ -14,5 +15,6 @@ public class CompanyRepresentation {
     public String street;
     public String zipcode;
     public ChargingPolicyRepresentation policy;
+
 
 }

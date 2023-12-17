@@ -130,9 +130,8 @@ class CompanyResourceTest extends IntegrationBase {
                 .then().statusCode(404);
     }
 
-    //todo create tests for updating a resource
     @Test
-    public void updateValid() {
+    public void updateCompanyValid() {
         //get the resource
         CompanyRepresentation representation = when().get("/company/"+compId)
                 .then().statusCode(200).extract().as(CompanyRepresentation.class);

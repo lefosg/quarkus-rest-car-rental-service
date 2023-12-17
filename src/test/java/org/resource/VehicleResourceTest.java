@@ -145,6 +145,61 @@ public class VehicleResourceTest extends IntegrationBase {
             .then().statusCode(404);
     }
 
+    @Test
+    public void updateVehicleValid() {
+        //get the resource
+        VehicleRepresentation representation = when().get("/vehicle/"+vehId)
+                .then().statusCode(200).extract().as(VehicleRepresentation.class);
+
+        assertEquals(vehId, representation.id);
+
+        //make the update
+        int newYear = 2020;
+        representation.year = newYear;
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/vehicle/"+vehId)
+                .then().statusCode(204);
+
+        //get the resource again to validate
+        VehicleRepresentation updated = when().get("/vehicle/"+vehId)
+                .then().statusCode(200).extract().as(VehicleRepresentation.class);
+
+        assertEquals(vehId, updated.id);
+        assertEquals(newYear, updated.year);
+    }
+
+    @Test
+    public void updateVehicleInvalid() {
+        //get the resource
+        VehicleRepresentation representation = when().get("/vehicle/"+vehId)
+                .then().statusCode(200).extract().as(VehicleRepresentation.class);
+
+        assertEquals(vehId, representation.id);
+
+        //make the update
+        representation.year = 2020;
+
+        //send the update to wrong endpoint, id mismatching
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/vehicle/3020")
+                .then().statusCode(404);
+
+        //make another update, set id to null -> should return 404
+        representation.id = null;
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/vehicle/3000")
+                .then().statusCode(404);
+
+    }
+
     // ---------- DELETE ----------
 
     //@Test

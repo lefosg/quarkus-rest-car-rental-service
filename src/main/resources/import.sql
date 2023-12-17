@@ -51,8 +51,8 @@ insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_numbe
 insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_number, vehicle_type, vehicle_state, amount, currency, count_damages, count_rents, company_id) values (3006, 'OPEL', 'CORSA', 2018, 64000, 'PIP-4556', 'Hatchback', 'Available', 60, 'EUR', 0, 0, 2001);
 insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_number, vehicle_type, vehicle_state, amount, currency, count_damages, count_rents, company_id) values (3007, 'AUDI', 'A7', 2021, 100000, 'MMA-8745', 'Sedan', 'Available', 70, 'EUR', 0, 0, 2001);
 insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_number, vehicle_type, vehicle_state, amount, currency, count_damages, count_rents, company_id) values (3008, 'NISSAN', 'QASHQAI AUTOMATIC', 2023, 50000, 'ZIK-6834', 'SUV', 'Available', 100, 'EUR', 0, 0, 2001);
-insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_number, vehicle_type, vehicle_state, amount, currency, count_damages, count_rents, company_id) values (3009,'TOYOTA', 'C-HR', 2022, 49000, 'PAP-3333', 'SUV', 'Available', 80, 'EUR', 0, 0, 2001);
-insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_number, vehicle_type, vehicle_state, amount, currency, count_damages, count_rents, company_id) values (3010,'VOLKSWAGEN', 'POLO', 2018, 73000, 'NIK-9012', 'Hatchback', 'Available', 50, 'EUR', 0, 0, 2001);
+insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_number, vehicle_type, vehicle_state, amount, currency, count_damages, count_rents, company_id) values (3009, 'TOYOTA', 'C-HR', 2022, 49000, 'PAP-3333', 'SUV', 'Available', 80, 'EUR', 0, 0, 2001);
+insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_number, vehicle_type, vehicle_state, amount, currency, count_damages, count_rents, company_id) values (3010, 'VOLKSWAGEN', 'POLO', 2018, 73000, 'NIK-9012', 'Hatchback', 'Available', 50, 'EUR', 0, 0, 2001);
 
 -- insert rents
 

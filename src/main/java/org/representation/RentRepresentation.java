@@ -12,7 +12,11 @@ public class RentRepresentation {
     public LocalDate endDate;
     public RentState rentState;
     public Money fixedCost;
+    public float miles;
     public Money mileageCost;
     public Money damageCost;
     public Money totalCost;
+    //public VehicleRepresentation vehicle;
+    //public TechnicalCheckRepresentation technicalCheck;
+    //public CustomerRepresentation customer;
 }

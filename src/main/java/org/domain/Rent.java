@@ -76,7 +76,9 @@ public class Rent {
     private TechnicalCheck technicalCheck;
 
 
-    public Rent() { }
+    public Rent() {
+        this.technicalCheck = new TechnicalCheckImpl(this);
+    }
 
     public Rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle, Customer customer) {
         this.startDate = startDate;

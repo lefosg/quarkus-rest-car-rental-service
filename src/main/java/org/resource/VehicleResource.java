@@ -63,8 +63,6 @@ public class VehicleResource {
         return companyMapper.toRepresentation(vehicle.getCompany());
     }
 
-    //todo add methods with query params (manufacturer, type)
-
     // ---------- PUT ----------
 
     @PUT

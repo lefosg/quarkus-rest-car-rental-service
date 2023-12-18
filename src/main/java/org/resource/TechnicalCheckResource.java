@@ -36,16 +36,17 @@ public class TechnicalCheckResource {
     @Context
     UriInfo uriInfo;
 
-   //@GET
-  //  @Path("{TechnicalCheckId: [0-9]+}")
-  //  @Transactional
-   // public TechnicalCheckRepresentation listtechnicalCheckById(@PathParam("technicalCheckId") Integer technicalCheckId) {
-   //     TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
+   /// @GET
+  ///  @Path("{companyId: [0-9]+}")
+   // @Transactional
+   // public TechnicalCheckRepresentation listTechnicalCheckById(@PathParam("technicalCheckId") Integer technicalCheckId) {
+     //   TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
 
-      //  if (technicalCheckId ==  null) {
-       //     throw new NotFoundException("[!] GET /ΤechnicalCheck/"+technicalCheckRepository+"\n\tCould not find technicalCheck with id " + technicalCheckId);
-        }
-     //   return technicalCheckMapper.toRepresentation(technicalCheck);
-   // }
+    //    if (technicalCheck ==  null) {
+     //       throw new NotFoundException("[!] GET /technicalCheck/"+technicalCheckId+"\n\tCould not find technicalCheck with id " + technicalCheckId);
+     //   }
+     //   return companyMapper.toRepresentation(TechnicalCheck);
+  //  }
+}
 
 

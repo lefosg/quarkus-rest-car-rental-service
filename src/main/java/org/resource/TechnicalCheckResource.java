@@ -36,7 +36,7 @@ public class TechnicalCheckResource {
     @Context
     UriInfo uriInfo;
 
-   // @GET
+   //@GET
   //  @Path("{TechnicalCheckId: [0-9]+}")
   //  @Transactional
    // public TechnicalCheckRepresentation listtechnicalCheckById(@PathParam("technicalCheckId") Integer technicalCheckId) {

@@ -82,12 +82,77 @@ class RentResourceTest extends IntegrationBase {
 
     }
 
+    @Test
+    public void listCustomerOfRentValid() {
+        CustomerRepresentation representation = when().get("/rent/"+rentId+"/customer")
+                .then()
+                .extract()
+                .as(CustomerRepresentation.class);
+
+        assertEquals(1000, representation.id);
+    }
+
+    @Test
+    public void listCustomerOfRentInvalid() {
+        when().get("/rent/"+4005+"/customer")  //id 4005 not in db
+                .then()
+                .statusCode(404);
+
+        when().get("/rent/"+null+"/customer")  //id null invalid
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void listVehicleOfRentValid() {
+        VehicleRepresentation representation = when().get("/rent/"+rentId+"/vehicle")
+                .then()
+                .extract()
+                .as(VehicleRepresentation.class);
+
+        assertEquals(3000, representation.id);
+    }
+
+    @Test
+    public void listVehicleOfRentInvalid() {
+        when().get("/rent/"+4005+"/vehicle")  //id 4005 not in db
+                .then()
+                .statusCode(404);
+
+        when().get("/rent/"+null+"/vehicle")  //id null invalid
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void listTechnicalCheckOfRentValid() {
+        TechnicalCheckRepresentation representation = when().get("/rent/"+rentId+"/technicalCheck")
+                .then()
+                .extract()
+                .as(TechnicalCheckRepresentation.class);
+
+        assertEquals(5000, representation.id);
+    }
+
+    @Test
+    public void listTechnicalCheckOfRentInvalid() {
+        when().get("/rent/"+4005+"/technicalCheck")  //id 4005 not in db
+                .then()
+                .statusCode(404);
+
+        when().get("/rent/"+null+"/echnicalCheck")  //id null invalid
+                .then()
+                .statusCode(404);
+    }
+
+
+
     // ---------- PUT ----------
 
     //doesn't work
-    //@Test
+    @Test
     public void createRentValid() {
-        RentRepresentation representation = createRentRepresentation(4002);
+        RentRepresentation representation = createRentRepresentation((Integer) 4002);
 
         RentRepresentation created = given()
                 .contentType(ContentType.JSON)
@@ -101,16 +166,44 @@ class RentResourceTest extends IntegrationBase {
     }
 
     //doesn't work
-    //@Test
+    @Test
     public void createRentInvalid() {
         RentRepresentation representation = createRentRepresentation(4000);  //4000 already in db
 
         given()
             .contentType(ContentType.JSON)
             .body(representation)
-            .when().put("/rent/")
+            .when().put("/rent")
             .then().statusCode(404);
     }
+
+    @Test
+    public void updateRentValid() {
+        //get the resource
+        RentRepresentation representation = when().get("/rent/"+rentId)
+                .then().statusCode(200).extract().as(RentRepresentation.class);
+
+        assertEquals(rentId, representation.id);
+
+        //make the update
+        Money newDamageCost = new Money(5);
+        representation.damageCost = newDamageCost;
+
+        //send the update
+        given()
+            .contentType(ContentType.JSON)
+            .body(representation)
+            .when().put("/rent/"+rentId)
+            .then().statusCode(204);
+
+        //get the resource again to validate
+        RentRepresentation updated = when().get("/rent/"+rentId)
+                .then().statusCode(200).extract().as(RentRepresentation.class);
+
+        assertEquals(rentId, updated.id);
+        assertEquals(newDamageCost, updated.damageCost);
+    }
+
 
 
 

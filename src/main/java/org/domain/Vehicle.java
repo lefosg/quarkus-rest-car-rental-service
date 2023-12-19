@@ -58,7 +58,7 @@ public class Vehicle {
     //@OnDelete(action = OnDeleteAction.CASCADE)
     //@Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
     @JoinColumn(name="company_id")
-    public Company company;
+    private Company company;
 
     public Vehicle() {
         this.countDamages = 0;

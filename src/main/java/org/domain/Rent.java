@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Rent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     protected Integer id;
 
@@ -36,12 +36,12 @@ public class Rent {
     })
     private Money fixedCost;
 
-//    @Embedded
-//    @AttributeOverrides({
-//            @AttributeOverride(name="amount",column=@Column(name="mileageCost_amount")),
-//            @AttributeOverride(name="currency",column=@Column(name="mileageCost_currency")),
-//    })
-    @Transient
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="amount",column=@Column(name="mileageCost_amount")),
+            @AttributeOverride(name="currency",column=@Column(name="mileageCost_currency")),
+    })
+    //@Transient
     private Money mileageCost;
 
     @Column(name="miles")
@@ -138,7 +138,7 @@ public class Rent {
     }
 
     public void setStartDate(LocalDate startDate) {
-        if (startDate.isBefore(LocalDate.now())){
+        if (startDate.isAfter(LocalDate.now())){
             throw new RuntimeException("Έχετε δώσει προγενέστερη ημερομηνία έναρξης ενοικίασης");
         }
         this.startDate = startDate;
@@ -222,7 +222,7 @@ public class Rent {
 
     public void setMiles(float miles) {
         this.miles = miles;
-        calculateMileageCost(miles);
+        //calculateMileageCost(miles);
     }
 
     @Override
@@ -233,11 +233,13 @@ public class Rent {
                 ", endDate=" + endDate +
                 ", rentState=" + rentState +
                 ", fixedCost=" + fixedCost +
+                ", miles=" + miles +
                 ", mileageCost=" + mileageCost +
                 ", damageCost=" + damageCost +
                 ", totalCost=" + totalCost +
                 ", rentedVehicle=" + rentedVehicle +
                 ", customer=" + customer +
+                ", technicalCheck=" + technicalCheck +
                 '}';
     }
 

@@ -56,8 +56,8 @@ insert into VEHICLES (id, manufacturer, model, year_of_model, miles, plate_numbe
 
 -- insert rents
 
-insert into RENTS(id, customer_id, vehicle_id, technical_check_id, startDate, endDate, rentState, miles, fixedCost_amount, fixedCost_currency, damageCost_amount, damageCost_currency,  totalCost_amount, totalCost_currency) values (4000, 1000, 3000, null, '2023-12-05', '2023-12-10', 'Finished', 464, 180.0, 'EUR', 50, 'EUR', 339.2000045776367, 'EUR');
-insert into RENTS(id, customer_id, vehicle_id, technical_check_id, startDate, endDate, rentState, miles, fixedCost_amount, fixedCost_currency, damageCost_amount, damageCost_currency,  totalCost_amount, totalCost_currency) values (4001, 1001, 3004, null, '2023-12-15', '2023-12-25', 'Finished', 281, 440.0, 'EUR', 0, 'EUR', 494.3000030517578, 'EUR');
+insert into RENTS(id, customer_id, vehicle_id, technical_check_id, startDate, endDate, rentState, miles, fixedCost_amount, fixedCost_currency, damageCost_amount, damageCost_currency, mileageCost_amount, mileageCost_currency, totalCost_amount, totalCost_currency) values (4000, 1000, 3000, null, '2023-12-05', '2023-12-10', 'Finished', 464, 180.0, 'EUR', 50, 'EUR', 109.2, 'EUR',  339.2000045776367, 'EUR');
+insert into RENTS(id, customer_id, vehicle_id, technical_check_id, startDate, endDate, rentState, miles, fixedCost_amount, fixedCost_currency, damageCost_amount, damageCost_currency, mileageCost_amount, mileageCost_currency, totalCost_amount, totalCost_currency) values (4001, 1001, 3004, null, '2023-12-15', '2023-12-25', 'Finished', 281, 440.0, 'EUR', 0, 'EUR', 68.35, 'EUR', 494.3000030517578, 'EUR');
 
 -- insert technical checks
 

@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.domain.Company;
+import org.domain.Rent;
 import org.domain.TechnicalCheck;
 import org.persistence.CompanyRepository;
 import org.persistence.TechnicalCheckRepository;
@@ -36,17 +37,36 @@ public class TechnicalCheckResource {
     @Context
     UriInfo uriInfo;
 
-   /// @GET
-  ///  @Path("{companyId: [0-9]+}")
-   // @Transactional
-   // public TechnicalCheckRepresentation listTechnicalCheckById(@PathParam("technicalCheckId") Integer technicalCheckId) {
-     //   TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
+    @GET
+    @Transactional
+    public List<TechnicalCheckRepresentation> listAllTechnicalChecks(@DefaultValue("") @QueryParam("technicalCheck") Integer technicalCheck) {
+        return technicalCheckMapper.toRepresentationList(technicalCheckRepository.findBytechnicalCheck(technicalCheck));
+    }
 
-    //    if (technicalCheck ==  null) {
-     //       throw new NotFoundException("[!] GET /technicalCheck/"+technicalCheckId+"\n\tCould not find technicalCheck with id " + technicalCheckId);
-     //   }
-     //   return companyMapper.toRepresentation(TechnicalCheck);
-  //  }
+  @GET
+  @Path("{technicalCheckId: [0-9]+}")
+    @Transactional
+    public TechnicalCheckRepresentation listTechnicalCheckById(@PathParam("technicalCheckId") Integer technicalCheckId) {
+     TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
+
+      if (technicalCheck ==  null) {
+           throw new NotFoundException("[!] GET /technicalCheck/"+technicalCheckId+"\n\tCould not find technicalCheck with id " + technicalCheckId);
+       }
+        return technicalCheckMapper.toRepresentation(technicalCheck);
+    }
+
+
+    //@GET
+   // @Path("{technicalCheckId: [0-9]+}/rents")
+   // @Transactional
+   // public List<TechnicalCheckRepresentation> listTechnicalCheckRents(@PathParam("technicalCheckId") Integer technicalCheckId) {
+      //  TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
+
+     //   if (technicalCheck ==  null) {
+       //     throw new NotFoundException("[!] GET /technicalCheck/"+technicalCheckId+"\n\tCould not find technicalCheck");
+       // }
+     //   return RentMapper.toRepresentationList(technicalCheck.getRent());
+   // }
 }
 
 

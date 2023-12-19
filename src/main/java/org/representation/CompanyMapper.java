@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper(
     componentModel = "jakarta",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-    uses = ChargingPolicyMapper.class
+    uses = CompanyMapper.class
 )
 public abstract class CompanyMapper {
 
@@ -27,7 +27,7 @@ public abstract class CompanyMapper {
     @Mapping(source = "city", target = "city")
     @Mapping(source = "street", target = "street")
     @Mapping(source = "zipcode", target = "zipcode")
-    @Mapping(source = "policy", target = "policy")
+    //@Mapping(source = "policy", target = "policy")
     public abstract Company toModel(CompanyRepresentation companyRepresentation);
 
 }

@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.Id;
+import jakarta.ws.rs.NotFoundException;
 import org.domain.Company;
 import org.domain.Vehicle;
 
@@ -18,11 +19,16 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
             c.getVehicles().clear();
             delete(c);
         }
-
     }
 
-    public void delete(Integer id) {
+    public void deleteCompany(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("CompanyRepository: deleteCompany\n\tid was null");
+        }
         Company company = findById(id);
+        if (company == null) {
+            throw new NotFoundException("CompanyRepository: deleteCompany\n\tcompany found is null");
+        }
         company.getVehicles().clear();
         delete(company);
     }

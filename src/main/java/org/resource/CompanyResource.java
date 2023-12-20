@@ -111,7 +111,7 @@ public class CompanyResource {
             throw new NotFoundException("[!] DELETE /company" + companyId + "\n\tCould not find company with id " + companyId);
         }
 
-        companyRepository.delete(companyId);
+        companyRepository.deleteCompany(companyId);
         boolean deleted = companyRepository.findById(companyId) == null;
         if (!deleted) {
             throw new RuntimeException("[!] DELETE /company" + companyId + "\n\tCould not delete company with id " + companyId);

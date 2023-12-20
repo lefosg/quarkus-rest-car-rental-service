@@ -166,7 +166,7 @@ class CompanyResourceTest extends IntegrationBase {
         when().get("/company/"+2000)
                 .then().statusCode(404);  //get must return 404
         when().get("/company/"+2001)
-                .then().statusCode(404);
+                .then().statusCode(404);  //get must return 404
 
         when().get("/vehicle/"+3000)
                 .then().statusCode(404);  //getting a vehicle should return 404 as well
@@ -174,13 +174,15 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void deleteOneCompany() {
-        when().delete("/company/" + 2000)  //id 3012 not in db
+        when().delete("/company/" + 2000)
                 .then().statusCode(200);
 
         when().get("/company/"+2000)
                 .then().statusCode(404);  //get must return 404
-    }
 
+        when().delete("/company/" + 2005)  //id 2005 not in db
+                .then().statusCode(404);
+    }
 
     // ---------- misc ----------
 

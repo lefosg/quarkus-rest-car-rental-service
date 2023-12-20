@@ -8,7 +8,6 @@ import jakarta.ws.rs.core.*;
 import org.domain.Company;
 import org.domain.Rent;
 import org.domain.TechnicalCheck;
-import org.domain.Vehicle;
 import org.persistence.CompanyRepository;
 import org.persistence.TechnicalCheckRepository;
 import org.representation.*;
@@ -66,56 +65,6 @@ public class TechnicalCheckResource {
             throw new NotFoundException("[!] GET /technicalCheck/" + technicalCheckId + "\n\tCould not find technicalCheck");
         }
         return rentMapper.toRepresentation(technicalCheck.getRent());
-    }
-    //-------PUT--------
-
-    @PUT
-    @Transactional
-    public Response create(TechnicalCheckRepresentation representation) {
-        if (representation.id == null || technicalCheckRepository.findById(representation.id) != null) {  //if id is null or already exists
-            throw new NotFoundException("[!] PUT /technicalCheck\n\tCould not create technicalCheck, invalid id");
-        }
-
-        TechnicalCheck technicalCheck = technicalCheckMapper.toModel(representation);
-        technicalCheckRepository.persist(technicalCheck);
-        URI uri = UriBuilder.fromResource(TechnicalCheckResource.class).path(String.valueOf(technicalCheck.getId())).build();
-        return Response.created(uri).entity(technicalCheckMapper.toRepresentation(technicalCheck)).build();
-    }
-
-    @PUT
-    @Path("{technicalCheckId:[0-9]+}")
-    @Transactional
-    public Response update(@PathParam("technicalCheckId") Integer technicalCheckId, TechnicalCheckRepresentation representation) {
-        if (technicalCheckId == null || !(technicalCheckId).equals(representation.id)) {
-            throw new NotFoundException("[!] PUT /technicalCheck\n\tCould not update technicalCheck, id mismatching");
-        }
-
-        TechnicalCheck technicalCheck = technicalCheckMapper.toModel(representation);
-        technicalCheckRepository.getEntityManager().merge(technicalCheck);
-        return Response.noContent().build();
-    }
-
-    //-----DELETE----
-
-    @DELETE
-    @Transactional
-    public Response deleteAll() {
-        technicalCheckRepository.deleteAll();
-        return Response.status(200).build();
-    }
-    @DELETE
-    @Path("{technicalCheckId: [0-9]+}")
-    @Transactional
-    public Response deletetechnicalCheck(@PathParam("technicalCheckId") Integer technicalCheckId) {
-        if (technicalCheckId == null || technicalCheckRepository.findById(technicalCheckId) == null) {
-            throw new NotFoundException("[!] DELETE /technicalCheck" + technicalCheckId + "\n\tCould not delete technicalCheck with id " + technicalCheckId + "(id not found)");
-        }
-
-        boolean deleted = technicalCheckRepository.deleteById(technicalCheckId);
-        if (!deleted) {
-            throw new RuntimeException("[!] DELETE /technicalCheck" + technicalCheckId + "\n\tCould not delete technicalCheck with id " + technicalCheckId);
-        }
-        return Response.status(200).build();
     }
 }
 

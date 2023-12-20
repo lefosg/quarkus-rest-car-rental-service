@@ -15,7 +15,7 @@ import org.representation.*;
 import java.net.URI;
 import java.util.List;
 
-@Path("TechnicalCheck")
+@Path("technicalCheck")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
@@ -28,45 +28,45 @@ public class TechnicalCheckResource {
     @Inject
     TechnicalCheckMapper technicalCheckMapper;
 
-    @Inject
-    VehicleMapper vehicleMapper;
 
     @Inject
-    CompanyMapper companyMapper;
+    RentMapper rentMapper;
+
 
     @Context
     UriInfo uriInfo;
 
     @GET
     @Transactional
-    public List<TechnicalCheckRepresentation> listAllTechnicalChecks(@DefaultValue("") @QueryParam("technicalCheck") Integer technicalCheck) {
-        return technicalCheckMapper.toRepresentationList(technicalCheckRepository.findBytechnicalCheck(technicalCheck));
+    public List<TechnicalCheckRepresentation> listAllTechnicalChecks()  {
+        return technicalCheckMapper.toRepresentationList(technicalCheckRepository.listAll());
     }
 
-  @GET
-  @Path("{technicalCheckId: [0-9]+}")
+    @GET
+    @Path("{technicalCheckId: [0-9]+}")
     @Transactional
     public TechnicalCheckRepresentation listTechnicalCheckById(@PathParam("technicalCheckId") Integer technicalCheckId) {
-     TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
+        TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
 
-      if (technicalCheck ==  null) {
-           throw new NotFoundException("[!] GET /technicalCheck/"+technicalCheckId+"\n\tCould not find technicalCheck with id " + technicalCheckId);
-       }
+        if (technicalCheck == null) {
+            throw new NotFoundException("[!] GET /technicalCheck/" + technicalCheckId + "\n\tCould not find technicalCheck with id " + technicalCheckId);
+        }
         return technicalCheckMapper.toRepresentation(technicalCheck);
     }
 
 
-    //@GET
-   // @Path("{technicalCheckId: [0-9]+}/rents")
-   // @Transactional
-   // public List<TechnicalCheckRepresentation> listTechnicalCheckRents(@PathParam("technicalCheckId") Integer technicalCheckId) {
-      //  TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
+    @GET
+    @Path("{technicalCheckId: [0-9]+}/rent")
+    @Transactional
+    public RentRepresentation listRentOfTechnicalCheck(@PathParam("technicalCheckId") Integer technicalCheckId) {
+        TechnicalCheck technicalCheck = technicalCheckRepository.findById(technicalCheckId);
 
-     //   if (technicalCheck ==  null) {
-       //     throw new NotFoundException("[!] GET /technicalCheck/"+technicalCheckId+"\n\tCould not find technicalCheck");
-       // }
-     //   return RentMapper.toRepresentationList(technicalCheck.getRent());
-   // }
+        if (technicalCheck == null) {
+            throw new NotFoundException("[!] GET /technicalCheck/" + technicalCheckId + "\n\tCould not find technicalCheck");
+        }
+        return rentMapper.toRepresentation(technicalCheck.getRent());
+    }
 }
+
 
 

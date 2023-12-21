@@ -54,7 +54,6 @@ public class TechnicalCheckResource {
         return technicalCheckMapper.toRepresentation(technicalCheck);
     }
 
-
     @GET
     @Path("{technicalCheckId: [0-9]+}/rent")
     @Transactional

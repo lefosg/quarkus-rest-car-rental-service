@@ -25,6 +25,11 @@ class CompanyRepositoryTest extends IntegrationBase {
     }
 
     @Test
+    void findNonExistingId() {
+        assertNull(companyRepository.findById(2022));
+    }
+
+    @Test
     @Transactional
     void deleteAllCompanies() {
         companyRepository.deleteAllCompanies();
@@ -52,8 +57,4 @@ class CompanyRepositoryTest extends IntegrationBase {
         });
     }
 
-    @Test
-    void findNonExistingId() {
-        assertNull(companyRepository.findById(2022));
-    }
 }

@@ -1,6 +1,5 @@
 package org.representation;
 
-import org.domain.Company;
 import org.domain.Vehicle;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

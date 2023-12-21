@@ -96,7 +96,7 @@ public class VehicleResource {
     @DELETE
     @Transactional
     public Response deleteAll() {
-        vehicleRepository.deleteAll();
+        vehicleRepository.deleteAllVehicles();
         return Response.status(200).build();
     }
 
@@ -108,7 +108,8 @@ public class VehicleResource {
             throw new NotFoundException("[!] DELETE /vehicle" + vehicleId + "\n\tCould not delete vehicle with id " + vehicleId + "(id not found)");
         }
 
-        boolean deleted = vehicleRepository.deleteById(vehicleId);
+        vehicleRepository.deleteVehicle(vehicleId);
+        boolean deleted = vehicleRepository.findById(vehicleId) == null;
         if (!deleted) {
             throw new RuntimeException("[!] DELETE /vehicle" + vehicleId + "\n\tCould not delete vehicle with id " + vehicleId);
         }

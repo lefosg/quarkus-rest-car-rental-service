@@ -5,20 +5,11 @@ import static io.restassured.RestAssured.given;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.core.MediaType;
-import org.domain.Company;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.representation.ChargingPolicyRepresentation;
-import org.representation.CompanyMapper;
 import org.representation.CompanyRepresentation;
 import org.representation.VehicleRepresentation;
 import org.util.Constants;
 import org.util.IntegrationBase;
-
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -174,10 +165,10 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void deleteOneCompany() {
-        when().delete("/company/" + 2000)
+        when().delete("/company/" + compId)
                 .then().statusCode(200);
 
-        when().get("/company/"+2000)
+        when().get("/company/" + compId)
                 .then().statusCode(404);  //get must return 404
 
         when().delete("/company/" + 2005)  //id 2005 not in db

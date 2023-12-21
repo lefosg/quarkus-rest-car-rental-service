@@ -5,6 +5,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.security.identity.request.UsernamePasswordAuthenticationRequest;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.NotFoundException;
 import org.domain.Company;
 import org.domain.Customer;
 import org.domain.Vehicle;
@@ -15,6 +16,26 @@ import java.util.List;
 
 @RequestScoped
 public class VehicleRepository implements PanacheRepositoryBase<Vehicle,Integer>{
+
+    public void deleteAllVehicles() {
+        List<Vehicle> vehicles = listAll();
+        for (Vehicle v : vehicles) {
+            v.setCompany(null);
+            delete(v);
+        }
+    }
+
+    public void deleteVehicle(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("VehicleRepository: deleteVehicle\n\tid was null");
+        }
+        Vehicle vehicle = findById(id);
+        if (vehicle == null) {
+            throw new NotFoundException("VehicleRepository: deleteVehicle\n\tvehicle found was null");
+        }
+        vehicle.setCompany(null);
+        delete(vehicle);
+    }
 
     public List<Vehicle> findByModel(String model) {
         if (model == null)

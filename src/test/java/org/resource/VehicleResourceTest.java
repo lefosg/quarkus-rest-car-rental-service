@@ -202,24 +202,32 @@ public class VehicleResourceTest extends IntegrationBase {
 
     // ---------- DELETE ----------
 
-    //@Test
+    @Test
     public void deleteAllVehicles() {
         when().delete("/vehicle")
                 .then().statusCode(200);
+
+        when().get("/vehicle/"+3000)
+                .then().statusCode(404);  //get must return 404
+        when().get("/vehicle/"+3001)
+                .then().statusCode(404);  //get must return 404
+
+        when().get("/company/"+2000)
+                .then().statusCode(200);  //getting a company should return 200
+
     }
 
-    //@Test
+    @Test
     public void deleteOneVehicleValid() {
         when().delete("/vehicle/" + vehId)
                 .then().statusCode(200);
-    }
 
-    //@Test
-    public void deleteOneVehicleInvalid() {
-        when().delete("/vehicle/" + 3012)  //id 3012 not in db
+        when().get("/vehicle/" + vehId)
+                .then().statusCode(404);  //get must return 404
+
+        when().delete("/vehicle/" + 3015)  //id 3015 not in db
                 .then().statusCode(404);
-        when().delete("/vehicle/" + null)  //id null is invalid
-                .then().statusCode(404);
+
     }
 
 

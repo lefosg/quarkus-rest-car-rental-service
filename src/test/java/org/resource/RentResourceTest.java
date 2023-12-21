@@ -140,10 +140,11 @@ class RentResourceTest extends IntegrationBase {
                 .then()
                 .statusCode(404);
 
-        when().get("/rent/"+null+"/technicalCheck")  //id null invalid
+        when().get("/rent/"+null+"/echnicalCheck")  //id null invalid
                 .then()
                 .statusCode(404);
     }
+
 
 
     // ---------- PUT ----------

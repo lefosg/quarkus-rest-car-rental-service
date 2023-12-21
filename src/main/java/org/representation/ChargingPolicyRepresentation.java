@@ -7,7 +7,7 @@ import java.util.Map;
 
 @RegisterForReflection
 public class ChargingPolicyRepresentation {
-    public Integer id;
+    public Long id;
     public Map<Integer, Float> mileageScale;
     public Map<DamageType, Float> damageType;
 }

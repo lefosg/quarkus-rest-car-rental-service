@@ -13,9 +13,9 @@ import java.util.*;
 public class ChargingPolicy {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "policy_mileage_scale", joinColumns = @JoinColumn(name = "policy_id"))
@@ -94,11 +94,11 @@ public class ChargingPolicy {
         this.mileageScale = mileage_scale;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

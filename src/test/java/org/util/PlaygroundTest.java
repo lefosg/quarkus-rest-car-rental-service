@@ -30,6 +30,7 @@ public class PlaygroundTest {
     public void test() {
         RentRepresentation representation = createRentRepresentation((Integer) 4002);
         Rent rent = rentMapper.toModel(representation);
+        System.out.println(rent);
 
         System.out.println(rentMapper.toRepresentation(rent));
     }

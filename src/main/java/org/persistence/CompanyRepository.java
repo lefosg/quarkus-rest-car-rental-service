@@ -12,6 +12,21 @@ import java.util.List;
 @RequestScoped
 public class CompanyRepository implements PanacheRepositoryBase<Company, Integer> {
 
+    public void deleteAllCompanies() {
+        List<Company> companies = listAll();
+        for (Company c : companies) {
+            c.getVehicles().clear();
+            delete(c);
+        }
+
+    }
+
+    public void delete(Integer id) {
+        Company company = findById(id);
+        company.getVehicles().clear();
+        delete(company);
+    }
+
     public List<Company> findByCity(String city) {
         if (city == null || city.equals(""))
             return listAll();
@@ -19,7 +34,6 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
         return find("select company from Company company where company.city = :city",
                 Parameters.with("city", city).map()).list();
     }
-
 
     public List<Company> findByName(String name) {
         if (name == null || name.equals(""))

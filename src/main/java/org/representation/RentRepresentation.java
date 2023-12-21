@@ -19,4 +19,8 @@ public class RentRepresentation {
     //public VehicleRepresentation vehicle;
     //public TechnicalCheckRepresentation technicalCheck;
     //public CustomerRepresentation customer;
+    //todo make above representations -> ids
+    //todo in domain logic, embeddables -> new
+    //todo my deletes
+    //todo fix resources
 }

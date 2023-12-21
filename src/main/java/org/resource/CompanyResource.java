@@ -65,9 +65,6 @@ public class CompanyResource {
         return vehicleMapper.toRepresentationList(company.getVehicles());
     }
 
-
-    //todo add methods with query params (city)
-
     // ---------- PUT ----------
 
     @PUT
@@ -102,7 +99,7 @@ public class CompanyResource {
     @DELETE
     @Transactional
     public Response deleteAllCompanies() {
-        companyRepository.deleteAll();
+        companyRepository.deleteAllCompanies();
         return Response.status(200).build();
     }
 
@@ -114,7 +111,8 @@ public class CompanyResource {
             throw new NotFoundException("[!] DELETE /company" + companyId + "\n\tCould not find company with id " + companyId);
         }
 
-        boolean deleted = companyRepository.deleteById(companyId);
+        companyRepository.delete(companyId);
+        boolean deleted = companyRepository.findById(companyId) == null;
         if (!deleted) {
             throw new RuntimeException("[!] DELETE /company" + companyId + "\n\tCould not delete company with id " + companyId);
         }

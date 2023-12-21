@@ -158,16 +158,27 @@ class CompanyResourceTest extends IntegrationBase {
 
     // ---------- DELETE ----------
 
-    //@Test
+    @Test
     public void deleteAllCompanies() {
-        when().delete("/company/")
+        when().delete("/company/")  //deletes all companies
         .then().statusCode(200);
+
+        when().get("/company/"+2000)
+                .then().statusCode(404);  //get must return 404
+        when().get("/company/"+2001)
+                .then().statusCode(404);
+
+        when().get("/vehicle/"+3000)
+                .then().statusCode(404);  //getting a vehicle should return 404 as well
     }
 
-    //@Test
+    @Test
     public void deleteOneCompany() {
         when().delete("/company/" + 2000)  //id 3012 not in db
                 .then().statusCode(200);
+
+        when().get("/company/"+2000)
+                .then().statusCode(404);  //get must return 404
     }
 
 

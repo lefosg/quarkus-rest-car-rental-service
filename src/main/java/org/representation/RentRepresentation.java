@@ -16,10 +16,9 @@ public class RentRepresentation {
     public Money mileageCost;
     public Money damageCost;
     public Money totalCost;
-    //public VehicleRepresentation vehicle;
-    //public TechnicalCheckRepresentation technicalCheck;
-    //public CustomerRepresentation customer;
-    //todo make above representations -> ids
+    public Integer rentedVehicle;
+    public Integer technicalCheck;
+    public Integer customer;
     //todo in domain logic, embeddables -> new
     //todo fix resources
 }

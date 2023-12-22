@@ -71,15 +71,14 @@ public class Rent {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE}, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN, org.hibernate.annotations.CascadeType.PERSIST})
     @JoinColumn(name="technical_check_id")
     private TechnicalCheck technicalCheck;
 
 
     public Rent() {
-        this.technicalCheck = new TechnicalCheckImpl(this);
+        //this.technicalCheck = new TechnicalCheckImpl(this);
     }
 
     public Rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle, Customer customer) {

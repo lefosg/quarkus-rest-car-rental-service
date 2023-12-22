@@ -32,6 +32,17 @@ import java.util.List;
         public List<CustomerRepresentation> listAllCustomers() {
             return customerMapper.toRepresentationList(customerRepository.listAll());
         }
+
+        @GET
+        @Path("{customerId: [0-9]+}")
+        @Transactional
+        public CustomerRepresentation listCompanyById(@PathParam("customerId") Integer customerId) {
+            Customer customer = customerRepository.findById(customerId);
+            if (customer ==  null) {
+                throw new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId);
+            }
+            return customerMapper.toRepresentation(customer);
+        }
         @PUT
         @Transactional
         public Response create(CustomerRepresentation representation) {

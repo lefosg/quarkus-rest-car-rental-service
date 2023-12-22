@@ -18,5 +18,7 @@ public abstract class TechnicalCheckMapper {
     public abstract List<TechnicalCheckRepresentation> toRepresentationList(List<TechnicalCheck> technicalCheck);
 
     @BeanMapping(resultType = TechnicalCheckImpl.class)
-    public abstract TechnicalCheck toModel(TechnicalCheckRepresentation representation);
+    public static TechnicalCheck toModel(TechnicalCheckRepresentation representation) {
+        return null;
+    }
 }

@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.*;
 import org.domain.Company;
 import org.domain.Rent;
 import org.domain.TechnicalCheck;
+import org.domain.Vehicle;
 import org.persistence.CompanyRepository;
 import org.persistence.TechnicalCheckRepository;
 import org.representation.*;
@@ -64,6 +65,18 @@ public class TechnicalCheckResource {
             throw new NotFoundException("[!] GET /technicalCheck/" + technicalCheckId + "\n\tCould not find technicalCheck");
         }
         return rentMapper.toRepresentation(technicalCheck.getRent());
+    }
+    @PUT
+    @Path("{technicalCheckId:[0-9]+}")
+    @Transactional
+    public Response update(@PathParam("technicalCheckId") Integer technicalCheckId, TechnicalCheckRepresentation representation) {
+        if (technicalCheckId == null || !(technicalCheckId).equals(representation.id)) {
+            throw new NotFoundException("[!] PUT /technicalCheck\n\tCould not update technicalCheck, id mismatching");
+        }
+
+        TechnicalCheck technicalCheck = TechnicalCheckMapper.toModel(representation);
+        technicalCheckRepository.getEntityManager().merge(technicalCheck);
+        return Response.noContent().build();
     }
 }
 

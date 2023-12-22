@@ -26,6 +26,7 @@ public class TechnicalCheckRepositoryTest extends IntegrationBase{
         assertEquals(2, technicalChecks.size());
 
         }
+        //todo fix
     @Test
     void findByDamageType() {
         List<TechnicalCheck> technicalChecks = technicalCheckRepository.findByDamageType("damageType");

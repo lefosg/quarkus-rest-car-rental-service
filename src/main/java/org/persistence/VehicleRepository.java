@@ -37,6 +37,14 @@ public class VehicleRepository implements PanacheRepositoryBase<Vehicle,Integer>
         delete(vehicle);
     }
 
+    public List<Vehicle> findByState(VehicleState state) {
+        if (state == null)
+            return listAll();
+
+        return find("select vehicle from Vehicle vehicle where vehicle.vehicleState = :vehicleState",
+                Parameters.with("vehicleState", state).map()).list();
+    }
+
     public List<Vehicle> findByModel(String model) {
         if (model == null)
             return listAll();

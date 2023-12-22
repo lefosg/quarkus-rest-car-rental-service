@@ -11,9 +11,9 @@ import org.domain.Company;
 import org.domain.Customer;
 import org.domain.Vehicle;
 import org.persistence.CustomerRepository;
-import org.representation.CompanyRepresentation;
-import org.representation.CustomerMapper;
-import org.representation.CustomerRepresentation;
+import org.persistence.VehicleRepository;
+import org.representation.*;
+import org.util.VehicleState;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -28,6 +28,12 @@ public class CustomerResource {
 
     @Inject
     CustomerRepository customerRepository;
+
+    @Inject
+    VehicleRepository vehicleRepository;
+
+    @Inject
+    VehicleMapper vehicleMapper;
 
     @Inject
     CustomerMapper customerMapper;
@@ -89,10 +95,13 @@ public class CustomerResource {
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
         }
-        Customer customer= new Customer();
-        List<Vehicle> availableVehicles = customer.viewAvailableVehicles(startLocalDate, endLocalDate);
+        //Customer customer= new Customer();
+        //List<Vehicle> availableVehicles = customer.viewAvailableVehicles(startLocalDate, endLocalDate);
+        List<Vehicle> availableVehicles = vehicleRepository.findByState(VehicleState.Available);
+        List<VehicleRepresentation> availableVehiclesRep = vehicleMapper.toRepresentationList(availableVehicles);
+
         if (!availableVehicles.isEmpty()) {
-            return Response.ok(availableVehicles).build();
+            return Response.ok(availableVehiclesRep).build();
         } else {
             return Response.noContent().build();
         }

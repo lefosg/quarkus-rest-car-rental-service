@@ -111,9 +111,7 @@ public class RentResource {
             throw new NotFoundException("[!] PUT /rent\n\tCould not update rent, id mismatching");
         }
         Rent rent = rentMapper.toModel(representation);
-        System.out.println(rent);
         rentRepository.getEntityManager().merge(rent);
-        System.out.println(rentRepository.findById(rentId));
         return Response.noContent().build();
     }
 

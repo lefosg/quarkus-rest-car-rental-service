@@ -7,8 +7,10 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
+import org.domain.Company;
 import org.domain.Customer;
 import org.persistence.CustomerRepository;
+import org.representation.CompanyRepresentation;
 import org.representation.CustomerMapper;
 import org.representation.CustomerRepresentation;
 
@@ -62,6 +64,18 @@ public class CustomerResource {
         customerRepository.persist(customer);
         URI uri = UriBuilder.fromResource(CustomerResource.class).path(String.valueOf(customer.getId())).build();
         return Response.created(uri).entity(customerMapper.toRepresentation(customer)).build();
+    }
+    @PUT
+    @Transactional
+    @Path("/{customerId:[0-9]+}")
+    public Response update(@PathParam("companyId") Integer customerId, CustomerRepresentation representation) {
+        if (! customerId.equals(representation.id)) {
+            throw new RuntimeException("[!] PUT /company\n\tCould not update company, id mismatching");
+        }
+
+        Customer customer = customerMapper.toModel(representation);
+        customerRepository.getEntityManager().merge(customer;
+        return Response.noContent().build();
     }
 
 

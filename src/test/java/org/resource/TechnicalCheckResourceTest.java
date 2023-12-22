@@ -68,7 +68,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
 
            assertEquals(0, technicalCheck.size());
       }
-   // @Test
+    @Test
     public void updatetechnicalCheckValid() {
         //get the resource
         TechnicalCheckRepresentation representation = when().get("/technicalCheck/"+technicalCheckId)

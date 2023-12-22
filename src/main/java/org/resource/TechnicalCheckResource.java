@@ -39,8 +39,8 @@ public class TechnicalCheckResource {
 
     @GET
     @Transactional
-    public List<TechnicalCheckRepresentation> listAllTechnicalChecks()  {
-        return technicalCheckMapper.toRepresentationList(technicalCheckRepository.listAll());
+    public List<TechnicalCheckRepresentation> listAllTechnicalChecks(@QueryParam("damageType") String damageType )   {
+        return technicalCheckMapper.toRepresentationList(technicalCheckRepository.findByDamageType(damageType));
     }
 
     @GET

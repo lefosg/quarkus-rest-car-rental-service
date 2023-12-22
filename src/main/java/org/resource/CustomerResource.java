@@ -74,7 +74,7 @@ public class CustomerResource {
         }
 
         Customer customer = customerMapper.toModel(representation);
-        customerRepository.getEntityManager().merge(customer;
+        customerRepository.getEntityManager().merge(customer);
         return Response.noContent().build();
     }
 

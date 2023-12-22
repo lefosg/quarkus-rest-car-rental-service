@@ -38,8 +38,8 @@ public class PlaygroundTest {
     private RentRepresentation createRentRepresentation(Integer id) {
         RentRepresentation representation = new RentRepresentation();
         representation.id = id;
-        representation.startDate = LocalDate.of(2023,10,10);
-        representation.endDate = LocalDate.of(2023,10,20);
+        representation.startDate = LocalDate.of(2023,10,10).toString();
+        representation.endDate = LocalDate.of(2023,10,20).toString();
         representation.rentState = RentState.Finished;
         representation.fixedCost = new Money(770);  //assume vehicle with id 3007 is rented
         representation.miles = 130;  //company with id 2001 which owns the vehicles 3007, policy: .15 -> 100, .25 -> 200

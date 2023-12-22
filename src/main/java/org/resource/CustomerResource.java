@@ -62,9 +62,9 @@ public class CustomerResource {
     @PUT
     @Transactional
     @Path("/{customerId:[0-9]+}")
-    public Response update(@PathParam("companyId") Integer customerId, CustomerRepresentation representation) {
+    public Response update(@PathParam("customerId") Integer customerId, CustomerRepresentation representation) {
         if (! customerId.equals(representation.id)) {
-            throw new RuntimeException("[!] PUT /company\n\tCould not update company, id mismatching");
+            throw new RuntimeException("[!] PUT /customer " + customerId + "\n\tCould not update company, id mismatching");
         }
 
         Customer customer = customerMapper.toModel(representation);

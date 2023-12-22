@@ -76,6 +76,32 @@ class CustomerResourceTest extends IntegrationBase {
 
     }
 
+    @Test
+    public void updateCustomerValid() {
+        //get the resource
+        CustomerRepresentation representation = when().get("/customer/"+custId)
+                .then().statusCode(200).extract().as(CustomerRepresentation.class);
+
+        assertEquals(custId, representation.id);
+        //make the update
+        String newName = "kwstas mhtsos";
+        representation.name = newName;
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/customer/"+custId)
+                .then().statusCode(204);
+
+        //get the resource again to validate the update
+        CustomerRepresentation updated = when().get("/customer/"+custId)
+                .then().statusCode(200).extract().as(CustomerRepresentation.class);
+
+        assertEquals(custId, updated.id);
+        assertEquals(newName, updated.name);
+    }
+
 
     // ---------- DELETE ----------
 

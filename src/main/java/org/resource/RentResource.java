@@ -94,11 +94,9 @@ public class RentResource {
     @PUT
     @Transactional
     public Response create(RentRepresentation representation) {
-        System.out.println("a");
         if (representation.id == null || rentRepository.findById(representation.id) != null) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /rent\n\tCould not create rent, invalid id");
         }
-
         Rent rent = rentMapper.toModel(representation);
         rentRepository.persist(rent);
         URI uri = UriBuilder.fromResource(RentResource.class).path(String.valueOf(rent.getId())).build();
@@ -112,10 +110,34 @@ public class RentResource {
         if (rentId == null || !(rentId).equals(representation.id)) {
             throw new NotFoundException("[!] PUT /rent\n\tCould not update rent, id mismatching");
         }
-
         Rent rent = rentMapper.toModel(representation);
         rentRepository.getEntityManager().merge(rent);
         return Response.noContent().build();
+    }
+
+    // ---------- DELETE ----------
+
+    @DELETE
+    @Transactional
+    public Response deleteAllRents() {
+        rentRepository.deleteAllRents();
+        return Response.status(200).build();
+    }
+
+    @DELETE
+    @Transactional
+    @Path("{rentId: [0-9]+}")
+    public Response deleteCompany(@PathParam("rentId") Integer rentId) {
+        if (rentId == null || rentRepository.findById(rentId) == null) {
+            throw new NotFoundException("[!] DELETE /rent" + rentId + "\n\tCould not find rent with id " + rentId);
+        }
+
+        rentRepository.deleteRent(rentId);
+        boolean deleted = rentRepository.findById(rentId) == null;
+        if (!deleted) {
+            throw new RuntimeException("[!] DELETE /rent" + rentId + "\n\tCould not delete rent with id " + rentId);
+        }
+        return Response.status(200).build();
     }
 
 }

@@ -86,6 +86,7 @@ public class CompanyResource {
     public Response update(@PathParam("companyId") Integer companyId, CompanyRepresentation representation) {
         if (! companyId.equals(representation.id)) {
             throw new RuntimeException("[!] PUT /company\n\tCould not update company, id mismatching");
+            //return Response.status(400).build();
         }
 
         Company company = companyMapper.toModel(representation);

@@ -58,8 +58,6 @@ public abstract class User{
 
     // domain logic
 
-    //future todo User.login, User.dashboard
-
     /**
      * Authorizes the user in the service
      * @param username

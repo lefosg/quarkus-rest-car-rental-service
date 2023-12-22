@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
+import org.domain.TechnicalCheck;
 import org.hibernate.metamodel.RepresentationMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,14 +35,14 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
     }
     //----GET-----
   // @Test
-  //  public void listAllTechnicalChecks() {
-   //    List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck")
-     //          .then()
-     //         .extract()
-        //       .as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
+    public void listAllTechnicalChecks() {
+       List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck")
+              .then()
+              .extract()
+               .as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
 
-   //   assertEquals(6, technicalCheck.size());
-// }
+      assertEquals(2, technicalCheck.size());
+ }
        @Test
        public void listtechnicalChekIdValidIdInvalid() {
            when().get("/technicalCheck/" + 3020) //id 3020 not existent
@@ -49,24 +50,50 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
                    .statusCode(404);
        }
 
-    //   @Test
-     //  public void listTechnicalCheckIdValid() {
-     //   TechnicalCheckRepresentation technicalCheck = when().get("/technicalCheck/" + technicalCheckId)
-      //         .then()
-       //        .extract()
-      //        .as(TechnicalCheckRepresentation.class);
+     // @Test
+      public void listTechnicalCheckIdValid() {
+        TechnicalCheckRepresentation technicalCheck = when().get("/technicalCheck/" + technicalCheckId)
+              .then()
+               .extract()
+              .as(TechnicalCheckRepresentation.class);
 
-      //  assertEquals(technicalCheckId, technicalCheck.id);
-   // }
-    //   @Test
-    //   public void listByTechnicalCheckUnknown() {
-      //     List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck?damageType=Engine")
-     //             .then()
-         //          .extract()
-        //           .as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
+        assertEquals(technicalCheckId, technicalCheck.id);
+    }
+      // @Test
+       public void listByTechnicalCheckUnknown() {
+           List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck?damageType=Engine")
+                  .then()
+                   .extract()
+                  .as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
 
-       //    assertEquals(0, technicalCheck.size());
-    //   }
+           assertEquals(0, technicalCheck.size());
+      }
+   // @Test
+    public void updatetechnicalCheckValid() {
+        //get the resource
+        TechnicalCheckRepresentation representation = when().get("/technicalCheck/"+technicalCheckId)
+                .then().statusCode(200).extract().as(TechnicalCheckRepresentation.class);
+
+        assertEquals(technicalCheckId, representation.id);
+
+        //make the update
+        DamageType type = DamageType.Tyres;
+        representation.damageType = type;
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/technicalCheck/"+technicalCheckId)
+                .then().statusCode(204);
+
+        //get the resource again to validate
+        TechnicalCheckRepresentation updated = when().get("/technicalCheck/"+technicalCheckId)
+                .then().statusCode(200).extract().as(TechnicalCheckRepresentation.class);
+
+        assertEquals(technicalCheckId, updated.id);
+        assertEquals(type, updated.id);
+    }
 
 
 }

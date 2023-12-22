@@ -14,7 +14,7 @@ public class CustomerRepresentation {
     public String surname;
     public String password;
     public String number;
-    public LocalDate expirationDate;
+    public String expirationDate;
     public String holderName;
     public String city;
     public String street;

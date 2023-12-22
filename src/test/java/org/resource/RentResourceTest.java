@@ -254,7 +254,7 @@ class RentResourceTest extends IntegrationBase {
         representation.zipcode = "35896";
         representation.AFM = "166008282";
         representation.surname = "ΕΥΑΓΓΕΛΟΥ";
-        representation.expirationDate = LocalDate.of(2027,11,26);
+        representation.expirationDate = LocalDate.of(2027,11,26).toString();
         representation.number = "7894665213797564";
         representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ";
         return representation;

@@ -8,8 +8,8 @@ import java.time.LocalDate;
 @RegisterForReflection
 public class RentRepresentation {
     public Integer id;
-    public LocalDate startDate;
-    public LocalDate endDate;
+    public String startDate;
+    public String endDate;
     public RentState rentState;
     public Money fixedCost;
     public float miles;
@@ -21,6 +21,5 @@ public class RentRepresentation {
     //public CustomerRepresentation customer;
     //todo make above representations -> ids
     //todo in domain logic, embeddables -> new
-    //todo my deletes
     //todo fix resources
 }

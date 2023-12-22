@@ -135,7 +135,6 @@ class CompanyTest {
 
     //@Test
     public void calculateMileageCostLastScale() {
-        //fixme last scale
         //over last scale case
         Money cost = company.calculateMileageCost(350);
         assertEquals(new Money(400), cost);

@@ -9,12 +9,15 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import org.domain.Company;
 import org.domain.Customer;
+import org.domain.Vehicle;
 import org.persistence.CustomerRepository;
 import org.representation.CompanyRepresentation;
 import org.representation.CustomerMapper;
 import org.representation.CustomerRepresentation;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("customer")
@@ -71,6 +74,38 @@ public class CustomerResource {
         customerRepository.getEntityManager().merge(customer);
         return Response.noContent().build();
     }
+
+    @GET
+    @Transactional
+    @Path("/availableVehicles/{startDate}/{endDate}")
+    public Response getAvailableVehicles(
+            @PathParam("startDate") String startDate,
+            @PathParam("endDate") String endDate) {
+        LocalDate startLocalDate = null;
+        LocalDate endLocalDate = null;
+        if (startDate != null && endDate != null) {
+            startLocalDate = LocalDate.parse(startDate);
+            endLocalDate = LocalDate.parse(endDate);
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
+        }
+        Customer customer= new Customer();
+        List<Vehicle> availableVehicles = customer.viewAvailableVehicles(startLocalDate, endLocalDate);
+        if (!availableVehicles.isEmpty()) {
+            return Response.ok(availableVehicles).build();
+        } else {
+            return Response.noContent().build();
+        }
+    }
+//    public Response getAvailableVehhicles(@QueryParam("startDate") String startDate,
+//                                          @QueryParam("endDate") String endDate)){
+//        public List<Vehicle> viewAvailableVehicles(LocalDate startDate, LocalDate endDate) {
+//            //placeholders
+//            List<Vehicle> availableVehicles = new ArrayList<>();
+//            return availableVehicles;
+//            return Response.noContent().build();
+//        }
+//    }
 
 
 

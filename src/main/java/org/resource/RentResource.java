@@ -72,7 +72,7 @@ public class RentResource {
     @Path("{rentId: [0-9]+}/vehicle")
     public VehicleRepresentation listVehicleOfRent(@PathParam("rentId") Integer rentId) {
         if (rentId == null || rentRepository.findById(rentId) == null) {  //if id null or not in db
-            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find customer for rent with id " + rentId);
+            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find vehicle for rent with id " + rentId);
         }
         Rent rent = rentRepository.findById(rentId);
         return vehicleMapper.toRepresentation(rent.getRentedVehicle());
@@ -83,7 +83,7 @@ public class RentResource {
     @Path("{rentId: [0-9]+}/technicalCheck")
     public TechnicalCheckRepresentation listTechnicalCheckOfRent(@PathParam("rentId") Integer rentId) {
         if (rentId == null || rentRepository.findById(rentId) == null) {  //if id null or not in db
-            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find customer for rent with id " + rentId);
+            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find rent for rent with id " + rentId);
         }
         Rent rent = rentRepository.findById(rentId);
         return technicalCheckMapper.toRepresentation(rent.getTechnicalCheck());
@@ -111,7 +111,9 @@ public class RentResource {
             throw new NotFoundException("[!] PUT /rent\n\tCould not update rent, id mismatching");
         }
         Rent rent = rentMapper.toModel(representation);
+        System.out.println(rent);
         rentRepository.getEntityManager().merge(rent);
+        System.out.println(rentRepository.findById(rentId));
         return Response.noContent().build();
     }
 

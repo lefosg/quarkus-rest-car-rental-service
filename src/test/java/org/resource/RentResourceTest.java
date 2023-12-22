@@ -34,6 +34,8 @@ class RentResourceTest extends IntegrationBase {
 
     // ---------- GET ----------
 
+    //rent get
+
     @Test
     public void listAllRents() {
         List<RentRepresentation> rents = when().get("/rent")
@@ -82,6 +84,8 @@ class RentResourceTest extends IntegrationBase {
 
     }
 
+    //customer get
+
     @Test
     public void listCustomerOfRentValid() {
         CustomerRepresentation representation = when().get("/rent/"+rentId+"/customer")
@@ -102,6 +106,8 @@ class RentResourceTest extends IntegrationBase {
                 .then()
                 .statusCode(404);
     }
+
+    //vehicle get
 
     @Test
     public void listVehicleOfRentValid() {
@@ -124,6 +130,8 @@ class RentResourceTest extends IntegrationBase {
                 .statusCode(404);
     }
 
+    //technical check get
+
     @Test
     public void listTechnicalCheckOfRentValid() {
         TechnicalCheckRepresentation representation = when().get("/rent/"+rentId+"/technicalCheck")
@@ -144,8 +152,6 @@ class RentResourceTest extends IntegrationBase {
                 .then()
                 .statusCode(404);
     }
-
-
 
     // ---------- PUT ----------
 
@@ -183,8 +189,8 @@ class RentResourceTest extends IntegrationBase {
         assertEquals(rentId, representation.id);
 
         //make the update
-        Money newDamageCost = new Money(5);
-        representation.damageCost = newDamageCost;
+        String newStartDate = LocalDate.of(2023, 12, 4).toString();  //change startDate day from 5 to 4
+        representation.startDate = newStartDate;
 
         //send the update
         given()
@@ -198,7 +204,7 @@ class RentResourceTest extends IntegrationBase {
                 .then().statusCode(200).extract().as(RentRepresentation.class);
 
         assertEquals(rentId, updated.id);
-        assertEquals(newDamageCost, updated.damageCost);
+        assertEquals(newStartDate, updated.startDate);
     }
 
     // ---------- DELETE ----------
@@ -255,8 +261,9 @@ class RentResourceTest extends IntegrationBase {
         representation.damageCost = new Money(0);  //assume no damage
         representation.totalCost = new Money(representation.mileageCost.getAmount() +
                 representation.fixedCost.getAmount() + representation.damageCost.getAmount());
-        //representation.vehicle = createVehicleRepresentation(3007);
-        //representation.customer = createCustomerRepresentation(1000);
+        representation.rentedVehicle = 3007;
+        representation.customer = 1000;
+        representation.technicalCheck = 1;
         return representation;
     }
 

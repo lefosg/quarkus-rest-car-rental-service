@@ -20,9 +20,7 @@ public abstract class TechnicalCheck {
     @Column(name = "id", nullable = false)
     protected Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE_ORPHAN, org.hibernate.annotations.CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="rent_id")
     protected Rent rent;
 

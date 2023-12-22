@@ -147,6 +147,34 @@ class CompanyResourceTest extends IntegrationBase {
         assertEquals(newName, updated.name);
     }
 
+    @Test
+    public void updateCompanyInvalid() {
+        //get the resource
+        CompanyRepresentation representation = when().get("/company/"+compId)
+                .then().statusCode(200).extract().as(CompanyRepresentation.class);
+
+        assertEquals(compId, representation.id);
+        //make the update
+        representation.id = 2001;  //id 2001 in db
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/company/"+compId)
+                .then().statusCode(500);
+
+        //make the update
+        representation.id = null;  //null value invalid
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/company/"+compId)
+                .then().statusCode(500);
+    }
+
     // ---------- DELETE ----------
 
     @Test

@@ -76,19 +76,6 @@ class CustomerResourceTest extends IntegrationBase {
 
     }
 
-
-    // ---------- DELETE ----------
-
-    @Test
-    public void deleteAllCustomers() {
-        when().delete("/customer/")
-            .then().statusCode(200);
-
-        when().get("/customer/"+1000)
-            .then().statusCode(404);
-        when().get("/customer/"+1001)
-            .then().statusCode(404);
-    }
     @Test
     public void updateCustomerValid() {
         //get the resource
@@ -113,6 +100,20 @@ class CustomerResourceTest extends IntegrationBase {
 
         assertEquals(custId, updated.id);
         assertEquals(newName, updated.name);
+    }
+
+
+    // ---------- DELETE ----------
+
+    @Test
+    public void deleteAllCustomers() {
+        when().delete("/customer/")
+            .then().statusCode(200);
+
+        when().get("/customer/"+1000)
+            .then().statusCode(404);
+        when().get("/customer/"+1001)
+            .then().statusCode(404);
     }
 
     @Test

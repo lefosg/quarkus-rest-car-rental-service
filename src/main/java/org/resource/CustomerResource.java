@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import org.domain.Company;
 import org.domain.Customer;
+import org.domain.Rent;
 import org.domain.Vehicle;
 import org.persistence.CustomerRepository;
 import org.persistence.VehicleRepository;
@@ -108,6 +109,8 @@ public class CustomerResource {
         }
     }
 
+    // ---------- POST ----------
+
     @POST
     @Transactional
     @Path("{customerId:[0-9]+}/rent")
@@ -142,13 +145,52 @@ public class CustomerResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist").build();
         }
 
-        if (vehicle.getVehicleState() == VehicleState.Available) {
+        if (vehicle.getVehicleState() != VehicleState.Available) {
             return Response.status(Response.Status.OK).entity("Vehicle not available until " + end).build();
         }
 
         customer.rent(startDate, endDate, vehicle);
         customerRepository.getEntityManager().merge(customer);
-        return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
+    }
+
+    @POST
+    @Transactional
+    @Path("{customerId:[0-9]+}/returnVehicle")
+    public Response returnVehicle(
+            @PathParam("customerId") Integer customerId,
+            @QueryParam("vehicleId") Integer vehicleId,
+            @QueryParam("miles") float miles
+    ) {
+        if (customerId == null || customerRepository.findById(customerId) == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist or id was null").build();
+        }
+        if (vehicleId == null || vehicleRepository.findById(vehicleId) == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist or id was null").build();
+        }
+        if (miles <= 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Miles provided are negative").build();
+        }
+
+        Customer customer = customerRepository.findById(customerId);
+        Vehicle vehicle = vehicleRepository.findById(vehicleId);
+
+        for (Rent rent : customer.getRents()) {
+            if (rent.getRentedVehicle().equals(vehicle)) {
+                if (rent.getRentedVehicle().getVehicleState() != VehicleState.Available) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
+                }
+            }
+        }
+
+        if (vehicle.getVehicleState() != VehicleState.Available) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
+        }
+
+        customer.returnVehicle(vehicle, miles);
+        customerRepository.getEntityManager().merge(customer);
+        return Response.status(Response.Status.OK).entity("Vehicle returned").build();
+
     }
 
 

@@ -95,8 +95,6 @@ public class CustomerResource {
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
         }
-        //Customer customer= new Customer();
-        //List<Vehicle> availableVehicles = customer.viewAvailableVehicles(startLocalDate, endLocalDate);
         List<Vehicle> availableVehicles = vehicleRepository.findByState(VehicleState.Available);
         List<VehicleRepresentation> availableVehiclesRep = vehicleMapper.toRepresentationList(availableVehicles);
 

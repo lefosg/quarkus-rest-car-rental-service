@@ -38,7 +38,7 @@ public abstract class RentMapper {
     protected void fill(RentRepresentation representation, @MappingTarget Rent rent) {
         rent.setCustomer(customerRepository.findById(representation.customer));
         rent.setRentedVehicle(vehicleRepository.findById(representation.rentedVehicle));
-        if (technicalCheckRepository.findById(representation.technicalCheck) != null)
-            rent.setTechnicalCheck(technicalCheckRepository.findById(representation.technicalCheck));
+        //if (technicalCheckRepository.findById(representation.technicalCheck) != null)
+        rent.setTechnicalCheck(technicalCheckRepository.findById(representation.technicalCheck));
     }
 }

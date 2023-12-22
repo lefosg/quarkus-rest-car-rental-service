@@ -46,11 +46,6 @@ public class CustomerResource {
         }
         return customerMapper.toRepresentation(customer);
     }
-    //@GET
-   // @Transactional
-    //public String test() {
-   //     return "PELATES";
-   // }
 
     // ---------- PUT ----------
     @PUT

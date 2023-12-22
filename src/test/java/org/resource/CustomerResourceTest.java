@@ -3,6 +3,7 @@ package org.resource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import org.domain.Customer;
 import org.junit.jupiter.api.Test;
 import org.representation.CompanyRepresentation;
 import org.representation.CustomerRepresentation;
@@ -29,6 +30,22 @@ class CustomerResourceTest extends IntegrationBase {
                 .extract().as(new TypeRef<List<CustomerRepresentation>>() {});
 
        assertEquals(2, representations.size());
+    }
+    @Test
+    public void listCustomerByIdValid() {
+        CustomerRepresentation customer = when().get("/customer/" + custId)
+                .then()
+                .extract()
+                .as(CustomerRepresentation.class);
+
+        assertEquals(custId, customer.id);
+    }
+
+    @Test
+    public void listCustomerByIdInvalid() {
+        when().get("/customer/" + 2003)  //id 2003 not existent in db
+                .then()
+                .statusCode(404);
     }
 
     // ---------- PUT ----------

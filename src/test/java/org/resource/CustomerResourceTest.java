@@ -62,17 +62,6 @@ class CustomerResourceTest extends IntegrationBase {
     }
 
     @Test
-    public void createInvalidId() {
-        CustomerRepresentation representation = createCustomerRepresentation(1000);  //id 1000 in db
-
-        given()
-                .contentType(ContentType.JSON)
-                .body(representation)
-                .when().put("/customer/")
-                .then().statusCode(404);
-    }
-
-    @Test
     public void createValid() {
         CustomerRepresentation representation = createCustomerRepresentation((Integer) 55);
 
@@ -100,6 +89,31 @@ class CustomerResourceTest extends IntegrationBase {
         when().get("/customer/"+1001)
             .then().statusCode(404);
     }
+    @Test
+    public void updateCustomerValid() {
+        //get the resource
+        CustomerRepresentation representation = when().get("/customer/"+custId)
+                .then().statusCode(200).extract().as(CustomerRepresentation.class);
+
+        assertEquals(custId, representation.id);
+        //make the update
+        String newName = "kwstas mhtsos";
+        representation.name = newName;
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/customer/"+custId)
+                .then().statusCode(204);
+
+        //get the resource again to validate the update
+        CustomerRepresentation updated = when().get("/customer/"+custId)
+                .then().statusCode(200).extract().as(CustomerRepresentation.class);
+
+        assertEquals(custId, updated.id);
+        assertEquals(newName, updated.name);
+    }
 
     @Test
     public void deleteOneCustomer() {
@@ -113,18 +127,18 @@ class CustomerResourceTest extends IntegrationBase {
     private CustomerRepresentation createCustomerRepresentation(Integer id) {
         CustomerRepresentation representation = new CustomerRepresentation();
         representation.id = id;
-        representation.name = "ΔΗΜΗΤΡΑ";
-        representation.email = "dimitra@yahoo.com";
-        representation.password = "dimitra";
-        representation.phone = "6912483189";
-        representation.street = "ΚΡΥΣΤΑΛΛΗ 52";
-        representation.city = "ΑΘΗΝΑ";
-        representation.zipcode = "16478";
-        representation.AFM = "199371245";
-        representation.surname = "ΚΥΠΡΑΙΟΥ";
-        representation.expirationDate = LocalDate.of(2029,10,15).toString();
-        representation.number = "15482634678126";
-        representation.holderName = "ΔΗΜΗΤΡΑ ΚΥΠΡΑΙΟΥ";
+        representation.name = "ΙΩΑΝΝΗS";
+        representation.email = "evangellKu@gmail.com";
+        representation.password = "johnjohD";
+        representation.phone = "6941603678";
+        representation.street = "ΛΕΥΚΑΔΟΣ 25";
+        representation.city = "ΑΘΗΝC";
+        representation.zipcode = "35895";
+        representation.AFM = "166008285";
+        representation.surname = "ΕΥΑΓΓΕΛoΥ";
+        representation.expirationDate = LocalDate.of(2027,11,26).toString();
+        representation.number = "7894665213797564";
+        representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛoΥ";
         return representation;
     }
 

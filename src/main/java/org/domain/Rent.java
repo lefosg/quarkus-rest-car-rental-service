@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Rent {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     protected Integer id;
 

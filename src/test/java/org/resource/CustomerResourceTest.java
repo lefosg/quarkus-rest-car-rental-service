@@ -7,6 +7,7 @@ import org.domain.Customer;
 import org.junit.jupiter.api.Test;
 import org.representation.CompanyRepresentation;
 import org.representation.CustomerRepresentation;
+import org.representation.RentRepresentation;
 import org.util.Constants;
 import org.util.IntegrationBase;
 
@@ -100,6 +101,21 @@ class CustomerResourceTest extends IntegrationBase {
 
         assertEquals(custId, updated.id);
         assertEquals(newName, updated.name);
+    }
+
+    // ---------- POST ----------
+
+    @Test
+    public void makeRent() {
+
+        RentRepresentation representation = new RentRepresentation();
+
+
+        //given()
+        //        .contentType(ContentType.JSON)
+        //        .body()
+        //        .
+
     }
 
 

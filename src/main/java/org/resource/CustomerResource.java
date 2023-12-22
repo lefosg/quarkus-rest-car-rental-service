@@ -95,6 +95,9 @@ public class CustomerResource {
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
         }
+        if (startLocalDate.isAfter(endLocalDate)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Start date is after end date").build();
+        }
         List<Vehicle> availableVehicles = vehicleRepository.findByState(VehicleState.Available);
         List<VehicleRepresentation> availableVehiclesRep = vehicleMapper.toRepresentationList(availableVehicles);
 
@@ -104,15 +107,50 @@ public class CustomerResource {
             return Response.noContent().build();
         }
     }
-//    public Response getAvailableVehhicles(@QueryParam("startDate") String startDate,
-//                                          @QueryParam("endDate") String endDate)){
-//        public List<Vehicle> viewAvailableVehicles(LocalDate startDate, LocalDate endDate) {
-//            //placeholders
-//            List<Vehicle> availableVehicles = new ArrayList<>();
-//            return availableVehicles;
-//            return Response.noContent().build();
-//        }
-//    }
+
+    @POST
+    @Transactional
+    @Path("{customerId:[0-9]+}/rent")
+    public Response makeRent(
+        @QueryParam("startDate") String start,
+        @QueryParam("endDate") String end,
+        @QueryParam("vehicleId") Integer vehicleId,
+        @PathParam("customerId") Integer customerId) {
+
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        if ((start != null && end != null) && (!start.equals("") && !end.equals(""))) {
+            startDate = LocalDate.parse(start);
+            endDate = LocalDate.parse(end);
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
+        }
+        if (customerId == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid customer id").build();
+        }
+        if (vehicleId == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid vehicle id").build();
+        }
+
+        Customer customer = customerRepository.findById(customerId);
+        Vehicle vehicle = vehicleRepository.findById(vehicleId);
+
+        if (customer == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist").build();
+        }
+        if (vehicle == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist").build();
+        }
+
+        if (vehicle.getVehicleState() == VehicleState.Available) {
+            return Response.status(Response.Status.OK).entity("Vehicle not available until " + end).build();
+        }
+
+        customer.rent(startDate, endDate, vehicle);
+        customerRepository.getEntityManager().merge(customer);
+        return Response.status(Response.Status.OK).build();
+    }
+
 
 
 

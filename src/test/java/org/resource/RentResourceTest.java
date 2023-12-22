@@ -204,7 +204,9 @@ class RentResourceTest extends IntegrationBase {
         assertEquals(newDamageCost, updated.damageCost);
     }
 
+    // ---------- DELETE ----------
 
+    
 
 
     // ---------- misc ----------

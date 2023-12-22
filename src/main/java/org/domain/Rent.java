@@ -67,6 +67,7 @@ public class Rent {
     private Vehicle rentedVehicle;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

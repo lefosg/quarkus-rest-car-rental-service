@@ -5,6 +5,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.security.identity.request.UsernamePasswordAuthenticationRequest;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.NotFoundException;
 import org.domain.Company;
 import org.domain.Customer;
 
@@ -12,6 +13,26 @@ import java.util.List;
 
 @RequestScoped
 public class CustomerRepository implements PanacheRepositoryBase<Customer,Integer> {
+
+    public void deleteAllCustomers() {
+        List<Customer> customers = listAll();
+        for (Customer c : customers) {
+            //c.getRents().clear();
+            delete(c);
+        }
+    }
+
+    public void deleteCustomer(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("CustomerRepository: deleteCustomer\n\tid was null");
+        }
+        Customer customer = findById(id);
+        if (customer == null) {
+            throw new NotFoundException("CustomerRepository: deleteCustomer\n\tcompany found is null");
+        }
+        //customer.getRents().clear();
+        delete(customer);
+    }
 
     public List<Customer> findBySurname(String surname) {
         if (surname == null)

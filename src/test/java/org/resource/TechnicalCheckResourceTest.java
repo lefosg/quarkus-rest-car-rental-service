@@ -34,7 +34,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
         rentId = 4000;
     }
     //----GET-----
-  // @Test
+  @Test
     public void listAllTechnicalChecks() {
        List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck")
               .then()

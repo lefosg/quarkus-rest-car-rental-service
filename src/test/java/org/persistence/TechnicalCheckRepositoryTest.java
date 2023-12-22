@@ -20,9 +20,17 @@ public class TechnicalCheckRepositoryTest extends IntegrationBase{
     @Inject
     TechnicalCheckRepository technicalCheckRepository;
 
-   // @Test
-    void findByDamageType(){
+   @Test
+    void findByDamageTypeNull(){
         List<TechnicalCheck> technicalChecks = technicalCheckRepository.findByDamageType(null);
+        assertEquals(2, technicalChecks.size());
+
+        }
+    @Test
+    void findByDamageType() {
+        List<TechnicalCheck> technicalChecks = technicalCheckRepository.findByDamageType("damageType");
+        assertEquals("damageType", technicalChecks.size());
+    }
 
     }
-}
+

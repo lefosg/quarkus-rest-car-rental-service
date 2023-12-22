@@ -50,7 +50,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
                    .statusCode(404);
        }
 
-     // @Test
+     @Test
       public void listTechnicalCheckIdValid() {
         TechnicalCheckRepresentation technicalCheck = when().get("/technicalCheck/" + technicalCheckId)
               .then()
@@ -59,7 +59,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
 
         assertEquals(technicalCheckId, technicalCheck.id);
     }
-      // @Test
+      @Test
        public void listByTechnicalCheckUnknown() {
            List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck?damageType=Engine")
                   .then()

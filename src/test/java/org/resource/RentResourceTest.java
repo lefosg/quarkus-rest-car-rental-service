@@ -161,7 +161,6 @@ class RentResourceTest extends IntegrationBase {
                 .extract().as(RentRepresentation.class);
 
         assertEquals(4002, created.id);
-
     }
 
     @Test
@@ -204,7 +203,42 @@ class RentResourceTest extends IntegrationBase {
 
     // ---------- DELETE ----------
 
-    
+    @Test
+    public void deleteAllRents() {
+        when().delete("/rent/")  //deletes all companies
+                .then().statusCode(200);
+
+        when().get("/rent/"+4000)
+                .then().statusCode(404);  //get must return 404
+        when().get("/rent/"+4001)
+                .then().statusCode(404);  //get must return 404
+
+        List<RentRepresentation> rents = when().get("rent/")
+                .then().extract().as(new TypeRef<List<RentRepresentation>>() {});
+
+        assertEquals(0, rents.size());
+
+        List<TechnicalCheckRepresentation> technicalChecks = when().get("/technicalCheck/")
+                .then().extract().as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
+        assertEquals(0, technicalChecks.size());
+    }
+
+    @Test
+    public void deleteOneRentValid() {
+        when().delete("/rent/" + rentId)
+                .then().statusCode(200);
+
+        when().get("/rent/" + rentId)
+                .then().statusCode(404);  //get must return 404
+        when().get("/technicalCheck/" + 5000)
+                .then().statusCode(404);  //get must return 404
+    }
+
+    @Test
+    public void deleteOneRentInvalid() {
+        when().get("/rent/" + 4005)  //4005 not in db
+                .then().statusCode(404);  //get must return 404
+    }
 
 
     // ---------- misc ----------

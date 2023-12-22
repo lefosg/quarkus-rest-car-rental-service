@@ -189,17 +189,28 @@ class CompanyResourceTest extends IntegrationBase {
 
         when().get("/vehicle/"+3000)
                 .then().statusCode(404);  //getting a vehicle should return 404 as well
+
+        List<CompanyRepresentation> companies = when().get("company")
+                .then().extract().as(new TypeRef<List<CompanyRepresentation>>() {});
+        assertEquals(0, companies.size());
+
+        List<VehicleRepresentation> vehicles = when().get("vehicle")
+                .then().extract().as(new TypeRef<List<VehicleRepresentation>>() {});
+        assertEquals(0, vehicles.size());
     }
 
     @Test
-    public void deleteOneCompany() {
+    public void deleteOneCompanyValid() {
         when().delete("/company/" + compId)
                 .then().statusCode(200);
 
         when().get("/company/" + compId)
                 .then().statusCode(404);  //get must return 404
+    }
 
-        when().delete("/company/" + 2005)  //id 2005 not in db
+    @Test
+    public void deleteOneCompanyInvalid() {
+        when().delete("/company/" + 2005)  //2005 not in db
                 .then().statusCode(404);
     }
 

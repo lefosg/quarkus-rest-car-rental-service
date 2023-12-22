@@ -7,6 +7,7 @@ import org.domain.Customer;
 import org.junit.jupiter.api.Test;
 import org.representation.CompanyRepresentation;
 import org.representation.CustomerRepresentation;
+import org.util.Constants;
 import org.util.IntegrationBase;
 
 import java.time.LocalDate;
@@ -60,6 +61,21 @@ class CustomerResourceTest extends IntegrationBase {
                 .then().statusCode(404);
     }
 
+    @Test
+    public void createValid() {
+        CustomerRepresentation representation = createCustomerRepresentation((Integer) 55);
+
+        CustomerRepresentation created = given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put("/customer/")
+                .then().statusCode(201).header("Location", Constants.API_ROOT+"/customer/"+representation.id)
+                .extract().as(CustomerRepresentation.class);
+
+        assertEquals(55, created.id);
+
+    }
+
 
     // ---------- DELETE ----------
 
@@ -86,18 +102,18 @@ class CustomerResourceTest extends IntegrationBase {
     private CustomerRepresentation createCustomerRepresentation(Integer id) {
         CustomerRepresentation representation = new CustomerRepresentation();
         representation.id = id;
-        representation.name = "ΙΩΑΝΝΗΣ";
-        representation.email = "evangellou@gmail.com";
-        representation.password = "johnjohn";
-        representation.phone = "6941603677";
-        representation.street = "ΛΕΥΚΑΔΟΣ 22";
-        representation.city = "ΑΘΗΝΑ";
-        representation.zipcode = "35896";
-        representation.AFM = "166008282";
-        representation.surname = "ΕΥΑΓΓΕΛΟΥ";
+        representation.name = "ΙΩΑΝΝΗS";
+        representation.email = "evangellKu@gmail.com";
+        representation.password = "johnjohD";
+        representation.phone = "6941603678";
+        representation.street = "ΛΕΥΚΑΔΟΣ 25";
+        representation.city = "ΑΘΗΝC";
+        representation.zipcode = "35895";
+        representation.AFM = "166008285";
+        representation.surname = "ΕΥΑΓΓΕΛoΥ";
         representation.expirationDate = LocalDate.of(2027,11,26).toString();
         representation.number = "7894665213797564";
-        representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ";
+        representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛoΥ";
         return representation;
     }
 

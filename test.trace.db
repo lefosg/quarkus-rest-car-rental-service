@@ -106,3 +106,12 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Gobakos
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
 	... 17 more
+2023-12-22 17:35:16 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ZIPCODE CHARACTER VARYING(5)": "'35896a' (6)"; SQL statement:
+insert into USERS (AFM,city,email,name,password,phone,street,zipcode,expirationDate,holderName,number,surname,type,id) values (?,?,?,?,?,?,?,?,?,?,?,?,'Customer',?) [22001-220]
+2023-12-22 17:35:59 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ZIPCODE CHARACTER VARYING(5)": "'35896a' (6)"; SQL statement:
+insert into USERS (AFM,city,email,name,password,phone,street,zipcode,expirationDate,holderName,number,surname,type,id) values (?,?,?,?,?,?,?,?,?,?,?,?,'Customer',?) [22001-220]
+2023-12-22 17:36:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NUMBER CHARACTER VARYING(16)": "'7894665213797564a' (17)"; SQL statement:
+insert into USERS (AFM,city,email,name,password,phone,street,zipcode,expirationDate,holderName,number,surname,type,id) values (?,?,?,?,?,?,?,?,?,?,?,?,'Customer',?) [22001-220]

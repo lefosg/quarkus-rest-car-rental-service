@@ -54,7 +54,6 @@ public class CustomerResource {
         if (representation.id == null ||  customerRepository.findById(representation.id) != null ) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /customer\n\tCould not create customer, invalid id");
         }
-
         Customer customer = customerMapper.toModel(representation);
         customerRepository.persist(customer);
         URI uri = UriBuilder.fromResource(CustomerResource.class).path(String.valueOf(customer.getId())).build();

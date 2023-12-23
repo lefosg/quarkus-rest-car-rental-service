@@ -16,4 +16,5 @@ public class VehicleRepresentation {
     public VehicleType vehicleType;
     public VehicleState vehicleState;
     public Money fixedCharge;
+    public Integer company;
 }

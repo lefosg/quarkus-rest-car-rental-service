@@ -1,9 +1,9 @@
 package org.representation;
 
+import jakarta.inject.Inject;
 import org.domain.Vehicle;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
+import org.persistence.CompanyRepository;
 
 import java.util.List;
 
@@ -12,6 +12,10 @@ import java.util.List;
         uses = VehicleMapper.class)
 public abstract class VehicleMapper {
 
+    @Inject
+    CompanyRepository companyRepository;
+
+    @Mapping(source = "company.id", target = "company")
     public abstract VehicleRepresentation toRepresentation(Vehicle vehicle);
     public abstract List<VehicleRepresentation> toRepresentationList(List<Vehicle> vehicle);
 
@@ -23,5 +27,12 @@ public abstract class VehicleMapper {
     @Mapping(source = "plateNumber", target = "plateNumber")
     @Mapping(source = "vehicleType", target = "vehicleType")
     @Mapping(source = "vehicleState", target = "vehicleState")
+    @Mapping(target = "company", ignore = true)
     public abstract Vehicle toModel(VehicleRepresentation representation);
+
+    @AfterMapping
+    protected void fillCompany(VehicleRepresentation representation, @MappingTarget Vehicle vehicle) {
+        vehicle.setCompany(companyRepository.findById(representation.company));
+    }
+
 }

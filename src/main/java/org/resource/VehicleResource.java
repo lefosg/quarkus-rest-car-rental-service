@@ -65,8 +65,8 @@ public class VehicleResource {
 
     // ---------- PUT ----------
 
-    @PUT
-    @Transactional
+    //@PUT
+    //@Transactional
     public Response create(VehicleRepresentation representation) {
         if (representation.id == null || vehicleRepository.findById(representation.id) != null) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /vehicle\n\tCould not create vehicle, invalid id");

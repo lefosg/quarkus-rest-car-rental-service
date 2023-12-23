@@ -6,7 +6,9 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.domain.Company;
+import org.domain.Vehicle;
 import org.persistence.CompanyRepository;
+import org.persistence.VehicleRepository;
 import org.representation.CompanyMapper;
 import org.representation.CompanyRepresentation;
 import org.representation.VehicleMapper;
@@ -29,6 +31,9 @@ public class CompanyResource {
 
     @Inject
     VehicleMapper vehicleMapper;
+
+    @Inject
+    VehicleRepository vehicleRepository;
 
     @Context
     UriInfo uriInfo;
@@ -97,6 +102,26 @@ public class CompanyResource {
 
     // ---------- POST ----------
 
+    @POST
+    @Transactional
+    @Path("{companyId:[0-9]+}/addVehicle")
+    public Response addVehicle(@PathParam("companyId") Integer companyId, VehicleRepresentation vehicleRepresentation) {
+        if (companyId == null || companyRepository.findById(companyId) == null) {
+            throw new NotFoundException("[!] POST /company/"+companyId+"/addVehicle\n\tCould not find company, invalid id");
+        }
+        if (vehicleRepresentation.id == null || vehicleRepository.findById(vehicleRepresentation.id) != null) {
+            throw new NotFoundException("[!] POST /company/"+companyId+"/addVehicle\n\tCould not find vehicle or already exists");
+        }
+        if (!companyId.equals(vehicleRepresentation.company)) {  //company calling this endpoint must be same in companyId and representation.company
+            throw new NotFoundException("[!] POST /company/"+companyId+"/addVehicle\n\trepresentation.company is not the same as companyId ("+companyId+")");
+        }
+        Vehicle vehicle = vehicleMapper.toModel(vehicleRepresentation);
+        Company company = companyRepository.findById(companyId);
+        company.addVehicle(vehicle);
+        companyRepository.getEntityManager().merge(company);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(vehicle.getId())).build();
+        return Response.created(uri).entity(vehicleMapper.toRepresentation(vehicle)).status(Response.Status.OK).build();
+    }
 
     // ---------- DELETE ----------
 

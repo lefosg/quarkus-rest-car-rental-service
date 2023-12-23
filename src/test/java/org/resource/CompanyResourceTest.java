@@ -8,8 +8,8 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.representation.CompanyRepresentation;
 import org.representation.VehicleRepresentation;
-import org.util.Constants;
-import org.util.IntegrationBase;
+import org.util.*;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class CompanyResourceTest extends IntegrationBase {
 
-    Integer compId = (Integer) 2000;
+    Integer compId = 2000;
     String compCity = "ΑΘΗΝΑ";
 
     // ---------- GET ----------
@@ -175,6 +175,66 @@ class CompanyResourceTest extends IntegrationBase {
                 .then().statusCode(500);
     }
 
+    // ---------- POST ----------
+
+    @Test
+    public void addVehicleValid() {
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3012, compId);
+
+        VehicleRepresentation created = given()
+                .contentType(ContentType.JSON)
+                .body(vehicleRepresentation)
+                .when().post("/company/"+compId+"/addVehicle")
+                .then().statusCode(200)
+                .extract().as(VehicleRepresentation.class);
+
+        assertEquals(3012, created.id);
+        assertEquals(compId, created.company);
+
+        List<VehicleRepresentation> vehicleRepresentations = when().get("/vehicle")
+                .then().extract().as(new TypeRef<List<VehicleRepresentation>>() {});
+        assertEquals(12, vehicleRepresentations.size());
+
+        List<VehicleRepresentation> vehicles = when().get("/company/" + compId + "/vehicles")
+                .then()
+                .extract()
+                .as(new TypeRef<List<VehicleRepresentation>>() {});
+
+        assertEquals(7, vehicles.size());
+    }
+
+    @Test
+    public void addVehicleInvalid() {
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(null, compId);
+        given()
+                .contentType(ContentType.JSON)
+                .body(vehicleRepresentation)
+                .when().post("/company/"+compId+"/addVehicle")
+                .then().statusCode(404);
+
+        vehicleRepresentation = createVehicleRepresentation(3012, null);
+        given()
+                .contentType(ContentType.JSON)
+                .body(vehicleRepresentation)
+                .when().post("/company/"+compId+"/addVehicle")
+                .then().statusCode(404);
+
+        vehicleRepresentation = createVehicleRepresentation(3010, compId);  //3010 already in db
+        given()
+                .contentType(ContentType.JSON)
+                .body(vehicleRepresentation)
+                .when().post("/company/"+compId+"/addVehicle")
+                .then().statusCode(404);
+
+        vehicleRepresentation = createVehicleRepresentation(3012, 2005);  //company 2005 not in db
+        given()
+                .contentType(ContentType.JSON)
+                .body(vehicleRepresentation)
+                .when().post("/company/"+compId+"/addVehicle")
+                .then().statusCode(404);
+
+    }
+
     // ---------- DELETE ----------
 
     @Test
@@ -228,6 +288,21 @@ class CompanyResourceTest extends IntegrationBase {
         representation.password = "topcars123";
         representation.AFM = "998678010";
         representation.IBAN = "GR12564789652365";
+        return representation;
+    }
+
+    private VehicleRepresentation createVehicleRepresentation(Integer vehId, Integer companyId) {
+        VehicleRepresentation representation = new VehicleRepresentation();
+        representation.id = vehId;
+        representation.manufacturer = "TOYOTA";
+        representation.model = "AYGO";
+        representation.year = 2022;
+        representation.miles = 50000;
+        representation.plateNumber = "MMB-8745";
+        representation.vehicleType = VehicleType.Hatchback;
+        representation.vehicleState = VehicleState.Available;
+        representation.fixedCharge = new Money(60);
+        representation.company = companyId;
         return representation;
     }
 }

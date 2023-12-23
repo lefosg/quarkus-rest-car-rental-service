@@ -107,7 +107,7 @@ public class VehicleResourceTest extends IntegrationBase {
 
     // ---------- PUT ----------
 
-    @Test
+    //@Test
     public void createVehicleValid() {
         VehicleRepresentation representation = createVehicleRepresentation((Integer)3011);
 
@@ -122,7 +122,7 @@ public class VehicleResourceTest extends IntegrationBase {
     }
 
     //assert that it does not create a resource with existing id
-    @Test
+    //@Test
     public void createVehicleIdInvalid() {
         VehicleRepresentation representation = createVehicleRepresentation((Integer) 3010);
 
@@ -134,7 +134,7 @@ public class VehicleResourceTest extends IntegrationBase {
     }
 
     //assert that it does not create a resource with null id
-    @Test
+    //@Test
     public void createVehicleIdNull() {
         VehicleRepresentation representation = createVehicleRepresentation(null);
 

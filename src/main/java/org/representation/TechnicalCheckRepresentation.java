@@ -9,5 +9,5 @@ import org.util.DamageType;
 public class TechnicalCheckRepresentation {
     public Integer id;
     public DamageType damageType;
-    //public RentRepresentation rent;
+    public Integer rent;
 }

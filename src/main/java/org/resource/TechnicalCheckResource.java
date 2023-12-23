@@ -12,8 +12,11 @@ import org.domain.Vehicle;
 import org.persistence.CompanyRepository;
 import org.persistence.TechnicalCheckRepository;
 import org.representation.*;
+import org.util.Constants;
+import org.util.DamageType;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("technicalCheck")
@@ -29,18 +32,23 @@ public class TechnicalCheckResource {
     @Inject
     TechnicalCheckMapper technicalCheckMapper;
 
-
     @Inject
     RentMapper rentMapper;
-
 
     @Context
     UriInfo uriInfo;
 
     @GET
     @Transactional
-    public List<TechnicalCheckRepresentation> listAllTechnicalChecks(@QueryParam("damageType") String damageType )   {
-        return technicalCheckMapper.toRepresentationList(technicalCheckRepository.findByDamageType(damageType));
+    public List<TechnicalCheckRepresentation> listAllTechnicalChecks(@QueryParam("damageType") String damageType ) {
+        if (damageType == null || damageType.equals("")) {
+            return technicalCheckMapper.toRepresentationList(technicalCheckRepository.listAll());
+        }
+        if (!Constants.contains(damageType)) {
+            return technicalCheckMapper.toRepresentationList(new ArrayList<TechnicalCheck>());
+        }
+        DamageType type = DamageType.valueOf(damageType);
+        return technicalCheckMapper.toRepresentationList(technicalCheckRepository.findByDamageType(type));
     }
 
     @GET
@@ -73,8 +81,8 @@ public class TechnicalCheckResource {
         if (technicalCheckId == null || !(technicalCheckId).equals(representation.id)) {
             throw new NotFoundException("[!] PUT /technicalCheck\n\tCould not update technicalCheck, id mismatching");
         }
-
-        TechnicalCheck technicalCheck = TechnicalCheckMapper.toModel(representation);
+        TechnicalCheck technicalCheck = technicalCheckMapper.toModel(representation);
+        System.out.println(technicalCheck);
         technicalCheckRepository.getEntityManager().merge(technicalCheck);
         return Response.noContent().build();
     }

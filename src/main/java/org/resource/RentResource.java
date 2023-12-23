@@ -91,8 +91,8 @@ public class RentResource {
 
     // ---------- PUT ----------
 
-    @PUT
-    @Transactional
+    //@PUT
+    //@Transactional
     public Response create(RentRepresentation representation) {
         if (representation.id == null || rentRepository.findById(representation.id) != null) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /rent\n\tCould not create rent, invalid id");

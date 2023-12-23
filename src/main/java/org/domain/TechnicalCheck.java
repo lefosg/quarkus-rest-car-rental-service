@@ -47,4 +47,10 @@ public abstract class TechnicalCheck {
     public void setRent(Rent rent) {
         this.rent = rent;
     }
+
+    @Override
+    public String toString() {
+        return "id: " + id + "\n" +
+                "rent: " + rent;
+    }
 }

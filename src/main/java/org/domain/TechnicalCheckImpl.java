@@ -56,4 +56,14 @@ public class TechnicalCheckImpl extends TechnicalCheck {
     public DamageType getDamageType() {
         return damageType;
     }
+
+    public void setDamageType(DamageType type) {
+        this.damageType = type;
+    }
+
+    @Override
+    public String toString() {
+        return "damageType: " + damageType + "\n" +
+                super.toString();
+    }
 }

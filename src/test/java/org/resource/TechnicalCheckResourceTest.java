@@ -69,7 +69,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
            assertEquals(0, technicalCheck.size());
       }
     @Test
-    public void updatetechnicalCheckValid() {
+    public void updateTechnicalCheckValid() {
         //get the resource
         TechnicalCheckRepresentation representation = when().get("/technicalCheck/"+technicalCheckId)
                 .then().statusCode(200).extract().as(TechnicalCheckRepresentation.class);
@@ -90,9 +90,8 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
         //get the resource again to validate
         TechnicalCheckRepresentation updated = when().get("/technicalCheck/"+technicalCheckId)
                 .then().statusCode(200).extract().as(TechnicalCheckRepresentation.class);
-
         assertEquals(technicalCheckId, updated.id);
-        assertEquals(type, updated.id);
+        assertEquals(type, updated.damageType);
     }
 
 

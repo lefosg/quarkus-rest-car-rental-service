@@ -9,17 +9,18 @@ import org.domain.ChargingPolicy;
 import org.domain.Company;
 import org.domain.Customer;
 import org.domain.TechnicalCheck;
+import org.util.DamageType;
 
 import java.util.List;
 
 @RequestScoped
 public class TechnicalCheckRepository implements PanacheRepositoryBase<TechnicalCheck,Integer>{
 
-    public List<TechnicalCheck> findByDamageType(String damageType) {
-        if (damageType == null || damageType.equals(""))
+    public List<TechnicalCheck> findByDamageType(DamageType damageType) {
+        if (damageType == null)
             return listAll();
 
-        return find("select damageType from TechnicalCheck technicalCheck where technicalCheck.damageType = :damageType",
+        return find("select technicalCheck from TechnicalCheck technicalCheck where technicalCheck.damageType = :damageType",
                 Parameters.with("damageType", damageType).map()).list();
     }
 

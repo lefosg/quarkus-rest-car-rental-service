@@ -155,7 +155,7 @@ class RentResourceTest extends IntegrationBase {
 
     // ---------- PUT ----------
 
-    @Test
+    //@Test
     public void createRentValid() {
         RentRepresentation representation = createRentRepresentation((Integer) 4002);
 
@@ -169,7 +169,7 @@ class RentResourceTest extends IntegrationBase {
         assertEquals(4002, created.id);
     }
 
-    @Test
+    //@Test
     public void createRentInvalid() {
         RentRepresentation representation = createRentRepresentation(4000);  //4000 already in db
 

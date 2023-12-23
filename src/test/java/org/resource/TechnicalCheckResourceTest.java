@@ -68,6 +68,9 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
 
            assertEquals(0, technicalCheck.size());
       }
+
+    //----PUT-----
+
     @Test
     public void updateTechnicalCheckValid() {
         //get the resource
@@ -94,5 +97,39 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
         assertEquals(type, updated.damageType);
     }
 
+    //----DELETE-----
+
+    @Test
+    public void deleteAllTechnicalChecks() {
+        when().delete("/technicalCheck")
+                .then().statusCode(200);
+
+        when().get("/technicalCheck/"+5000)
+                .then().statusCode(404);  //get must return 404
+        when().get("/technicalCheck/"+5001)
+                .then().statusCode(404);  //get must return 404
+
+        List<TechnicalCheckRepresentation> representations = when().get("/technicalCheck")
+                .then().extract().as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
+        assertEquals(0, representations.size());
+
+        List<RentRepresentation> rents = when().get("/rent")
+                .then().extract().as(new TypeRef<List<RentRepresentation>>() {});
+        assertEquals(2, rents.size());
+    }
+
+    @Test
+    public void deleteTechnicalCheckValid() {
+        when().delete("/technicalCheck/"+technicalCheckId)
+                .then().statusCode(200);
+        when().get("/technicalCheck/" + technicalCheckId)
+                .then().statusCode(404);  //get must return 404
+    }
+
+    @Test
+    public void deleteTechnicalCheckInvalid() {
+        when().delete("/technicalCheck" + 5005)  //5005 not in db
+                .then().statusCode(404);
+    }
 
 }

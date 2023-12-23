@@ -72,7 +72,7 @@ public class Rent {
     private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE}, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name="technical_check_id")
     private TechnicalCheck technicalCheck;
 

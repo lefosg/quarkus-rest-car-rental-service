@@ -21,6 +21,9 @@ public class TechnicalCheckRepositoryTest extends IntegrationBase{
     @Inject
     TechnicalCheckRepository technicalCheckRepository;
 
+    @Inject
+    RentRepository rentRepository;
+
    @Test
     void findByDamageTypeNull(){
         List<TechnicalCheck> technicalChecks = technicalCheckRepository.findByDamageType(null);
@@ -38,6 +41,40 @@ public class TechnicalCheckRepositoryTest extends IntegrationBase{
     void findByDamageType2() {
         List<TechnicalCheck> technicalChecks = technicalCheckRepository.findByDamageType(DamageType.Machine);
         assertEquals(0, technicalChecks.size());
+    }
+
+    @Test
+    void listAll() {
+       assertEquals(2, technicalCheckRepository.listAll().size());
+    }
+
+    @Test
+    @Transactional
+    void deleteAllTechnicalChecks() {
+       technicalCheckRepository.deleteAllTechnicalChecks();
+       assertEquals(0, technicalCheckRepository.listAll().size());
+       assertEquals(2, rentRepository.listAll().size());
+    }
+
+    @Test
+    @Transactional
+    void deleteTechnicalCheckValid() {
+        technicalCheckRepository.deleteTechnicalCheck(5000);
+        List<TechnicalCheck> technicalChecks = technicalCheckRepository.listAll();
+        assertEquals(1, technicalChecks.size());
+        assertEquals(2, rentRepository.listAll().size());  //deleting one technical check should not delete the rent
+    }
+
+    @Test
+    @Transactional
+    void deleteTechnicalCheckInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            technicalCheckRepository.deleteTechnicalCheck(null);
+        });
+
+        assertThrows(NotFoundException.class, () -> {
+            technicalCheckRepository.deleteTechnicalCheck(5005);  //5005 not in db
+        });
     }
 
 }

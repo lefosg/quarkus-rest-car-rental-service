@@ -38,6 +38,8 @@ public class TechnicalCheckResource {
     @Context
     UriInfo uriInfo;
 
+    // ---------- GET ----------
+
     @GET
     @Transactional
     public List<TechnicalCheckRepresentation> listAllTechnicalChecks(@QueryParam("damageType") String damageType ) {
@@ -74,6 +76,9 @@ public class TechnicalCheckResource {
         }
         return rentMapper.toRepresentation(technicalCheck.getRent());
     }
+
+    // ---------- PUT ----------
+
     @PUT
     @Path("{technicalCheckId:[0-9]+}")
     @Transactional
@@ -85,6 +90,31 @@ public class TechnicalCheckResource {
         System.out.println(technicalCheck);
         technicalCheckRepository.getEntityManager().merge(technicalCheck);
         return Response.noContent().build();
+    }
+
+    // ---------- DELETE ----------
+
+    @DELETE
+    @Transactional
+    public Response deleteAllTechnicalChecks() {
+        technicalCheckRepository.deleteAllTechnicalChecks();
+        return Response.status(200).build();
+    }
+
+    @DELETE
+    @Transactional
+    @Path("{technicalCheckId: [0-9]+}")
+    public Response deleteTechnicalCheck(@PathParam("technicalCheckId") Integer technicalCheckId) {
+        if (technicalCheckId == null || technicalCheckRepository.findById(technicalCheckId) == null) {
+            throw new NotFoundException("[!] DELETE /technicalCheck" + technicalCheckId + "\n\tCould not find technical check with id " + technicalCheckId);
+        }
+
+        technicalCheckRepository.deleteTechnicalCheck(technicalCheckId);
+        boolean deleted = technicalCheckRepository.findById(technicalCheckId) == null;
+        if (!deleted) {
+            throw new RuntimeException("[!] DELETE /technicalCheck" + technicalCheckId + "\n\tCould not delete technical check with id " + technicalCheckId);
+        }
+        return Response.status(200).build();
     }
 }
 

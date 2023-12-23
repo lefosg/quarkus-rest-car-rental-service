@@ -5,14 +5,13 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import org.domain.ChargingPolicy;
 import org.domain.Company;
 import org.domain.Vehicle;
+import org.persistence.ChargingPolicyRepository;
 import org.persistence.CompanyRepository;
 import org.persistence.VehicleRepository;
-import org.representation.CompanyMapper;
-import org.representation.CompanyRepresentation;
-import org.representation.VehicleMapper;
-import org.representation.VehicleRepresentation;
+import org.representation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -34,6 +33,12 @@ public class CompanyResource {
 
     @Inject
     VehicleRepository vehicleRepository;
+
+    @Inject
+    ChargingPolicyRepository policyRepository;
+
+    @Inject
+    ChargingPolicyMapper policyMapper;
 
     @Context
     UriInfo uriInfo;
@@ -70,6 +75,18 @@ public class CompanyResource {
         return vehicleMapper.toRepresentationList(company.getVehicles());
     }
 
+    @GET
+    @Path("{companyId: [0-9]+}/policy")
+    @Transactional
+    public ChargingPolicyRepresentation listCompanyPolicy(@PathParam("companyId") Integer companyId) {
+        Company company = companyRepository.findById(companyId);
+
+        if (company ==  null) {
+            throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");
+        }
+        return policyMapper.toRepresentation(company.getPolicy());
+    }
+
     // ---------- PUT ----------
 
     @PUT
@@ -97,6 +114,26 @@ public class CompanyResource {
         Company company = companyMapper.toModel(representation);
         companyRepository.getEntityManager().merge(company);
         return Response.noContent().build();
+    }
+
+    //@PUT
+    //@Transactional
+    //@Path("/{companyId:[0-9]+}/updatePolicy")
+    public Response updatePolicy(@PathParam("companyId") Integer companyId, ChargingPolicyRepresentation policyRepresentation) {
+        if (companyId == null || companyRepository.findById(companyId) == null) {
+            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find company, invalid id");
+        }
+        if (policyRepresentation.id == null || policyRepository.findById(policyRepresentation.id) == null) {
+            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find policy, invalid id");
+        }
+        Company company = companyRepository.findById(companyId);
+        if (company.getPolicy().getId() != policyRepresentation.id) {
+            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tThis policy does not belong to the specified company");
+        }
+        ChargingPolicy policy = policyMapper.toModel(policyRepresentation);
+        company.setPolicy(policy);
+        companyRepository.getEntityManager().merge(company);
+        return Response.status(Response.Status.OK).build();
     }
 
 

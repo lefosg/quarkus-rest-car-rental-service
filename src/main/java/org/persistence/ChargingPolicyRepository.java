@@ -11,5 +11,5 @@ import org.domain.Customer;
 import java.util.List;
 
 @RequestScoped
-public class ChargingPolicyRepository implements PanacheRepositoryBase<ChargingPolicy, Long>{
+public class ChargingPolicyRepository implements PanacheRepositoryBase<ChargingPolicy, Integer>{
 }

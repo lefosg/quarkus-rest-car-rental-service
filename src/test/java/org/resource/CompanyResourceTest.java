@@ -6,10 +6,12 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
+import org.representation.ChargingPolicyRepresentation;
 import org.representation.CompanyRepresentation;
 import org.representation.VehicleRepresentation;
 import org.util.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,6 +79,16 @@ class CompanyResourceTest extends IntegrationBase {
                 .as(new TypeRef<List<VehicleRepresentation>>() {});
 
         assertEquals(6, vehicles.size());
+    }
+
+    @Test
+    public void listCompanyPolicy() {
+        ChargingPolicyRepresentation policyRepresentation = when().get("/company/" + compId + "/policy")
+                .then()
+                .extract()
+                .as(ChargingPolicyRepresentation.class);
+
+        assertEquals(1500, policyRepresentation.id);
     }
 
 
@@ -173,6 +185,33 @@ class CompanyResourceTest extends IntegrationBase {
                 .body(representation)
                 .when().put("/company/"+compId)
                 .then().statusCode(500);
+    }
+
+    //@Test
+    public void updateChargingPolicyValid() {
+        //get the resource
+        ChargingPolicyRepresentation policyRepresentation = when().get("/company/" + compId + "/policy")
+                .then()
+                .extract()
+                .as(ChargingPolicyRepresentation.class);
+
+        assertEquals(1500, policyRepresentation.id);
+        //make the update
+        policyRepresentation.mileageScale.put(100, 0.05f);
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(policyRepresentation)
+                .when().put("/company/"+compId+"/updatePolicy")
+                .then().statusCode(200);
+
+        //get the resource again to validate the update
+        ChargingPolicyRepresentation updated = when().get("/company/"+compId+"/policy")
+                .then().statusCode(200).extract().as(ChargingPolicyRepresentation.class);
+
+        assertEquals(1500, updated.id);
+        assertEquals(0.05f, updated.mileageScale.get(100));
     }
 
     // ---------- POST ----------
@@ -303,6 +342,26 @@ class CompanyResourceTest extends IntegrationBase {
         representation.vehicleState = VehicleState.Available;
         representation.fixedCharge = new Money(60);
         representation.company = companyId;
+        return representation;
+    }
+
+    private ChargingPolicyRepresentation createChargingPolicyRepresentation(Integer id) {
+        LinkedHashMap<Integer, Float> mileageScale = new LinkedHashMap();
+        mileageScale.put(100, 0.13f);
+        mileageScale.put(200, 0.23f);
+        mileageScale.put(300, 0.33f);
+        LinkedHashMap<DamageType, Float> damages = new LinkedHashMap();
+        damages.put(DamageType.NoDamage, 0f);
+        damages.put(DamageType.Glasses, 100f);
+        damages.put(DamageType.Machine, 300f);
+        damages.put(DamageType.Interior, 250f);
+        damages.put(DamageType.Tyres, 180f);
+        damages.put(DamageType.Scratches, 80f);
+
+        ChargingPolicyRepresentation representation = new ChargingPolicyRepresentation();
+        representation.id = id;
+        representation.mileageScale = mileageScale;
+        representation.damageType = damages;
         return representation;
     }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class CustomerResourceTest extends IntegrationBase {
@@ -124,6 +125,21 @@ class CustomerResourceTest extends IntegrationBase {
         assertEquals("You rented the vehicle", response.getBody().asString());
     }
 
+    @Test
+    public void makeRentWithInvalidDates() {
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1001);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3001, compId);
+
+        Response response = given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("endDate", LocalDate.now().toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/" + customerRepresentation.id + "/rent/")
+                .then().extract().response();
+
+        System.out.println("Response: " + response.getBody().asString());
+        assertTrue(response.getBody().asString().contains("Not good dates"));
+    }
 
     // ---------- DELETE ----------
 

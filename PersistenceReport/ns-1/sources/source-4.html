@@ -1,0 +1,381 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Rent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.domain</a>
+</div>
+
+<h1>Coverage Summary for Class: Rent (org.domain)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Rent</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.7%
+  </span>
+  <span class="absValue">
+    (2/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5%
+  </span>
+  <span class="absValue">
+    (4/80)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Rent$HibernateProxy$WPOC2LCI</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    5.7%
+  </span>
+  <span class="absValue">
+    (2/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5%
+  </span>
+  <span class="absValue">
+    (4/80)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.domain;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import org.hibernate.annotations.Cascade;
+&nbsp;import org.hibernate.annotations.OnDelete;
+&nbsp;import org.hibernate.annotations.OnDeleteAction;
+&nbsp;import org.util.*;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.temporal.ChronoUnit;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;RENTS&quot;)
+&nbsp;public class Rent {
+&nbsp;
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.AUTO)
+&nbsp;    @Column(name = &quot;id&quot;, nullable = false)
+&nbsp;    protected Integer id;
+&nbsp;
+&nbsp;    @Column(name = &quot;startDate&quot;)
+&nbsp;    private LocalDate startDate;
+&nbsp;
+&nbsp;    @Column(name = &quot;endDate&quot;)
+&nbsp;    private LocalDate endDate;
+&nbsp;
+&nbsp;    @Column(name = &quot;rentState&quot;)
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private RentState rentState;
+&nbsp;
+&nbsp;    @Embedded
+&nbsp;    @AttributeOverrides({
+&nbsp;            @AttributeOverride(name=&quot;amount&quot;,column=@Column(name=&quot;fixedCost_amount&quot;)),
+&nbsp;            @AttributeOverride(name=&quot;currency&quot;,column=@Column(name=&quot;fixedCost_currency&quot;)),
+&nbsp;    })
+&nbsp;    private Money fixedCost;
+&nbsp;
+&nbsp;    @Embedded
+&nbsp;    @AttributeOverrides({
+&nbsp;            @AttributeOverride(name=&quot;amount&quot;,column=@Column(name=&quot;mileageCost_amount&quot;)),
+&nbsp;            @AttributeOverride(name=&quot;currency&quot;,column=@Column(name=&quot;mileageCost_currency&quot;)),
+&nbsp;    })
+&nbsp;    //@Transient
+&nbsp;    private Money mileageCost;
+&nbsp;
+&nbsp;    @Column(name=&quot;miles&quot;)
+&nbsp;    private float miles;
+&nbsp;
+&nbsp;    @Embedded
+&nbsp;    @AttributeOverrides({
+&nbsp;            @AttributeOverride(name=&quot;amount&quot;,column=@Column(name=&quot;damageCost_amount&quot;)),
+&nbsp;            @AttributeOverride(name=&quot;currency&quot;,column=@Column(name=&quot;damageCost_currency&quot;)),
+&nbsp;    })
+&nbsp;    private Money damageCost;
+&nbsp;
+&nbsp;    @Embedded
+&nbsp;    @AttributeOverrides({
+&nbsp;            @AttributeOverride(name=&quot;amount&quot;,column=@Column(name=&quot;totalCost_amount&quot;)),
+&nbsp;            @AttributeOverride(name=&quot;currency&quot;,column=@Column(name=&quot;totalCost_currency&quot;)),
+&nbsp;    })
+&nbsp;    private Money totalCost;
+&nbsp;
+&nbsp;    @ManyToOne(fetch = FetchType.LAZY)
+&nbsp;    @OnDelete(action = OnDeleteAction.SET_NULL)
+&nbsp;    @JoinColumn(name = &quot;vehicle_id&quot;)
+&nbsp;    private Vehicle rentedVehicle;
+&nbsp;
+&nbsp;    @ManyToOne(fetch = FetchType.LAZY)
+&nbsp;    @OnDelete(action = OnDeleteAction.SET_NULL)
+&nbsp;    @JoinColumn(name = &quot;customer_id&quot;)
+&nbsp;    private Customer customer;
+&nbsp;
+&nbsp;    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE}, orphanRemoval = true)
+&nbsp;    @OnDelete(action = OnDeleteAction.SET_NULL)
+&nbsp;    @JoinColumn(name=&quot;technical_check_id&quot;)
+&nbsp;    private TechnicalCheck technicalCheck;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    public Rent() {</b>
+&nbsp;        //this.technicalCheck = new TechnicalCheckImpl(this);
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="nc">&nbsp;    public Rent(LocalDate startDate, LocalDate endDate, Vehicle vehicle, Customer customer) {</b>
+<b class="nc">&nbsp;        this.startDate = startDate;</b>
+<b class="nc">&nbsp;        this.endDate = endDate;</b>
+<b class="nc">&nbsp;        this.rentedVehicle = vehicle;</b>
+<b class="nc">&nbsp;        this.customer = customer;</b>
+<b class="nc">&nbsp;        this.rentState = RentState.Pending;  //by default rent is initiated to pending state</b>
+<b class="nc">&nbsp;        this.rentedVehicle.setVehicleState(VehicleState.Rented);</b>
+<b class="nc">&nbsp;        this.technicalCheck = new TechnicalCheckImpl(this);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    // domain logic
+&nbsp;
+&nbsp;    private void calculateDamageCost() {
+<b class="nc">&nbsp;        DamageType damageType = technicalCheck.checkForDamage();</b>
+<b class="nc">&nbsp;        this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(damageType);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void calculateMileageCost(float miles) {
+<b class="nc">&nbsp;        this.miles = miles;</b>
+<b class="nc">&nbsp;        this.mileageCost = this.rentedVehicle.getCompany().calculateMileageCost(miles);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void calculateFixedCost() {
+<b class="nc">&nbsp;        this.fixedCost = this.rentedVehicle.getCompany().calculateFixedCharge(this.startDate, this.endDate, this.rentedVehicle.getFixedCharge());</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    private void calculateTotalCost() {
+<b class="nc">&nbsp;        double total = fixedCost.getAmount() + mileageCost.getAmount() + damageCost.getAmount();</b>
+<b class="nc">&nbsp;        totalCost = new Money(total);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void calculateCosts(float miles) {
+<b class="nc">&nbsp;        this.calculateMileageCost(miles);</b>
+<b class="nc">&nbsp;        this.calculateDamageCost();</b>
+<b class="nc">&nbsp;        this.calculateFixedCost();</b>
+<b class="nc">&nbsp;        this.calculateTotalCost();</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public int getDurationInDays() {
+<b class="nc">&nbsp;        return (int) this.startDate.until(this.endDate, ChronoUnit.DAYS)+1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // getters &amp; setters
+&nbsp;
+&nbsp;
+&nbsp;    public Integer getId() {
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setId(Integer id) {
+<b class="nc">&nbsp;        this.id = id;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public LocalDate getStartDate() {
+<b class="nc">&nbsp;        return startDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setStartDate(LocalDate startDate) {
+<b class="nc">&nbsp;        if (startDate.isAfter(LocalDate.now())){</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;Έχετε δώσει προγενέστερη ημερομηνία έναρξης ενοικίασης&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        this.startDate = startDate;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public LocalDate getEndDate() {
+<b class="nc">&nbsp;        return endDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEndDate(LocalDate endDate) {
+<b class="nc">&nbsp;        this.endDate = endDate;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public RentState getRentState() {
+<b class="nc">&nbsp;        return rentState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setRentState(RentState rentState) {
+<b class="nc">&nbsp;        this.rentState = rentState;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Money getFixedCost() {
+<b class="nc">&nbsp;        return fixedCost;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setFixedCost(Money fixedCost) {
+<b class="nc">&nbsp;        this.fixedCost = fixedCost;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Money getMileageCost() {
+<b class="nc">&nbsp;        return mileageCost;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setMileageCost(Money mileageCost) {
+<b class="nc">&nbsp;        this.mileageCost = mileageCost;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Money getDamageCost() {
+<b class="nc">&nbsp;        return damageCost;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDamageCost(Money damageCost) {
+<b class="nc">&nbsp;        this.damageCost = damageCost;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Money getTotalCost() {
+<b class="nc">&nbsp;        return totalCost;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTotalCost(Money totalCost) {
+<b class="nc">&nbsp;        this.totalCost = totalCost;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Vehicle getRentedVehicle() {
+<b class="nc">&nbsp;        return rentedVehicle;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setRentedVehicle(Vehicle rentedVehicle) {
+<b class="nc">&nbsp;        this.rentedVehicle = rentedVehicle;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Customer getCustomer() {
+<b class="nc">&nbsp;        return customer;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCustomer(Customer customer) {
+<b class="nc">&nbsp;        this.customer = customer;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public TechnicalCheck getTechnicalCheck() {
+<b class="nc">&nbsp;        return technicalCheck;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTechnicalCheck(TechnicalCheck technicalCheckImpl) {
+<b class="fc">&nbsp;        this.technicalCheck = technicalCheckImpl;</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public float getMiles() {
+<b class="nc">&nbsp;        return miles;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setMiles(float miles) {
+<b class="nc">&nbsp;        this.miles = miles;</b>
+&nbsp;        //calculateMileageCost(miles);
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;Rent{&quot; +</b>
+&nbsp;                &quot;id=&quot; + id +
+&nbsp;                &quot;, startDate=&quot; + startDate +
+&nbsp;                &quot;, endDate=&quot; + endDate +
+&nbsp;                &quot;, rentState=&quot; + rentState +
+&nbsp;                &quot;, fixedCost=&quot; + fixedCost +
+&nbsp;                &quot;, miles=&quot; + miles +
+&nbsp;                &quot;, mileageCost=&quot; + mileageCost +
+&nbsp;                &quot;, damageCost=&quot; + damageCost +
+&nbsp;                &quot;, totalCost=&quot; + totalCost +
+&nbsp;                &quot;, rentedVehicle=&quot; + rentedVehicle +
+&nbsp;                &quot;, customer=&quot; + customer +
+&nbsp;                &quot;, technicalCheck=&quot; + technicalCheck +
+&nbsp;                &#39;}&#39;;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="nc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (!(o instanceof Rent rent)) return false;</b>
+<b class="nc">&nbsp;        return Objects.equals(getStartDate(), rent.getStartDate())</b>
+<b class="nc">&nbsp;                &amp;&amp; Objects.equals(getEndDate(), rent.getEndDate())</b>
+<b class="nc">&nbsp;                &amp;&amp; getRentState() == rent.getRentState()</b>
+<b class="nc">&nbsp;                &amp;&amp; Objects.equals(getFixedCost(), rent.getFixedCost())</b>
+<b class="nc">&nbsp;                &amp;&amp; Objects.equals(getMileageCost(), rent.getMileageCost())</b>
+<b class="nc">&nbsp;                &amp;&amp; Objects.equals(getDamageCost(), rent.getDamageCost())</b>
+<b class="nc">&nbsp;                &amp;&amp; Objects.equals(getTotalCost(), rent.getTotalCost())</b>
+<b class="nc">&nbsp;                &amp;&amp; Objects.equals(getRentedVehicle(), rent.getRentedVehicle())</b>
+<b class="nc">&nbsp;                &amp;&amp; Objects.equals(getCustomer(), rent.getCustomer());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return Objects.hash(getStartDate(), getEndDate(), getRentState(), getFixedCost(), getMileageCost(),</b>
+<b class="nc">&nbsp;                getDamageCost(), getTotalCost(), getRentedVehicle(), getCustomer());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

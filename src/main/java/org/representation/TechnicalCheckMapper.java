@@ -34,7 +34,7 @@ public abstract class TechnicalCheckMapper {
     protected void fillDomain(TechnicalCheckRepresentation representation, @MappingTarget TechnicalCheck technicalCheck) {
         TechnicalCheckImpl tc = (TechnicalCheckImpl) technicalCheck;
         tc.setDamageType(representation.damageType);
-        tc.setRent(rentRepository.findById(representation.id));
+        tc.setRent(rentRepository.findById(representation.rent));
     }
 
     @AfterMapping

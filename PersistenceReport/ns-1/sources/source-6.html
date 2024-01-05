@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TechnicalCheckImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.domain</a>
+</div>
+
+<h1>Coverage Summary for Class: TechnicalCheckImpl (org.domain)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TechnicalCheckImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    3.3%
+  </span>
+  <span class="absValue">
+    (1/30)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TechnicalCheckImpl$HibernateProxy$eayJg3QX</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    3.3%
+  </span>
+  <span class="absValue">
+    (1/30)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.domain;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import org.util.DamageType;
+&nbsp;import org.util.Money;
+&nbsp;import org.util.VehicleState;
+&nbsp;
+&nbsp;import java.util.Random;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@DiscriminatorValue(&quot;Impl&quot;)
+&nbsp;public class TechnicalCheckImpl extends TechnicalCheck {
+&nbsp;
+<b class="fc">&nbsp;    public TechnicalCheckImpl() { }</b>
+&nbsp;
+<b class="nc">&nbsp;    public TechnicalCheckImpl(Rent rent) {</b>
+<b class="nc">&nbsp;        this.rent = rent;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Column(name = &quot;damageType&quot;)
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private DamageType damageType;
+&nbsp;
+&nbsp;    //domain logic
+&nbsp;
+&nbsp;    public DamageType checkForDamage() {
+<b class="nc">&nbsp;        rent.getRentedVehicle().setVehicleState(VehicleState.Service);</b>
+<b class="nc">&nbsp;        Random random= new Random();</b>
+<b class="nc">&nbsp;        int number = random.nextInt(10) + 1;</b>
+<b class="nc">&nbsp;        if( number==1 ){</b>
+<b class="nc">&nbsp;            this.damageType = calcDamage();</b>
+<b class="nc">&nbsp;            return damageType;</b>
+<b class="nc">&nbsp;        } else if(number&gt;8 &amp;&amp; rent.getRentedVehicle().getCountOfRents()&gt;=1) {</b>
+<b class="nc">&nbsp;            this.damageType = calcDamage();</b>
+<b class="nc">&nbsp;            return damageType;</b>
+<b class="nc">&nbsp;        } else if(number&gt;6 &amp;&amp; rent.getRentedVehicle().getCountOfRents()&gt;=2){</b>
+<b class="nc">&nbsp;            this.damageType = calcDamage();</b>
+<b class="nc">&nbsp;            return damageType;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        rent.getRentedVehicle().setCountOfRents(rent.getRentedVehicle().getCountOfRents()+1);</b>
+<b class="nc">&nbsp;        this.damageType = DamageType.NoDamage;</b>
+<b class="nc">&nbsp;        return DamageType.NoDamage;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private DamageType calcDamage(){
+<b class="nc">&nbsp;        rent.getRentedVehicle().setCountDamages(rent.getRentedVehicle().getCountDamages()+1);</b>
+<b class="nc">&nbsp;        Random damage= new Random();</b>
+<b class="nc">&nbsp;        int numberOfType= damage.nextInt(5)+1;</b>
+<b class="nc">&nbsp;        DamageType damageType = DamageType.values()[numberOfType];</b>
+<b class="nc">&nbsp;        rent.setDamageCost(new Money(rent.getRentedVehicle().getCompany().getPolicy().calculateDamageCost(damageType)));</b>
+<b class="nc">&nbsp;        return damageType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //getters &amp; setters
+&nbsp;
+&nbsp;    public DamageType getDamageType() {
+<b class="nc">&nbsp;        return damageType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDamageType(DamageType type) {
+<b class="nc">&nbsp;        this.damageType = type;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;damageType: &quot; + damageType + &quot;\n&quot; +</b>
+<b class="nc">&nbsp;                super.toString();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

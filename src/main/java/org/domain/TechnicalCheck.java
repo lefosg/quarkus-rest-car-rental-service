@@ -51,6 +51,6 @@ public abstract class TechnicalCheck {
     @Override
     public String toString() {
         return "id: " + id + "\n" +
-                "rent: " + rent;
+                "rent: " + rent.getId();
     }
 }

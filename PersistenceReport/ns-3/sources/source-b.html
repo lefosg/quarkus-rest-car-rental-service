@@ -1,0 +1,239 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RentMapperImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.representation</a>
+</div>
+
+<h1>Coverage Summary for Class: RentMapperImpl (org.representation)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RentMapperImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/69)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.representation;
+&nbsp;
+&nbsp;import jakarta.inject.Named;
+&nbsp;import jakarta.inject.Singleton;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.format.DateTimeFormatter;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;import org.domain.Customer;
+&nbsp;import org.domain.Rent;
+&nbsp;import org.domain.TechnicalCheck;
+&nbsp;import org.domain.Vehicle;
+&nbsp;
+&nbsp;@Generated(
+&nbsp;    value = &quot;org.mapstruct.ap.MappingProcessor&quot;
+&nbsp;)
+&nbsp;@Singleton
+&nbsp;@Named
+<b class="nc">&nbsp;public class RentMapperImpl extends RentMapper {</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public RentRepresentation toRepresentation(Rent rent) {
+<b class="nc">&nbsp;        if ( rent == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        RentRepresentation rentRepresentation = new RentRepresentation();</b>
+&nbsp;
+<b class="nc">&nbsp;        rentRepresentation.technicalCheck = rentTechnicalCheckId( rent );</b>
+<b class="nc">&nbsp;        rentRepresentation.customer = rentCustomerId( rent );</b>
+<b class="nc">&nbsp;        rentRepresentation.rentedVehicle = rentRentedVehicleId( rent );</b>
+<b class="nc">&nbsp;        rentRepresentation.id = rent.getId();</b>
+<b class="nc">&nbsp;        if ( rent.getStartDate() != null ) {</b>
+<b class="nc">&nbsp;            rentRepresentation.startDate = DateTimeFormatter.ISO_LOCAL_DATE.format( rent.getStartDate() );</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if ( rent.getEndDate() != null ) {</b>
+<b class="nc">&nbsp;            rentRepresentation.endDate = DateTimeFormatter.ISO_LOCAL_DATE.format( rent.getEndDate() );</b>
+&nbsp;        }
+<b class="nc">&nbsp;        rentRepresentation.rentState = rent.getRentState();</b>
+<b class="nc">&nbsp;        rentRepresentation.fixedCost = rent.getFixedCost();</b>
+<b class="nc">&nbsp;        rentRepresentation.miles = rent.getMiles();</b>
+<b class="nc">&nbsp;        rentRepresentation.mileageCost = rent.getMileageCost();</b>
+<b class="nc">&nbsp;        rentRepresentation.damageCost = rent.getDamageCost();</b>
+<b class="nc">&nbsp;        rentRepresentation.totalCost = rent.getTotalCost();</b>
+&nbsp;
+<b class="nc">&nbsp;        return rentRepresentation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;RentRepresentation&gt; toRepresentationList(List&lt;Rent&gt; rent) {
+<b class="nc">&nbsp;        if ( rent == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        List&lt;RentRepresentation&gt; list = new ArrayList&lt;RentRepresentation&gt;( rent.size() );</b>
+<b class="nc">&nbsp;        for ( Rent rent1 : rent ) {</b>
+<b class="nc">&nbsp;            list.add( toRepresentation( rent1 ) );</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return list;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Rent toModel(RentRepresentation representation) {
+<b class="nc">&nbsp;        if ( representation == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Rent rent = new Rent();</b>
+&nbsp;
+<b class="nc">&nbsp;        rent.setMiles( representation.miles );</b>
+<b class="nc">&nbsp;        rent.setId( representation.id );</b>
+<b class="nc">&nbsp;        if ( representation.startDate != null ) {</b>
+<b class="nc">&nbsp;            rent.setStartDate( LocalDate.parse( representation.startDate ) );</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if ( representation.endDate != null ) {</b>
+<b class="nc">&nbsp;            rent.setEndDate( LocalDate.parse( representation.endDate ) );</b>
+&nbsp;        }
+<b class="nc">&nbsp;        rent.setRentState( representation.rentState );</b>
+<b class="nc">&nbsp;        rent.setFixedCost( representation.fixedCost );</b>
+<b class="nc">&nbsp;        rent.setMileageCost( representation.mileageCost );</b>
+<b class="nc">&nbsp;        rent.setDamageCost( representation.damageCost );</b>
+<b class="nc">&nbsp;        rent.setTotalCost( representation.totalCost );</b>
+&nbsp;
+<b class="nc">&nbsp;        fill( representation, rent );</b>
+&nbsp;
+<b class="nc">&nbsp;        return rent;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Integer rentTechnicalCheckId(Rent rent) {
+<b class="nc">&nbsp;        if ( rent == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        TechnicalCheck technicalCheck = rent.getTechnicalCheck();</b>
+<b class="nc">&nbsp;        if ( technicalCheck == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Integer id = technicalCheck.getId();</b>
+<b class="nc">&nbsp;        if ( id == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Integer rentCustomerId(Rent rent) {
+<b class="nc">&nbsp;        if ( rent == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Customer customer = rent.getCustomer();</b>
+<b class="nc">&nbsp;        if ( customer == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Integer id = customer.getId();</b>
+<b class="nc">&nbsp;        if ( id == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Integer rentRentedVehicleId(Rent rent) {
+<b class="nc">&nbsp;        if ( rent == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Vehicle rentedVehicle = rent.getRentedVehicle();</b>
+<b class="nc">&nbsp;        if ( rentedVehicle == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Integer id = rentedVehicle.getId();</b>
+<b class="nc">&nbsp;        if ( id == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

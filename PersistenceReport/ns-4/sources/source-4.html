@@ -1,0 +1,247 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RentResource</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.resource</a>
+</div>
+
+<h1>Coverage Summary for Class: RentResource (org.resource)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RentResource</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.resource;
+&nbsp;
+&nbsp;import jakarta.enterprise.context.RequestScoped;
+&nbsp;import jakarta.inject.Inject;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import jakarta.ws.rs.*;
+&nbsp;import jakarta.ws.rs.core.*;
+&nbsp;import org.domain.Rent;
+&nbsp;import org.persistence.RentRepository;
+&nbsp;import org.representation.*;
+&nbsp;
+&nbsp;import java.net.URI;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Path(&quot;rent&quot;)
+&nbsp;@Consumes(MediaType.APPLICATION_JSON)
+&nbsp;@Produces(MediaType.APPLICATION_JSON)
+&nbsp;@RequestScoped
+<b class="nc">&nbsp;public class RentResource {</b>
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    RentRepository rentRepository;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    RentMapper rentMapper;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    CustomerMapper customerMapper;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    VehicleMapper vehicleMapper;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    TechnicalCheckMapper technicalCheckMapper;
+&nbsp;
+&nbsp;    @Context
+&nbsp;    UriInfo uriInfo;
+&nbsp;
+&nbsp;    // ---------- GET ----------
+&nbsp;
+&nbsp;    @GET
+&nbsp;    @Transactional
+&nbsp;    public List&lt;RentRepresentation&gt; listAllRents(@DefaultValue(&quot;0&quot;) @QueryParam(&quot;month&quot;) Integer month) {
+<b class="nc">&nbsp;        return rentMapper.toRepresentationList(rentRepository.findByMonth(month));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GET
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{rentId: [0-9]+}&quot;)
+&nbsp;    public RentRepresentation listRentById(@PathParam(&quot;rentId&quot;) Integer rentId) {
+<b class="nc">&nbsp;        Rent rent = rentRepository.findById(rentId);</b>
+<b class="nc">&nbsp;        if (rent == null) {</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] GET /rent/&quot;+rentId+&quot;\n\tCould not find rent with id &quot; + rentId);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return rentMapper.toRepresentation(rent);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GET
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{rentId: [0-9]+}/customer&quot;)
+&nbsp;    public CustomerRepresentation listCustomerOfRent(@PathParam(&quot;rentId&quot;) Integer rentId) {
+<b class="nc">&nbsp;        if (rentId == null || rentRepository.findById(rentId) == null) {  //if id null or not in db</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] GET /rent/&quot;+rentId+&quot;\n\tCould not find customer for rent with id &quot; + rentId);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Rent rent = rentRepository.findById(rentId);</b>
+<b class="nc">&nbsp;        return customerMapper.toRepresentation(rent.getCustomer());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GET
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{rentId: [0-9]+}/vehicle&quot;)
+&nbsp;    public VehicleRepresentation listVehicleOfRent(@PathParam(&quot;rentId&quot;) Integer rentId) {
+<b class="nc">&nbsp;        if (rentId == null || rentRepository.findById(rentId) == null) {  //if id null or not in db</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] GET /rent/&quot;+rentId+&quot;\n\tCould not find vehicle for rent with id &quot; + rentId);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Rent rent = rentRepository.findById(rentId);</b>
+<b class="nc">&nbsp;        return vehicleMapper.toRepresentation(rent.getRentedVehicle());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GET
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{rentId: [0-9]+}/technicalCheck&quot;)
+&nbsp;    public TechnicalCheckRepresentation listTechnicalCheckOfRent(@PathParam(&quot;rentId&quot;) Integer rentId) {
+<b class="nc">&nbsp;        if (rentId == null || rentRepository.findById(rentId) == null) {  //if id null or not in db</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] GET /rent/&quot;+rentId+&quot;\n\tCould not find rent for rent with id &quot; + rentId);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Rent rent = rentRepository.findById(rentId);</b>
+<b class="nc">&nbsp;        return technicalCheckMapper.toRepresentation(rent.getTechnicalCheck());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // ---------- PUT ----------
+&nbsp;
+&nbsp;    //@PUT
+&nbsp;    //@Transactional
+&nbsp;    public Response create(RentRepresentation representation) {
+<b class="nc">&nbsp;        if (representation.id == null || rentRepository.findById(representation.id) != null) {  //if id is null or already exists</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] PUT /rent\n\tCould not create rent, invalid id&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Rent rent = rentMapper.toModel(representation);</b>
+<b class="nc">&nbsp;        rentRepository.persist(rent);</b>
+<b class="nc">&nbsp;        URI uri = UriBuilder.fromResource(RentResource.class).path(String.valueOf(rent.getId())).build();</b>
+<b class="nc">&nbsp;        return Response.created(uri).entity(rentMapper.toRepresentation(rent)).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PUT
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{rentId: [0-9]+}&quot;)
+&nbsp;    public Response update(@PathParam(&quot;rentId&quot;) Integer rentId, RentRepresentation representation) {
+<b class="nc">&nbsp;        if (rentId == null || !(rentId).equals(representation.id)) {</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] PUT /rent\n\tCould not update rent, id mismatching&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Rent rent = rentMapper.toModel(representation);</b>
+<b class="nc">&nbsp;        rentRepository.getEntityManager().merge(rent);</b>
+<b class="nc">&nbsp;        return Response.noContent().build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // ---------- DELETE ----------
+&nbsp;
+&nbsp;    @DELETE
+&nbsp;    @Transactional
+&nbsp;    public Response deleteAllRents() {
+<b class="nc">&nbsp;        rentRepository.deleteAllRents();</b>
+<b class="nc">&nbsp;        return Response.status(200).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DELETE
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{rentId: [0-9]+}&quot;)
+&nbsp;    public Response deleteCompany(@PathParam(&quot;rentId&quot;) Integer rentId) {
+<b class="nc">&nbsp;        if (rentId == null || rentRepository.findById(rentId) == null) {</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] DELETE /rent&quot; + rentId + &quot;\n\tCould not find rent with id &quot; + rentId);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        rentRepository.deleteRent(rentId);</b>
+<b class="nc">&nbsp;        boolean deleted = rentRepository.findById(rentId) == null;</b>
+<b class="nc">&nbsp;        if (!deleted) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;[!] DELETE /rent&quot; + rentId + &quot;\n\tCould not delete rent with id &quot; + rentId);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return Response.status(200).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

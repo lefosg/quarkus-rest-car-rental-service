@@ -1,0 +1,145 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RentRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.persistence</a>
+</div>
+
+<h1>Coverage Summary for Class: RentRepository (org.persistence)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RentRepository</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.persistence;
+&nbsp;
+&nbsp;import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+&nbsp;import io.quarkus.panache.common.Parameters;
+&nbsp;import jakarta.enterprise.context.RequestScoped;
+&nbsp;import jakarta.ws.rs.NotFoundException;
+&nbsp;import org.domain.Rent;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@RequestScoped
+<b class="fc">&nbsp;public class RentRepository implements PanacheRepositoryBase&lt;Rent, Integer&gt; {</b>
+&nbsp;
+&nbsp;    public void deleteAllRents() {
+<b class="fc">&nbsp;        List&lt;Rent&gt; rents = listAll();</b>
+<b class="fc">&nbsp;        for (Rent r : rents) {</b>
+<b class="fc">&nbsp;            delete(r);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void deleteRent(Integer id) {
+<b class="fc">&nbsp;        if (id == null) {</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;RentRepository: deleteRent\n\tid was null&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        Rent rent = findById(id);</b>
+<b class="fc">&nbsp;        if (rent == null) {</b>
+<b class="fc">&nbsp;            throw new NotFoundException(&quot;RentRepository: deleteRent\n\trent found was null&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        rent.setTechnicalCheck(null);</b>
+<b class="fc">&nbsp;        delete(rent);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Rent&gt; findByMonth(int month) {
+<b class="fc">&nbsp;        if (month &lt;= 0 || month &gt; 12) {</b>
+<b class="fc">&nbsp;            return listAll();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return find(&quot;select rent from Rent rent where month(rent.startDate) = :month&quot;,</b>
+<b class="fc">&nbsp;                Parameters.with(&quot;month&quot;, month).map()).list();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,327 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CustomerResource</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.resource</a>
+</div>
+
+<h1>Coverage Summary for Class: CustomerResource (org.resource)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CustomerResource</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/78)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.resource;
+&nbsp;
+&nbsp;import jakarta.enterprise.context.RequestScoped;
+&nbsp;import jakarta.inject.Inject;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import jakarta.ws.rs.*;
+&nbsp;import jakarta.ws.rs.core.MediaType;
+&nbsp;import jakarta.ws.rs.core.Response;
+&nbsp;import jakarta.ws.rs.core.UriBuilder;
+&nbsp;import org.domain.Company;
+&nbsp;import org.domain.Customer;
+&nbsp;import org.domain.Rent;
+&nbsp;import org.domain.Vehicle;
+&nbsp;import org.persistence.CustomerRepository;
+&nbsp;import org.persistence.VehicleRepository;
+&nbsp;import org.representation.*;
+&nbsp;import org.util.VehicleState;
+&nbsp;
+&nbsp;import java.net.URI;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Path(&quot;customer&quot;)
+&nbsp;@Consumes(MediaType.APPLICATION_JSON)
+&nbsp;@Produces(MediaType.APPLICATION_JSON)
+&nbsp;@RequestScoped
+<b class="nc">&nbsp;public class CustomerResource {</b>
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    CustomerRepository customerRepository;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    VehicleRepository vehicleRepository;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    VehicleMapper vehicleMapper;
+&nbsp;
+&nbsp;    @Inject
+&nbsp;    CustomerMapper customerMapper;
+&nbsp;
+&nbsp;    // ---------- GET ----------
+&nbsp;
+&nbsp;    @GET
+&nbsp;    @Transactional
+&nbsp;    public List&lt;CustomerRepresentation&gt; listAllCustomers() {
+<b class="nc">&nbsp;        return customerMapper.toRepresentationList(customerRepository.listAll());</b>
+&nbsp;    }
+&nbsp;    @GET
+&nbsp;    @Path(&quot;{customerId: [0-9]+}&quot;)
+&nbsp;    @Transactional
+&nbsp;    public CustomerRepresentation listCompanyById(@PathParam(&quot;customerId&quot;) Integer customerId) {
+<b class="nc">&nbsp;        Customer customer = customerRepository.findById(customerId);</b>
+<b class="nc">&nbsp;        if (customer ==  null) {</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] GET /customer/&quot;+customerId+&quot;\n\tCould not find customer with id &quot; + customerId);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return customerMapper.toRepresentation(customer);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // ---------- PUT ----------
+&nbsp;    @PUT
+&nbsp;    @Transactional
+&nbsp;    public Response create(CustomerRepresentation representation) {
+<b class="nc">&nbsp;        if (representation.id == null ||  customerRepository.findById(representation.id) != null ) {  //if id is null or already exists</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] PUT /customer\n\tCould not create customer, invalid id&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Customer customer = customerMapper.toModel(representation);</b>
+<b class="nc">&nbsp;        customerRepository.persist(customer);</b>
+<b class="nc">&nbsp;        URI uri = UriBuilder.fromResource(CustomerResource.class).path(String.valueOf(customer.getId())).build();</b>
+<b class="nc">&nbsp;        return Response.created(uri).entity(customerMapper.toRepresentation(customer)).build();</b>
+&nbsp;    }
+&nbsp;    @PUT
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;/{customerId:[0-9]+}&quot;)
+&nbsp;    public Response update(@PathParam(&quot;customerId&quot;) Integer customerId, CustomerRepresentation representation) {
+<b class="nc">&nbsp;        if (! customerId.equals(representation.id)) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;[!] PUT /customer &quot; + customerId + &quot;\n\tCould not update company, id mismatching&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Customer customer = customerMapper.toModel(representation);</b>
+<b class="nc">&nbsp;        customerRepository.getEntityManager().merge(customer);</b>
+<b class="nc">&nbsp;        return Response.noContent().build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GET
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;/availableVehicles/{startDate}/{endDate}&quot;)
+&nbsp;    public Response getAvailableVehicles(
+&nbsp;            @PathParam(&quot;startDate&quot;) String startDate,
+&nbsp;            @PathParam(&quot;endDate&quot;) String endDate) {
+<b class="nc">&nbsp;        LocalDate startLocalDate = null;</b>
+<b class="nc">&nbsp;        LocalDate endLocalDate = null;</b>
+<b class="nc">&nbsp;        if (startDate != null &amp;&amp; endDate != null) {</b>
+<b class="nc">&nbsp;            startLocalDate = LocalDate.parse(startDate);</b>
+<b class="nc">&nbsp;            endLocalDate = LocalDate.parse(endDate);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Invalid date parameters&quot;).build();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (startLocalDate.isAfter(endLocalDate)) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Start date is after end date&quot;).build();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        List&lt;Vehicle&gt; availableVehicles = vehicleRepository.findByState(VehicleState.Available);</b>
+<b class="nc">&nbsp;        List&lt;VehicleRepresentation&gt; availableVehiclesRep = vehicleMapper.toRepresentationList(availableVehicles);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!availableVehicles.isEmpty()) {</b>
+<b class="nc">&nbsp;            return Response.ok(availableVehiclesRep).build();</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return Response.noContent().build();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // ---------- POST ----------
+&nbsp;
+&nbsp;    @POST
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{customerId:[0-9]+}/rent&quot;)
+&nbsp;    public Response makeRent(
+&nbsp;        @QueryParam(&quot;startDate&quot;) String start,
+&nbsp;        @QueryParam(&quot;endDate&quot;) String end,
+&nbsp;        @QueryParam(&quot;vehicleId&quot;) Integer vehicleId,
+&nbsp;        @PathParam(&quot;customerId&quot;) Integer customerId) {
+&nbsp;
+<b class="nc">&nbsp;        LocalDate startDate = null;</b>
+<b class="nc">&nbsp;        LocalDate endDate = null;</b>
+<b class="nc">&nbsp;        if ((start != null &amp;&amp; end != null) &amp;&amp; (!start.equals(&quot;&quot;) &amp;&amp; !end.equals(&quot;&quot;))) {</b>
+<b class="nc">&nbsp;            startDate = LocalDate.parse(start);</b>
+<b class="nc">&nbsp;            endDate = LocalDate.parse(end);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Invalid date parameters&quot;).build();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (customerId == null) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Invalid customer id&quot;).build();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (vehicleId == null) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Invalid vehicle id&quot;).build();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Customer customer = customerRepository.findById(customerId);</b>
+<b class="nc">&nbsp;        Vehicle vehicle = vehicleRepository.findById(vehicleId);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (customer == null) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Customer does not exist&quot;).build();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (vehicle == null) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Vehicle does not exist&quot;).build();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (vehicle.getVehicleState() != VehicleState.Available) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.OK).entity(&quot;Vehicle not available until &quot; + end).build();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        customer.rent(startDate, endDate, vehicle);</b>
+<b class="nc">&nbsp;        customerRepository.getEntityManager().merge(customer);</b>
+<b class="nc">&nbsp;        return Response.status(Response.Status.OK).entity(&quot;You rented the vehicle&quot;).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @POST
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{customerId:[0-9]+}/returnVehicle&quot;)
+&nbsp;    public Response returnVehicle(
+&nbsp;            @PathParam(&quot;customerId&quot;) Integer customerId,
+&nbsp;            @QueryParam(&quot;vehicleId&quot;) Integer vehicleId,
+&nbsp;            @QueryParam(&quot;miles&quot;) float miles
+&nbsp;    ) {
+<b class="nc">&nbsp;        if (customerId == null || customerRepository.findById(customerId) == null) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Customer does not exist or id was null&quot;).build();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (vehicleId == null || vehicleRepository.findById(vehicleId) == null) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Vehicle does not exist or id was null&quot;).build();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (miles &lt;= 0) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;Miles provided are negative&quot;).build();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Customer customer = customerRepository.findById(customerId);</b>
+<b class="nc">&nbsp;        Vehicle vehicle = vehicleRepository.findById(vehicleId);</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Rent rent : customer.getRents()) {</b>
+<b class="nc">&nbsp;            if (rent.getRentedVehicle().equals(vehicle)) {</b>
+<b class="nc">&nbsp;                if (rent.getRentedVehicle().getVehicleState() != VehicleState.Available) {</b>
+<b class="nc">&nbsp;                    return Response.status(Response.Status.BAD_REQUEST).entity(&quot;This vehicle cannot be returned&quot;).build();</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        if (vehicle.getVehicleState() != VehicleState.Available) {</b>
+<b class="nc">&nbsp;            return Response.status(Response.Status.BAD_REQUEST).entity(&quot;This vehicle cannot be returned&quot;).build();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        customer.returnVehicle(vehicle, miles);</b>
+<b class="nc">&nbsp;        customerRepository.getEntityManager().merge(customer);</b>
+<b class="nc">&nbsp;        return Response.status(Response.Status.OK).entity(&quot;Vehicle returned&quot;).build();</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    
+&nbsp;    // ---------- DELETE ----------
+&nbsp;
+&nbsp;    @DELETE
+&nbsp;    @Transactional
+&nbsp;    public Response deleteAllCustomers() {
+<b class="nc">&nbsp;        customerRepository.deleteAllCustomers();</b>
+<b class="nc">&nbsp;        return Response.status(200).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DELETE
+&nbsp;    @Transactional
+&nbsp;    @Path(&quot;{customerId: [0-9]+}&quot;)
+&nbsp;    public Response deleteCustomer(@PathParam(&quot;customerId&quot;) Integer customerId) {
+<b class="nc">&nbsp;        if (customerId == null || customerRepository.findById(customerId) == null) {</b>
+<b class="nc">&nbsp;            throw new NotFoundException(&quot;[!] DELETE /customer &quot; + customerId + &quot;\n\tCould not find customer with id &quot; + customerId);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        customerRepository.deleteCustomer(customerId);</b>
+<b class="nc">&nbsp;        boolean deleted = customerRepository.findById(customerId) == null;</b>
+<b class="nc">&nbsp;        if (!deleted) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;[!] DELETE /customer &quot; + customerId + &quot;\n\tCould not delete customer with id &quot; + customerId);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return Response.status(200).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

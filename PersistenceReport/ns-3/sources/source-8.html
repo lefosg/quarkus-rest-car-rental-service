@@ -1,0 +1,190 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CustomerMapperImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.representation</a>
+</div>
+
+<h1>Coverage Summary for Class: CustomerMapperImpl (org.representation)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CustomerMapperImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/44)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.representation;
+&nbsp;
+&nbsp;import jakarta.inject.Named;
+&nbsp;import jakarta.inject.Singleton;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.format.DateTimeFormatter;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;import org.domain.Customer;
+&nbsp;
+&nbsp;@Generated(
+&nbsp;    value = &quot;org.mapstruct.ap.MappingProcessor&quot;
+&nbsp;)
+&nbsp;@Singleton
+&nbsp;@Named
+<b class="nc">&nbsp;public class CustomerMapperImpl extends CustomerMapper {</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public CustomerRepresentation toRepresentation(Customer customer) {
+<b class="nc">&nbsp;        if ( customer == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        CustomerRepresentation customerRepresentation = new CustomerRepresentation();</b>
+&nbsp;
+<b class="nc">&nbsp;        customerRepresentation.id = customer.getId();</b>
+<b class="nc">&nbsp;        customerRepresentation.name = customer.getName();</b>
+<b class="nc">&nbsp;        customerRepresentation.AFM = customer.getAFM();</b>
+<b class="nc">&nbsp;        customerRepresentation.email = customer.getEmail();</b>
+<b class="nc">&nbsp;        customerRepresentation.phone = customer.getPhone();</b>
+<b class="nc">&nbsp;        customerRepresentation.surname = customer.getSurname();</b>
+<b class="nc">&nbsp;        customerRepresentation.password = customer.getPassword();</b>
+<b class="nc">&nbsp;        customerRepresentation.number = customer.getNumber();</b>
+<b class="nc">&nbsp;        if ( customer.getExpirationDate() != null ) {</b>
+<b class="nc">&nbsp;            customerRepresentation.expirationDate = DateTimeFormatter.ISO_LOCAL_DATE.format( customer.getExpirationDate() );</b>
+&nbsp;        }
+<b class="nc">&nbsp;        customerRepresentation.holderName = customer.getHolderName();</b>
+<b class="nc">&nbsp;        customerRepresentation.city = customer.getCity();</b>
+<b class="nc">&nbsp;        customerRepresentation.street = customer.getStreet();</b>
+<b class="nc">&nbsp;        customerRepresentation.zipcode = customer.getZipcode();</b>
+&nbsp;
+<b class="nc">&nbsp;        return customerRepresentation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;CustomerRepresentation&gt; toRepresentationList(List&lt;Customer&gt; customer) {
+<b class="nc">&nbsp;        if ( customer == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        List&lt;CustomerRepresentation&gt; list = new ArrayList&lt;CustomerRepresentation&gt;( customer.size() );</b>
+<b class="nc">&nbsp;        for ( Customer customer1 : customer ) {</b>
+<b class="nc">&nbsp;            list.add( toRepresentation( customer1 ) );</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return list;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Customer toModel(CustomerRepresentation customerRepresentation) {
+<b class="nc">&nbsp;        if ( customerRepresentation == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Customer customer = new Customer();</b>
+&nbsp;
+<b class="nc">&nbsp;        customer.setId( customerRepresentation.id );</b>
+<b class="nc">&nbsp;        customer.setName( customerRepresentation.name );</b>
+<b class="nc">&nbsp;        customer.setEmail( customerRepresentation.email );</b>
+<b class="nc">&nbsp;        customer.setPassword( customerRepresentation.password );</b>
+<b class="nc">&nbsp;        customer.setPhone( customerRepresentation.phone );</b>
+<b class="nc">&nbsp;        customer.setCity( customerRepresentation.city );</b>
+<b class="nc">&nbsp;        customer.setSurname( customerRepresentation.surname );</b>
+<b class="nc">&nbsp;        customer.setNumber( customerRepresentation.number );</b>
+<b class="nc">&nbsp;        customer.setStreet( customerRepresentation.street );</b>
+<b class="nc">&nbsp;        customer.setZipcode( customerRepresentation.zipcode );</b>
+<b class="nc">&nbsp;        customer.setHolderName( customerRepresentation.holderName );</b>
+<b class="nc">&nbsp;        if ( customerRepresentation.expirationDate != null ) {</b>
+<b class="nc">&nbsp;            customer.setExpirationDate( LocalDate.parse( customerRepresentation.expirationDate ) );</b>
+&nbsp;        }
+<b class="nc">&nbsp;        customer.setAFM( customerRepresentation.AFM );</b>
+&nbsp;
+<b class="nc">&nbsp;        return customer;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

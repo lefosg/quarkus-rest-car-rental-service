@@ -193,9 +193,7 @@ public class CustomerResource {
 
     }
 
-
-
-
+    
     // ---------- DELETE ----------
 
     @DELETE

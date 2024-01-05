@@ -62,43 +62,43 @@ public class VehicleRepository implements PanacheRepositoryBase<Vehicle,Integer>
                 Parameters.with("manufacturer", manufacturer).map()).list();
     }
 
-    public List<Vehicle> findByYear(Integer year) {
-        if (year == null)
-            return listAll();
-
-        return find("select vehicle from Vehicle vehicle where vehicle.year = :year",
-                Parameters.with("year", year).map()).list();
-    }
-
-    public List<Vehicle> findByMiles(Float miles) {
-        if (miles == null)
-            return listAll();
-
-        return find("select vehicle from Vehicle vehicle where vehicle.miles = :miles",
-                Parameters.with("miles",miles).map()).list();
-    }
-
-    public List<Vehicle> findByplateNumber(String plateNumber) {
-        if (plateNumber == null)
-            return listAll();
-
-        return find("select vehicle from Vehicle vehicle where vehicle.plateNumber = :plateNumber",
-                Parameters.with("plateNumber",plateNumber).map()).list();
-    }
-    public List<Vehicle> findByvehicleState(VehicleState vehicleState) {
-        if (vehicleState == null)
-            return listAll();
-
-        return find("select vehicle from Vehicle vehicle where vehicle.vehicleState = :vehicleState",
-                Parameters.with("vehicleState",vehicleState).map()).list();
-    }
-    public List<Vehicle> findByvehicleType(VehicleType vehicleType) {
-        if (vehicleType == null)
-            return listAll();
-
-        return find("select vehicle from Vehicle vehicle where vehicle.vehicleType = :vehicleType",
-                Parameters.with("vehicleType",vehicleType).map()).list();
-    }
+//    public List<Vehicle> findByYear(Integer year) {
+//        if (year == null)
+//            return listAll();
+//
+//        return find("select vehicle from Vehicle vehicle where vehicle.year = :year",
+//                Parameters.with("year", year).map()).list();
+//    }
+//
+//    public List<Vehicle> findByMiles(Float miles) {
+//        if (miles == null)
+//            return listAll();
+//
+//        return find("select vehicle from Vehicle vehicle where vehicle.miles = :miles",
+//                Parameters.with("miles",miles).map()).list();
+//    }
+//
+//    public List<Vehicle> findByplateNumber(String plateNumber) {
+//        if (plateNumber == null)
+//            return listAll();
+//
+//        return find("select vehicle from Vehicle vehicle where vehicle.plateNumber = :plateNumber",
+//                Parameters.with("plateNumber",plateNumber).map()).list();
+//    }
+//    public List<Vehicle> findByvehicleState(VehicleState vehicleState) {
+//        if (vehicleState == null)
+//            return listAll();
+//
+//        return find("select vehicle from Vehicle vehicle where vehicle.vehicleState = :vehicleState",
+//                Parameters.with("vehicleState",vehicleState).map()).list();
+//    }
+//    public List<Vehicle> findByvehicleType(VehicleType vehicleType) {
+//        if (vehicleType == null)
+//            return listAll();
+//
+//        return find("select vehicle from Vehicle vehicle where vehicle.vehicleType = :vehicleType",
+//                Parameters.with("vehicleType",vehicleType).map()).list();
+//    }
 
 
 }

@@ -1,0 +1,331 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Company</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.domain</a>
+</div>
+
+<h1>Coverage Summary for Class: Company (org.domain)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Company</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.7%
+  </span>
+  <span class="absValue">
+    (2/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8%
+  </span>
+  <span class="absValue">
+    (6/75)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Company$HibernateProxy$kBK8crZ9</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    8.7%
+  </span>
+  <span class="absValue">
+    (2/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8%
+  </span>
+  <span class="absValue">
+    (6/75)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.domain;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import org.hibernate.annotations.Cascade;
+&nbsp;import org.util.DamageType;
+&nbsp;import org.util.Money;
+&nbsp;import org.util.VehicleType;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.temporal.ChronoUnit;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@DiscriminatorValue(&quot;Company&quot;)
+&nbsp;public class Company extends User{
+&nbsp;
+&nbsp;    @Column(name=&quot;IBAN&quot;, length=30)
+&nbsp;    private String IBAN;
+&nbsp;
+&nbsp;    @Embedded
+&nbsp;    @AttributeOverrides({
+&nbsp;        @AttributeOverride(name=&quot;amount&quot;,column=@Column(name=&quot;income_amount&quot;)),
+&nbsp;        @AttributeOverride(name=&quot;currency&quot;,column=@Column(name=&quot;income_currency&quot;)),
+&nbsp;    })
+&nbsp;    private Money income;
+&nbsp;
+&nbsp;    @Embedded
+&nbsp;    @AttributeOverrides({
+&nbsp;        @AttributeOverride(name=&quot;amount&quot;,column=@Column(name=&quot;damage_cost_amount&quot;)),
+&nbsp;        @AttributeOverride(name=&quot;currency&quot;,column=@Column(name=&quot;damage_cost_currency&quot;)),
+&nbsp;    })
+&nbsp;    private Money damage_cost;
+&nbsp;
+&nbsp;    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+&nbsp;    private ChargingPolicy policy;
+&nbsp;
+<b class="fc">&nbsp;    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy=&quot;company&quot;, cascade = {CascadeType.REMOVE, CascadeType.MERGE})</b>
+&nbsp;    private List&lt;Vehicle&gt; vehicles = new ArrayList&lt;&gt;();
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    public Company() {</b>
+<b class="fc">&nbsp;        income = new Money(0);</b>
+<b class="fc">&nbsp;        damage_cost = new Money(0);</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM,
+&nbsp;                   String IBAN) {
+<b class="nc">&nbsp;        super(name, email, password, phone, AFM, street, city, zipcode);</b>
+<b class="nc">&nbsp;        this.IBAN = IBAN;</b>
+<b class="nc">&nbsp;        income = new Money(0);</b>
+<b class="nc">&nbsp;        damage_cost = new Money(0);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Company(String name, String email, String password, String phone, String street, String city, String zipcode, String AFM,
+&nbsp;                   String IBAN, ChargingPolicy policy) {
+<b class="nc">&nbsp;        super(name, email, password, phone, AFM, street, city, zipcode);</b>
+<b class="nc">&nbsp;        this.IBAN = IBAN;</b>
+<b class="nc">&nbsp;        this.income = new Money(0);</b>
+<b class="nc">&nbsp;        this.damage_cost = new Money(0);</b>
+<b class="nc">&nbsp;        this.policy= policy;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    // domain logic
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Given the miles a Customer has done with a rented vehicle, it calculates the
+&nbsp;     * mileage cost the Customer has to pay.
+&nbsp;     * @param miles
+&nbsp;     * @return the mileage cost
+&nbsp;     */
+&nbsp;    public Money calculateMileageCost(float miles) {
+<b class="nc">&nbsp;        if (miles &lt; 0 ) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;[!] Company.calculateMileageCost: negative number in miles parameter&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        float mileage_cost = policy.calculateMileageCost(miles);</b>
+<b class="nc">&nbsp;        return new Money(mileage_cost);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * If a Customer has cause damage on a rented vehicle, it calculates the cost to
+&nbsp;     * charge the Customer for the damage.
+&nbsp;     * @param damageType
+&nbsp;     * @return the damage cost
+&nbsp;     */
+&nbsp;    public Money calculateDamageCost(DamageType damageType) {
+<b class="nc">&nbsp;        if (damageType == null) {</b>
+<b class="nc">&nbsp;            throw new NullPointerException(&quot;[!] Company.calculateDamageCost: damageType is null&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        float damage_cost = policy.calculateDamageCost(damageType);</b>
+<b class="nc">&nbsp;        return new Money(damage_cost);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calculates the fixed cost for a rented vehicle
+&nbsp;     * @param startDate
+&nbsp;     * @param endDate
+&nbsp;     * @param money
+&nbsp;     * @return the fixed cost
+&nbsp;     * also check if the vehicle is not available at this time
+&nbsp;     */
+&nbsp;
+&nbsp;    public Money calculateFixedCharge(LocalDate startDate, LocalDate endDate, Money money) {
+<b class="nc">&nbsp;        if (startDate==null){</b>
+<b class="nc">&nbsp;            throw new NullPointerException(&quot;[!] Company.calculateFixedCharge: startDate is null&quot;);</b>
+<b class="nc">&nbsp;        } else if (endDate==null){</b>
+<b class="nc">&nbsp;            throw new NullPointerException(&quot;[!] Company.calculateFixedCharge: endDate is null&quot;);</b>
+<b class="nc">&nbsp;        } else if (money == null) {</b>
+<b class="nc">&nbsp;            throw new NullPointerException(&quot;[!] Company.calculateFixedCharge: money is null&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (startDate.isAfter(endDate)) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;Έχετε δώσει μεταγενέστερη ημερομηνία έναρξης ενοικίασης&quot;);</b>
+<b class="nc">&nbsp;        } else if (endDate.isBefore(startDate)) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;Έχετε δώσει προγενέστερη ημερομηνία λήξης ενοικίασης&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //1. calculate #days this vehicle was rented
+<b class="nc">&nbsp;        int days = (int) startDate.until(endDate, ChronoUnit.DAYS)+1;</b>
+&nbsp;
+&nbsp;        //2. do the math
+<b class="nc">&nbsp;        double cost = money.getAmount() * days;</b>
+<b class="nc">&nbsp;        return new Money(cost);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;        @Override
+&nbsp;    public void dashboard() {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+&nbsp;    public void addVehicle(Vehicle v) {
+<b class="nc">&nbsp;        this.vehicles.add(v);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void removeVehicle(Vehicle v) {
+<b class="nc">&nbsp;        this.vehicles.remove(v);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;    public void removeVehicle(int index) {
+<b class="nc">&nbsp;        this.vehicles.remove(index);</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+&nbsp;    // getters &amp; setters
+&nbsp;
+&nbsp;    public  String getIBAN() {
+<b class="nc">&nbsp;        return IBAN;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setIBAN(String IBAN) {
+<b class="nc">&nbsp;        this.IBAN = IBAN;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Money getIncome() {
+<b class="nc">&nbsp;        return income;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setIncome(Money income) {
+<b class="nc">&nbsp;        this.income = income;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Money getDamage_cost() {
+<b class="nc">&nbsp;        return damage_cost;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDamage_cost(Money damage_cost) {
+<b class="nc">&nbsp;        this.damage_cost = damage_cost;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public ChargingPolicy getPolicy() {
+<b class="nc">&nbsp;        return policy;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPolicy(ChargingPolicy policy) {
+<b class="nc">&nbsp;        this.policy = policy;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public List&lt;Vehicle&gt; getVehicles() {
+<b class="fc">&nbsp;        return vehicles;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setVehicles(List&lt;Vehicle&gt; vehicles) {
+<b class="nc">&nbsp;        this.vehicles = vehicles;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;Company{&quot; +</b>
+<b class="nc">&nbsp;                &quot;AFM=&#39;&quot; + getAFM() + &#39;\&#39;&#39; +</b>
+&nbsp;                &quot;, IBAN=&#39;&quot; + IBAN + &#39;\&#39;&#39; +
+&nbsp;                &quot;, income=&quot; + income +
+&nbsp;                &quot;, damage_cost=&quot; + damage_cost +
+<b class="nc">&nbsp;                super.toString() +</b>
+&nbsp;                &#39;}&#39;;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="nc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (!(o instanceof Company company)) return false;</b>
+<b class="nc">&nbsp;        return  this.getName().equals(company.getName())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.getPassword().equals(company.getPassword())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.getCity().equals(company.getCity())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.getEmail().equals(company.getEmail())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.getPhone().equals(company.getPhone())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.getZipcode().equals(company.getZipcode())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.getAFM().equals(company.getAFM())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.IBAN.equals(company.getIBAN())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.income.equals(company.getIncome())</b>
+<b class="nc">&nbsp;                &amp;&amp; this.damage_cost.equals(company.getDamage_cost());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return Objects.hash(getAFM(), getIBAN(), getIncome(), getDamage_cost());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

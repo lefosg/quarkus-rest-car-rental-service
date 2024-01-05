@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > VehicleMapperImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.representation</a>
+</div>
+
+<h1>Coverage Summary for Class: VehicleMapperImpl (org.representation)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VehicleMapperImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.representation;
+&nbsp;
+&nbsp;import jakarta.inject.Named;
+&nbsp;import jakarta.inject.Singleton;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import javax.annotation.processing.Generated;
+&nbsp;import org.domain.Company;
+&nbsp;import org.domain.Vehicle;
+&nbsp;
+&nbsp;@Generated(
+&nbsp;    value = &quot;org.mapstruct.ap.MappingProcessor&quot;
+&nbsp;)
+&nbsp;@Singleton
+&nbsp;@Named
+<b class="nc">&nbsp;public class VehicleMapperImpl extends VehicleMapper {</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public VehicleRepresentation toRepresentation(Vehicle vehicle) {
+<b class="nc">&nbsp;        if ( vehicle == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        VehicleRepresentation vehicleRepresentation = new VehicleRepresentation();</b>
+&nbsp;
+<b class="nc">&nbsp;        vehicleRepresentation.company = vehicleCompanyId( vehicle );</b>
+<b class="nc">&nbsp;        vehicleRepresentation.id = vehicle.getId();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.manufacturer = vehicle.getManufacturer();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.model = vehicle.getModel();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.year = vehicle.getYear();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.miles = vehicle.getMiles();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.plateNumber = vehicle.getPlateNumber();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.vehicleType = vehicle.getVehicleType();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.vehicleState = vehicle.getVehicleState();</b>
+<b class="nc">&nbsp;        vehicleRepresentation.fixedCharge = vehicle.getFixedCharge();</b>
+&nbsp;
+<b class="nc">&nbsp;        return vehicleRepresentation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;VehicleRepresentation&gt; toRepresentationList(List&lt;Vehicle&gt; vehicle) {
+<b class="nc">&nbsp;        if ( vehicle == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        List&lt;VehicleRepresentation&gt; list = new ArrayList&lt;VehicleRepresentation&gt;( vehicle.size() );</b>
+<b class="nc">&nbsp;        for ( Vehicle vehicle1 : vehicle ) {</b>
+<b class="nc">&nbsp;            list.add( toRepresentation( vehicle1 ) );</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return list;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Vehicle toModel(VehicleRepresentation representation) {
+<b class="nc">&nbsp;        if ( representation == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Vehicle vehicle = new Vehicle();</b>
+&nbsp;
+<b class="nc">&nbsp;        vehicle.setManufacturer( representation.manufacturer );</b>
+<b class="nc">&nbsp;        vehicle.setId( representation.id );</b>
+<b class="nc">&nbsp;        vehicle.setModel( representation.model );</b>
+<b class="nc">&nbsp;        vehicle.setYear( representation.year );</b>
+<b class="nc">&nbsp;        vehicle.setMiles( representation.miles );</b>
+<b class="nc">&nbsp;        vehicle.setPlateNumber( representation.plateNumber );</b>
+<b class="nc">&nbsp;        vehicle.setVehicleType( representation.vehicleType );</b>
+<b class="nc">&nbsp;        vehicle.setVehicleState( representation.vehicleState );</b>
+<b class="nc">&nbsp;        vehicle.setFixedCharge( representation.fixedCharge );</b>
+&nbsp;
+<b class="nc">&nbsp;        fillCompany( representation, vehicle );</b>
+&nbsp;
+<b class="nc">&nbsp;        return vehicle;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Integer vehicleCompanyId(Vehicle vehicle) {
+<b class="nc">&nbsp;        if ( vehicle == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Company company = vehicle.getCompany();</b>
+<b class="nc">&nbsp;        if ( company == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Integer id = company.getId();</b>
+<b class="nc">&nbsp;        if ( id == null ) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-01-05 15:58</div>
+</div>
+</body>
+</html>

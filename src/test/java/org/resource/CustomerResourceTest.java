@@ -109,19 +109,8 @@ class CustomerResourceTest extends IntegrationBase {
 
     @Test
     public void makeRent() {
-        CustomerRepresentation customerRepresentation = createCustomerRepresentation(123);
-        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3012, compId);
-
-        given()
-                .contentType(ContentType.JSON)
-                .body(customerRepresentation)
-                .when().put("/customer/")
-                .then().statusCode(201);
-        given()
-                .contentType(ContentType.JSON)
-                .body(vehicleRepresentation)
-                .when().post("/company/"+compId+"/addVehicle/")
-                .then().statusCode(200);
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3000, compId);
 
         Response response = given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
@@ -129,6 +118,8 @@ class CustomerResourceTest extends IntegrationBase {
                 .queryParam("vehicleId", vehicleRepresentation.id)
                 .when().post("/customer/"+customerRepresentation.id+"/rent/")
                 .then().extract().response();
+        System.out.println("Response: " + response.getBody().asString());
+
         assertEquals(200, response.getStatusCode());
         assertEquals("You rented the vehicle", response.getBody().asString());
     }

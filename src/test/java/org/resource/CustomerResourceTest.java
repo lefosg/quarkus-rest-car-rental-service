@@ -3,13 +3,14 @@ package org.resource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.domain.Customer;
 import org.junit.jupiter.api.Test;
 import org.representation.CompanyRepresentation;
 import org.representation.CustomerRepresentation;
 import org.representation.RentRepresentation;
-import org.util.Constants;
-import org.util.IntegrationBase;
+import org.representation.VehicleRepresentation;
+import org.util.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CustomerResourceTest extends IntegrationBase {
 
     Integer custId = 1000;
+    Integer compId = 2000;
 
     // ---------- GET ----------
 
@@ -107,15 +109,28 @@ class CustomerResourceTest extends IntegrationBase {
 
     @Test
     public void makeRent() {
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(123);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3012, compId);
 
-        RentRepresentation representation = new RentRepresentation();
+        given()
+                .contentType(ContentType.JSON)
+                .body(customerRepresentation)
+                .when().put("/customer/")
+                .then().statusCode(201);
+        given()
+                .contentType(ContentType.JSON)
+                .body(vehicleRepresentation)
+                .when().post("/company/"+compId+"/addVehicle/")
+                .then().statusCode(200);
 
-
-        //given()
-        //        .contentType(ContentType.JSON)
-        //        .body()
-        //        .
-
+        Response response = given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/"+customerRepresentation.id+"/rent/")
+                .then().extract().response();
+        assertEquals(200, response.getStatusCode());
+        assertEquals("You rented the vehicle", response.getBody().asString());
     }
 
 
@@ -156,6 +171,21 @@ class CustomerResourceTest extends IntegrationBase {
         representation.expirationDate = LocalDate.of(2027,11,26).toString();
         representation.number = "7894665213797564";
         representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛoΥ";
+        return representation;
+    }
+
+    private VehicleRepresentation createVehicleRepresentation(Integer vehId, Integer companyId) {
+        VehicleRepresentation representation = new VehicleRepresentation();
+        representation.id = vehId;
+        representation.manufacturer = "TOYOTA";
+        representation.model = "AYGO";
+        representation.year = 2022;
+        representation.miles = 50000;
+        representation.plateNumber = "MMB-8745";
+        representation.vehicleType = VehicleType.Hatchback;
+        representation.vehicleState = VehicleState.Available;
+        representation.fixedCharge = new Money(60);
+        representation.company = companyId;
         return representation;
     }
 

@@ -1,6 +1,7 @@
 package org.domain;
 
 import jakarta.persistence.*;
+import jakarta.ws.rs.NotFoundException;
 import org.util.Money;
 import org.util.RentState;
 import org.util.VehicleState;
@@ -114,7 +115,9 @@ public class Customer extends User{
             }
         }
         //check if there is any rent ongoing with this vehicle
-        assert rent != null : "[!] Customer.returnVehicle: rent searched for is null";
+        if (rent == null) {
+            throw new NotFoundException("[!] Customer.returnVehicle: rent searched for is null");
+        }
         rent.calculateCosts(miles);
         Money amount = new Money(rent.getFixedCost().getAmount() + rent.getMileageCost().getAmount());
         pay(amount, rent.getDamageCost(), rent.getRentedVehicle().getCompany());

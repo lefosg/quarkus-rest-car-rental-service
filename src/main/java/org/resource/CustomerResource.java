@@ -175,15 +175,15 @@ public class CustomerResource {
         Customer customer = customerRepository.findById(customerId);
         Vehicle vehicle = vehicleRepository.findById(vehicleId);
 
-        for (Rent rent : customer.getRents()) {
-            if (rent.getRentedVehicle().equals(vehicle)) {
-                if (rent.getRentedVehicle().getVehicleState() != VehicleState.Available) {
-                    return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
-                }
-            }
-        }
+//        for (Rent rent : customer.getRents()) {
+//            if (rent.getRentedVehicle().equals(vehicle)) {
+//                if (rent.getRentedVehicle().getVehicleState() != VehicleState.Available) {
+//                    return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
+//                }
+//            }
+//        }
 
-        if (vehicle.getVehicleState() != VehicleState.Available) {
+        if (vehicle.getVehicleState() == VehicleState.Available) {
             return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
         }
 

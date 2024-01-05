@@ -1,5 +1,6 @@
 package org.domain;
 
+import jakarta.ws.rs.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.*;
@@ -121,7 +122,7 @@ class CustomerTest {
         Vehicle vehicle = createVehicle2();
         float miles = 100;
         //customer.rent has not been called, so no such vehicle can be returned
-        assertThrows(AssertionError.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             customer.returnVehicle(vehicle, miles);
         });
     }

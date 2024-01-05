@@ -141,6 +141,48 @@ class CustomerResourceTest extends IntegrationBase {
         assertTrue(response.getBody().asString().contains("Not good dates"));
     }
 
+    @Test
+    public void makeRentInvalidVehicle() {
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1001);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(null, compId);  //id null invalid
+
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/" + customerRepresentation.id + "/rent/")
+                .then().statusCode(404);
+
+        vehicleRepresentation = createVehicleRepresentation(3020, compId);  //3020 not in db
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/" + customerRepresentation.id + "/rent/")
+                .then().statusCode(400);
+    }
+
+    @Test
+    public void makeRentInvalidCustomer() {
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(null);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3001, compId);  //id null invalid
+
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/" + customerRepresentation.id + "/rent/")
+                .then().statusCode(404);
+
+        vehicleRepresentation = createVehicleRepresentation(1007, compId);  //1007 not in db
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/" + customerRepresentation.id + "/rent/")
+                .then().statusCode(404);
+    }
+
     // ---------- DELETE ----------
 
     @Test

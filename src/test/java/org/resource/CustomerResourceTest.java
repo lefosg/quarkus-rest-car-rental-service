@@ -278,13 +278,12 @@ class CustomerResourceTest extends IntegrationBase {
 
         //now return it with wrong vehicle representation
         vehicleRepresentation.id = 3001;
-        given().contentType(ContentType.JSON)
+        response = given().contentType(ContentType.JSON)
                 .queryParam("miles", 50.0f)
                 .queryParam("vehicleId", vehicleRepresentation.id)
                 .when().post("/customer/"+customerRepresentation.id+"/returnVehicle/")
                 .then().extract().response();
-        //fixme does not work
-        //assertEquals("This vehicle cannot be returned", response.getBody().asString());
+        assertEquals("This vehicle cannot be returned", response.getBody().asString());
     }
 
     // ---------- DELETE ----------

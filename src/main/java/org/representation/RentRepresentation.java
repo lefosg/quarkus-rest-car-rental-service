@@ -19,5 +19,4 @@ public class RentRepresentation {
     public Integer rentedVehicle;
     public Integer technicalCheck;
     public Integer customer;
-    //todo in domain logic, embeddables -> new
 }

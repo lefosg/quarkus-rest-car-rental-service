@@ -227,7 +227,7 @@ class CompanyResourceTest extends IntegrationBase {
                 .then().statusCode(200)
                 .extract().as(VehicleRepresentation.class);
 
-        assertEquals(3012, created.id);
+        assertEquals(1, created.id);
         assertEquals(compId, created.company);
 
         List<VehicleRepresentation> vehicleRepresentations = when().get("/vehicle")

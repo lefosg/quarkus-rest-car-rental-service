@@ -3,6 +3,7 @@ package org.resource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import jakarta.inject.Inject;
 import org.hibernate.metamodel.RepresentationMode;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +26,12 @@ class RentResourceTest extends IntegrationBase {
 
     Integer rentId;
     LocalDate startDate;
+    Integer compId;
 
     @BeforeEach
     public void setup() {
         rentId = 4000;
+        compId = 2000;
         startDate = LocalDate.of(2023, 12, 5);
     }
 
@@ -304,5 +307,186 @@ class RentResourceTest extends IntegrationBase {
         representation.id = 5002;
         representation.damageType = DamageType.NoDamage;
         return representation;
+    }
+
+/*makeRent Tests */
+
+@Test
+public void makeRent() {
+    CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
+    VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3000);
+
+    Response response = given().contentType(ContentType.JSON)
+            .queryParam("startDate", LocalDate.now().toString())
+            .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+            .queryParam("vehicleId", vehicleRepresentation.id)
+            .when().post("/rent/newRent/"+customerRepresentation.id)
+            .then().extract().response();
+    System.out.println("Response: " + response.getBody().asString());
+
+    assertEquals(200, response.getStatusCode());
+    assertEquals("You rented the vehicle", response.getBody().asString());
+
+    VehicleRepresentation v = when().get("/vehicle/" + vehicleRepresentation.id)
+            .then()
+            .extract()
+            .as(VehicleRepresentation.class);
+    assertEquals(vehicleRepresentation.id, v.id);
+    assertEquals(v.vehicleState, VehicleState.Rented);
+}
+
+    @Test
+    public void makeRentWithInvalidDates() {
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1001);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3001);
+
+        Response response = given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("endDate", LocalDate.now().toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/newRent/"+customerRepresentation.id)
+                .then().extract().response();
+
+        System.out.println("Response: " + response.getBody().asString());
+        assertTrue(response.getBody().asString().contains("Not good dates"));
+    }
+
+    @Test
+    public void makeRentInvalidVehicle() {
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1001);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(null);  //id null invalid
+
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/newRent/"+customerRepresentation.id)
+                .then().statusCode(404);
+
+        vehicleRepresentation = createVehicleRepresentation(3020);  //3020 not in db
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/newRent/"+customerRepresentation.id)
+                .then().statusCode(400);
+    }
+
+    @Test
+    public void makeRentInvalidCustomer() {
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(null);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3001);  //id null invalid
+
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/" + customerRepresentation.id + "/rent/")
+                .then().statusCode(404);
+
+        vehicleRepresentation = createVehicleRepresentation(1007);  //1007 not in db
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/customer/" + customerRepresentation.id + "/rent/")
+                .then().statusCode(404);
+    }
+/*returnVehicle tests*/
+
+    @Test
+    public void returnVehicle() {
+        //first make a rent
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3000);
+
+        Response response = given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/newRent/"+customerRepresentation.id)
+                .then().extract().response();
+        System.out.println("Response: " + response.getBody().asString());
+
+        assertEquals(200, response.getStatusCode());
+        assertEquals("You rented the vehicle", response.getBody().asString());
+
+        //then return it
+        response = given().contentType(ContentType.JSON)
+                .queryParam("miles", 50.0f)
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/returnVehicle/"+customerRepresentation.id)
+                .then().extract().response();
+        System.out.println(response.getBody().asString());
+        assertEquals(200, response.getStatusCode());
+        assertEquals("Vehicle returned", response.getBody().asString());
+    }
+
+    @Test
+    public void returnVehicleInvalidCustomer() {
+        //first make a rent
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
+        VehicleRepresentation vehicleRepresentation =createVehicleRepresentation(3000);
+
+        Response response = given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/newRent/"+customerRepresentation.id)
+                .then().extract().response();
+        System.out.println("Response: " + response.getBody().asString());
+
+        assertEquals(200, response.getStatusCode());
+        assertEquals("You rented the vehicle", response.getBody().asString());
+
+        //then return it with invalid customer representation
+        customerRepresentation.id = 1010;
+        response = given().contentType(ContentType.JSON)
+                .queryParam("miles", 50.0f)
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/returnVehicle/"+customerRepresentation.id)
+                .then().extract().response();
+        assertEquals(400, response.getStatusCode());
+
+        customerRepresentation.id = null;
+        response = given().contentType(ContentType.JSON)
+                .queryParam("miles", 50.0f)
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/returnVehicle/"+customerRepresentation.id)
+                .then().extract().response();
+        assertEquals(404, response.getStatusCode());
+
+        //now make miles <= 0
+        customerRepresentation.id = 1000;
+        response = given().contentType(ContentType.JSON)
+                .queryParam("miles", -10.0f)
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/returnVehicle/"+customerRepresentation.id)
+                .then().extract().response();
+        assertEquals(400, response.getStatusCode());
+    }
+
+    @Test
+    public void returnVehicleInvalidVehicle() {
+        //first make a rent
+        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
+        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3000);
+
+        Response response = given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/newRent/"+customerRepresentation.id)
+                .then().extract().response();
+        System.out.println("Response: " + response.getBody().asString());
+
+        //now return it with wrong vehicle representation
+        vehicleRepresentation.id = 3001;
+        response = given().contentType(ContentType.JSON)
+                .queryParam("miles", 50.0f)
+                .queryParam("vehicleId", vehicleRepresentation.id)
+                .when().post("/rent/returnVehicle/"+customerRepresentation.id)
+                .then().extract().response();
+        assertEquals("This vehicle cannot be returned", response.getBody().asString());
     }
 }

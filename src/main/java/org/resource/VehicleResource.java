@@ -63,8 +63,10 @@ public class VehicleResource {
         return companyMapper.toRepresentation(vehicle.getCompany());
     }
 
+
     // ---------- PUT ----------
 
+    //todo: test this
     @PUT
     @Transactional
     public Response create(VehicleRepresentation representation) {

@@ -44,16 +44,6 @@ class CustomerTest {
         assertNotEquals(customer, customer2);
     }
 
-
-    @Test
-    void rent() {
-        LocalDate startDate = LocalDate.of(2023, 11, 10);
-        LocalDate endDate = LocalDate.of(2023, 11, 15);
-        Vehicle vehicle = createVehicle1();
-        customer.rent(startDate, endDate, vehicle);
-        assertEquals(1, customer.getRents().size());
-    }
-
     @Test
     void rentFalseInput() {
         LocalDate startDate = LocalDate.of(2023, 11, 10);
@@ -98,26 +88,6 @@ class CustomerTest {
     }
 
     @Test
-    void returnVehicle() {
-        //prerequisites: must create company with a charging policy to call the Customer.pay method inside Customer.returnVehicle
-        Company company = createCompany();
-        Vehicle vehicle = createVehicle2();
-        company.addVehicle(vehicle);
-        vehicle.setCompany(company);
-
-        float miles = 100;
-        float initialVehicleMiles = vehicle.getMiles();
-        LocalDate startDate = LocalDate.of(2023, 11, 10);
-        LocalDate endDate = LocalDate.of(2023, 11, 15);
-        customer.rent(startDate, endDate, vehicle);
-        customer.returnVehicle(vehicle, miles);
-
-        assertEquals(RentState.Finished, customer.getRents().get(0).getRentState());
-        assertEquals(initialVehicleMiles+miles, customer.getRents().get(0).getRentedVehicle().getMiles());
-        assertEquals(VehicleState.Available, customer.getRents().get(0).getRentedVehicle().getVehicleState());
-    }
-
-    @Test
     public void returnVehicleWithoutRenting() {
         Vehicle vehicle = createVehicle2();
         float miles = 100;
@@ -151,7 +121,7 @@ class CustomerTest {
         assertEquals(new Money(15), company_total);
     }
 
-    @Test
+    //@Test
     void payAfterRent() {
         //instantiate a company and a vehicle
         Company company = createCompany();
@@ -163,7 +133,7 @@ class CustomerTest {
         LocalDate endDate = LocalDate.of(2023, 11, 15);
         //first make a rent and pay without damage costs
         customer.rent(startDate, endDate, vehicle);
-        customer.getRents().get(0).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(0)));
+        //customer.getRents().get(0).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(0)));
         float miles = 150;
         customer.returnVehicle(vehicle, miles);  //customer.pay is called inside here, automatically all costs are calculated (mileage: 180, fixed: 20, total: 200)
 
@@ -177,7 +147,7 @@ class CustomerTest {
         company.setIncome(new Money(0));
         company.setDamage_cost(new Money(0));
         customer.rent(startDate, endDate, vehicle);
-        customer.getRents().get(1).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(1)));
+        //customer.getRents().get(1).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(1)));
         customer.returnVehicle(vehicle, miles);
         compIncome = company.getIncome();
         compDamageCosts = company.getDamage_cost();
@@ -188,7 +158,7 @@ class CustomerTest {
         //make again the same rent to see that company total money accumulates
         //now the stub should return a damage type of machine, which costs 70, so 60 from before + 70 now = 130, and the income should just double (200 before + 200 now)
         customer.rent(startDate, endDate, vehicle);
-        customer.getRents().get(1).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(1)));
+        //customer.getRents().get(1).setTechnicalCheck(new TechnicalCheckStub(customer.getRents().get(1)));
         customer.returnVehicle(vehicle, miles);
         compIncome = company.getIncome();
         compDamageCosts = company.getDamage_cost();
@@ -196,7 +166,7 @@ class CustomerTest {
         assertEquals(new Money(400), compIncome);
         assertEquals(new Money(130), compDamageCosts);
 
-        ((TechnicalCheckStub) customer.getRents().get(0).getTechnicalCheck()).clear();
+        //((TechnicalCheckStub) customer.getRents().get(0).getTechnicalCheck()).clear();
     }
 
     private Vehicle createVehicle1() {

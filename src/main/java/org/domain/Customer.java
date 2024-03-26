@@ -83,8 +83,7 @@ public class Customer extends User{
             throw new RuntimeException("The vehicle is not available");
         }
         //make the rent
-        Rent rent1 = new Rent(startDate,endDate,vehicle,this);
-        this.rents.add(rent1);
+        //Rent rent1 = new Rent(startDate,endDate,vehicle,this);
     }
 
     /**
@@ -109,15 +108,15 @@ public class Customer extends User{
         Rent rent = null;
         //Customer may have done several rents, e.g. one 16/7-19/7 and one 20/7-22/7, but the day of the booking may be 10/7,
         //so all of them are still pending. Search to find for which rent the customer wants to return the vehicle
-        for(int i=this.rents.size(); i > 0; i--) {
-            if (this.rents.get(i-1).getRentedVehicle().equals(vehicle)) {
-                rent = this.rents.get(i-1);
-            }
-        }
+        //for(int i=this.rents.size(); i > 0; i--) {
+        //    if (this.rents.get(i-1).getRentedVehicle().equals(vehicle)) {
+        //        rent = this.rents.get(i-1);
+        //    }
+        //}
         //check if there is any rent ongoing with this vehicle
-        if (rent == null) {
-            throw new NotFoundException("[!] Customer.returnVehicle: rent searched for is null");
-        }
+        //if (rent == null) {
+        //    throw new NotFoundException("[!] Customer.returnVehicle: rent searched for is null");
+        //}
         rent.calculateCosts(miles);
         Money amount = new Money(rent.getFixedCost().getAmount() + rent.getMileageCost().getAmount());
         pay(amount, rent.getDamageCost(), rent.getRentedVehicle().getCompany());
@@ -156,10 +155,6 @@ public class Customer extends User{
 
     }
 
-    public void addRent(Rent rent) {
-        this.rents.add(rent);
-    }
-
     // getters & setters
 
     public void setSurname(String surname) {
@@ -192,14 +187,6 @@ public class Customer extends User{
 
     public String getHolderName(){
         return holderName;
-    }
-
-    public List<Rent> getRents() {
-        return rents;
-    }
-
-    public void setRents(List<Rent> rents) {
-        this.rents = rents;
     }
 
     @Override

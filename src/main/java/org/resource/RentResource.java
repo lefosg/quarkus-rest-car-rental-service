@@ -67,6 +67,7 @@ public class RentResource {
 
         return rentMapper.toRepresentation(rent);
     }
+    //todo: add /rent/rentid/policy
 
     @GET
     @Transactional

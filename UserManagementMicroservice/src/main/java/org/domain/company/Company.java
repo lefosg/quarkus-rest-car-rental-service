@@ -1,6 +1,7 @@
-package org.domain;
+package org.domain.company;
 
 import jakarta.persistence.*;
+import org.domain.User;
 import org.hibernate.annotations.Cascade;
 import org.util.DamageType;
 import org.util.Money;
@@ -11,7 +12,7 @@ import java.util.*;
 
 @Entity
 @DiscriminatorValue("Company")
-public class Company extends User{
+public class Company extends User {
 
     @Column(name="IBAN", length=30)
     private String IBAN;

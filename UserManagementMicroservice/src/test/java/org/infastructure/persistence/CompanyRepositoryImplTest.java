@@ -1,11 +1,11 @@
-package org.persistence;
+package org.infastructure.persistence;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import org.domain.Company;
-import org.infastructure.rest.persistence.CompanyRepository;
+import org.domain.company.Company;
+import org.domain.company.CompanyRepository;
 import org.junit.jupiter.api.Test;
 import org.util.IntegrationBase;
 
@@ -14,10 +14,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-class CompanyRepositoryTest extends IntegrationBase {
+class CompanyRepositoryImplTest extends IntegrationBase {
 
+    //todo? replace impl with interface (qualifier?)
     @Inject
-    CompanyRepository companyRepository;
+    CompanyRepositoryImpl companyRepository;
 
     @Test
     void findByCity() {

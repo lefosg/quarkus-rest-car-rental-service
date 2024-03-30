@@ -1,10 +1,12 @@
 package org.domain;
 
-import jakarta.ws.rs.NotFoundException;
+import org.domain.company.ChargingPolicy;
+import org.domain.company.Company;
+import org.domain.customer.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.*;
-import java.security.InvalidParameterException;
+
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import static org.junit.jupiter.api.Assertions.*;

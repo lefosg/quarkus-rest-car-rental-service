@@ -1,6 +1,6 @@
 package org.infastructure.rest.representation;
 
-import org.domain.ChargingPolicy;
+import org.domain.company.ChargingPolicy;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -3,16 +3,46 @@ package org.infastructure.persistence;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.Id;
+import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.NotFoundException;
-import org.domain.Company;
+import org.domain.company.Company;
+import org.domain.company.CompanyRepository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestScoped
-public class CompanyRepository implements PanacheRepositoryBase<Company, Integer> {
+public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Integer>, CompanyRepository {
 
+    @Override
+    public Optional<Company> findByIdOptional(Integer integer) {
+        return PanacheRepositoryBase.super.findByIdOptional(integer);
+    }
+
+    @Override
+    public List<Company> listAll() {
+        return PanacheRepositoryBase.super.listAll();
+    }
+
+    @Override
+    public Company findById(Integer integer) {
+        return PanacheRepositoryBase.super.findById(integer);
+    }
+
+    @Override
+    public void persist(Company company) {
+        PanacheRepositoryBase.super.persist(company);
+    }
+
+    @Override
+    public EntityManager getEntityManager() {
+        return PanacheRepositoryBase.super.getEntityManager();
+    }
+
+
+
+    @Override
     public void deleteAllCompanies() {
         List<Company> companies = listAll();
         for (Company c : companies) {
@@ -21,6 +51,7 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
         }
     }
 
+    @Override
     public void deleteCompany(Integer id) {
         if (id == null) {
             throw new IllegalArgumentException("CompanyRepository: deleteCompany\n\tid was null");
@@ -33,6 +64,7 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
         delete(company);
     }
 
+    @Override
     public List<Company> findByCity(String city) {
         if (city == null || city.equals(""))
             return listAll();
@@ -41,6 +73,7 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
                 Parameters.with("city", city).map()).list();
     }
 
+    @Override
     public List<Company> findByName(String name) {
         if (name == null || name.equals(""))
             return listAll();
@@ -49,6 +82,7 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
                 Parameters.with("name", name).map()).list();
     }
 
+    @Override
     public List<Company> findByPhone(String phone) {
         if (phone == null || phone.equals(""))
             return listAll();
@@ -57,6 +91,7 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
                 Parameters.with("phone", phone).map()).list();
     }
 
+    @Override
     public List<Company> findByEmail(String email) {
         if (email == null || email.equals(""))
             return listAll();
@@ -65,6 +100,7 @@ public class CompanyRepository implements PanacheRepositoryBase<Company, Integer
                 Parameters.with("email", email).map()).list();
     }
 
+    @Override
     public List<Company> findByAFM(String AFM) {
         if (AFM == null || AFM.equals(""))
             return listAll();

@@ -1,4 +1,4 @@
-package org.domain;
+package org.domain.company;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;

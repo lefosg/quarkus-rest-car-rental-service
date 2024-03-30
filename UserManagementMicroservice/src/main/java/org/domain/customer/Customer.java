@@ -1,21 +1,16 @@
-package org.domain;
+package org.domain.customer;
 
 import jakarta.persistence.*;
-import jakarta.ws.rs.NotFoundException;
+import org.domain.User;
+import org.domain.company.Company;
 import org.util.Money;
-
-import java.security.InvalidParameterException;
 import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import static java.lang.Thread.sleep;
 
 @Entity
 @DiscriminatorValue("Customer")
-public class Customer extends User{
+public class Customer extends User {
 
     @Column(name="surname", length=30)
     private String surname;

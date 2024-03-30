@@ -7,10 +7,10 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
-import org.domain.Customer;
+import org.domain.customer.Customer;
+import org.domain.customer.CustomerRepository;
 import org.infastructure.rest.representation.CustomerMapper;
 import org.infastructure.rest.representation.CustomerRepresentation;
-import org.infastructure.rest.persistence.CustomerRepository;
 
 import java.net.URI;
 import java.util.List;
@@ -32,16 +32,15 @@ public class CustomerResource {
     @GET
     @Transactional
     public List<CustomerRepresentation> listAllCustomers() {
-        return customerMapper.toRepresentationList(customerRepository.listAll());
+        return customerMapper.toRepresentationList(customerRepository.listAllCustomers());
     }
     @GET
     @Path("{customerId: [0-9]+}")
     @Transactional
     public CustomerRepresentation listCompanyById(@PathParam("customerId") Integer customerId) {
-        Customer customer = customerRepository.findById(customerId);
-        if (customer ==  null) {
-            throw new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId);
-        }
+        Customer customer = customerRepository.findByIdOptional(customerId)
+                .orElseThrow(() -> new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId));
+
         return customerMapper.toRepresentation(customer);
     }
 
@@ -49,7 +48,7 @@ public class CustomerResource {
     @PUT
     @Transactional
     public Response create(CustomerRepresentation representation) {
-        if (representation.id == null ||  customerRepository.findById(representation.id) != null ) {  //if id is null or already exists
+        if (representation.id == null || customerRepository.findByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /customer\n\tCould not create customer, invalid id");
         }
         Customer customer = customerMapper.toModel(representation);
@@ -115,12 +114,12 @@ public class CustomerResource {
     @Transactional
     @Path("{customerId: [0-9]+}")
     public Response deleteCustomer(@PathParam("customerId") Integer customerId) {
-        if (customerId == null || customerRepository.findById(customerId) == null) {
+        if (customerId == null || customerRepository.findByIdOptional(customerId).isEmpty()) {
             throw new NotFoundException("[!] DELETE /customer " + customerId + "\n\tCould not find customer with id " + customerId);
         }
 
         customerRepository.deleteCustomer(customerId);
-        boolean deleted = customerRepository.findById(customerId) == null;
+        boolean deleted = customerRepository.findByIdOptional(customerId).isEmpty();
         if (!deleted) {
             throw new RuntimeException("[!] DELETE /customer " + customerId + "\n\tCould not delete customer with id " + customerId);
         }

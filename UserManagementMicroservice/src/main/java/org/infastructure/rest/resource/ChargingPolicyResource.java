@@ -8,14 +8,15 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import jakarta.ws.rs.core.UriInfo;
-import org.domain.ChargingPolicy;
+import org.domain.company.ChargingPolicy;
+import org.domain.company.ChargingPolicyRepository;
 import org.infastructure.rest.representation.ChargingPolicyMapper;
 import org.infastructure.rest.representation.ChargingPolicyRepresentation;
-import org.infastructure.rest.persistence.ChargingPolicyRepository;
 
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Path("policy")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -44,10 +45,9 @@ public class ChargingPolicyResource {
     @Path("{policyId: [0-9]+}")
     @Transactional
     public ChargingPolicyRepresentation listVehicleById(@PathParam("policyId") Integer policyId) {
-        ChargingPolicy policy = policyRepository.findById(policyId);
-        if (policy == null) {
-            throw new NotFoundException("[!] GET /policy/"+policyId+"\n\tCould not find policy with id " + policyId);
-        }
+        ChargingPolicy policy = policyRepository.findByIdOptional(policyId)
+                .orElseThrow(() -> new NotFoundException("[!] GET /policy/"+policyId+"\n\tCould not find policy with id " + policyId));
+
         return policyMapper.toRepresentation(policy);
     }
 
@@ -56,7 +56,7 @@ public class ChargingPolicyResource {
     //@PUT
     //@Transactional
     public Response create(ChargingPolicyRepresentation representation) {
-        if (representation.id == null || policyRepository.findById(representation.id) != null) {  //if id is null or already exists
+        if (representation.id == null || policyRepository.findByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /policy\n\tCould not create policy, invalid id");
         }
 

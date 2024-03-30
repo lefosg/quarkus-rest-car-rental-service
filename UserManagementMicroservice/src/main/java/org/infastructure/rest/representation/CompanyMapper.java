@@ -1,8 +1,6 @@
 package org.infastructure.rest.representation;
 
-import org.domain.Company;
-import org.domain.User;
-import org.mapstruct.InheritInverseConfiguration;
+import org.domain.company.Company;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

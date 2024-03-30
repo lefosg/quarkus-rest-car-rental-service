@@ -3,8 +3,6 @@ package org.infastructure.rest.resource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import org.domain.Customer;
 import org.infastructure.rest.representation.CustomerRepresentation;
 import org.junit.jupiter.api.Test;
 import org.util.*;

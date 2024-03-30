@@ -1,7 +1,6 @@
 package org.infastructure.rest.representation;
 
-import org.domain.Company;
-import org.domain.Customer;
+import org.domain.customer.Customer;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

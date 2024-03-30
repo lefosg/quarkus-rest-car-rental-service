@@ -1,6 +1,7 @@
 package org.domain;
 
-import org.junit.jupiter.api.AfterEach;
+import org.domain.company.ChargingPolicy;
+import org.domain.company.Company;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.Currency;
@@ -8,9 +9,7 @@ import org.util.DamageType;
 import org.util.Money;
 
 
-import java.security.InvalidParameterException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -143,11 +143,11 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
     // ---------- misc ----------
 
     private ChargingPolicyRepresentation createChargingPolicyRepresentation(Integer id) {
-        LinkedHashMap<Integer, Float> mileageScale = new LinkedHashMap();
+        LinkedHashMap<Integer, Float> mileageScale = new LinkedHashMap<>();
         mileageScale.put(100, 0.13f);
         mileageScale.put(200, 0.23f);
         mileageScale.put(300, 0.33f);
-        LinkedHashMap<DamageType, Float> damages = new LinkedHashMap();
+        LinkedHashMap<DamageType, Float> damages = new LinkedHashMap<>();
         damages.put(DamageType.NoDamage, 0f);
         damages.put(DamageType.Glasses, 100f);
         damages.put(DamageType.Machine, 300f);

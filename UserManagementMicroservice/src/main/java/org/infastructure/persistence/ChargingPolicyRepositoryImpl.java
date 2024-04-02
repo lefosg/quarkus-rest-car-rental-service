@@ -14,27 +14,27 @@ import java.util.Optional;
 @ApplicationScoped
 public class ChargingPolicyRepositoryImpl implements PanacheRepositoryBase<ChargingPolicy, Integer>, ChargingPolicyRepository {
 
-//    @Override
-//    public EntityManager getEntityManager() {
-//        return PanacheRepositoryBase.super.getEntityManager();
-//    }
-//
-//    @Override
-//    public void persist(ChargingPolicy chargingPolicy) {
-//        PanacheRepositoryBase.super.persist(chargingPolicy);
-//    }
+    @Override
+    public EntityManager getPolicyEntityManager() {
+        return getEntityManager();
+    }
 
-//    @Override
-//    public ChargingPolicy findById(Integer integer) {
-//        return PanacheRepositoryBase.super.findById(integer);
-//    }
-//    @Override
-//    public Optional<ChargingPolicy> findByIdOptional(Integer integer) {
-//        return PanacheRepositoryBase.super.findByIdOptional(integer);
-//    }
+    @Override
+    public void persistPolicy(ChargingPolicy chargingPolicy) {
+        persist(chargingPolicy);
+    }
 
-//    @Override
-//    public List<ChargingPolicy> listAll() {
-//        return PanacheRepositoryBase.super.listAll();
-//    }
+    @Override
+    public ChargingPolicy findByPolicyId(Integer integer) {
+        return findById(integer);
+    }
+    @Override
+    public Optional<ChargingPolicy> findByPolicyIdOptional(Integer integer) {
+        return findByIdOptional(integer);
+    }
+
+    @Override
+    public List<ChargingPolicy> listAllPolicies() {
+        return listAll();
+    }
 }

@@ -39,20 +39,16 @@ public class ChargingPolicyResource {
     @GET
     @Transactional
     public List<ChargingPolicyRepresentation> listAllPolicies() {
-        return policyMapper.toRepresentationList(policyRepository.listAll());
+        return policyMapper.toRepresentationList(policyRepository.listAllPolicies());
     }
 
     @GET
     @Path("{policyId: [0-9]+}")
     @Transactional
     public ChargingPolicyRepresentation listPolicyById(@PathParam("policyId") Integer policyId) {
-//       todo edo skaei to findByIdOptional den ksero pos na to kano, Prosorina vazo to palio
-//        ChargingPolicy policy = policyRepository.findByIdOptional(policyId)
-//                .orElseThrow(() -> new NotFoundException("[!] GET /policy/"+policyId+"\n\tCould not find policy with id " + policyId));
-        ChargingPolicy policy = policyRepository.findById(policyId);
-        if (policy == null) {
-            throw new NotFoundException("[!] GET /policy/"+policyId+"\n\tCould not find policy with id " + policyId);
-        }
+        ChargingPolicy policy = policyRepository.findByPolicyIdOptional(policyId)
+                .orElseThrow(() -> new NotFoundException("[!] GET /policy/"+policyId+"\n\tCould not find policy with id " + policyId));
+
         return policyMapper.toRepresentation(policy);
     }
 
@@ -61,15 +57,12 @@ public class ChargingPolicyResource {
     @PUT
     @Transactional
     public Response create(ChargingPolicyRepresentation representation) {
-//        todo to idio kai edo
-//        if (representation.id == null || policyRepository.findByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
-//            throw new NotFoundException("[!] PUT /policy\n\tCould not create policy, invalid id");
-//        }
-        if (representation.id == null || policyRepository.findById(representation.id) != null) {  //if id is null or already exists
+        if (representation.id == null || policyRepository.findByPolicyIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /policy\n\tCould not create policy, invalid id");
         }
+
         ChargingPolicy policy = policyMapper.toModel(representation);
-        policyRepository.persist(policy);
+        policyRepository.persistPolicy(policy);
         URI uri = UriBuilder.fromResource(ChargingPolicyResource.class).path(String.valueOf(policy.getId())).build();
         return Response.created(uri).entity(policyMapper.toRepresentation(policy)).build();
     }
@@ -83,7 +76,7 @@ public class ChargingPolicyResource {
         }
 
         ChargingPolicy policy = policyMapper.toModel(representation);
-        policyRepository.getEntityManager().merge(policy);
+        policyRepository.getPolicyEntityManager().merge(policy);
         return Response.noContent().build();
     }
 

@@ -16,24 +16,24 @@ import java.util.Optional;
 @ApplicationScoped
 public class CustomerRepositoryImpl implements PanacheRepositoryBase<Customer,Integer>, CustomerRepository {
 
-//    @Override
-//    public EntityManager getEntityManager() {
-//        return PanacheRepositoryBase.super.getEntityManager();
-//    }
-
     @Override
-    public void persist(Customer customer) {
-        PanacheRepositoryBase.super.persist(customer);
+    public EntityManager getCustomerEntityManager() {
+        return getEntityManager();
     }
 
-//    @Override
-//    public Customer findById(Integer integer) {
-//        return PanacheRepositoryBase.super.findById(integer);
-//    }
+    @Override
+    public void persistCustomer(Customer customer) {
+        persist(customer);
+    }
 
     @Override
-    public Optional<Customer> findByIdOptional(Integer integer) {
-        return PanacheRepositoryBase.super.findByIdOptional(integer);
+    public Customer findByCustomerId(Integer integer) {
+        return findById(integer);
+    }
+
+    @Override
+    public Optional<Customer> findByCustomerIdOptional(Integer integer) {
+        return findByIdOptional(integer);
     }
 
     @Override

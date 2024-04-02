@@ -1,0 +1,3 @@
+2024-04-02 19:31:46.349351+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "STREET CHARACTER VARYING(30)": "'eb.kmdfnvblkdfgnblkjdfgnblkjdfnbldkfgjnbdlfgkjnb' (48)"; SQL statement:
+update USERS set AFM=?,city=?,email=?,name=?,password=?,phone=?,street=?,zipcode=?,expirationDate=?,holderName=?,number=?,surname=? where id=? [22001-224]

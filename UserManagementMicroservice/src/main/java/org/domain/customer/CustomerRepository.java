@@ -23,11 +23,11 @@ public interface CustomerRepository {
 
     List<Customer> listAllCustomers();
 
-    Optional<Customer> findByIdOptional(Integer integer);
+    Optional<Customer> findByCustomerIdOptional(Integer integer);
 
-    //Customer findById(Integer integer);
+    Customer findByCustomerId(Integer integer);
 
-    void persist(Customer customer);
+    void persistCustomer(Customer customer);
 
-//    EntityManager getEntityManager();
+    EntityManager getCustomerEntityManager();
 }

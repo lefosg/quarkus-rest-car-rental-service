@@ -8,13 +8,14 @@ import org.domain.customer.Customer;
 import org.domain.customer.CustomerRepository;
 import org.infastructure.persistence.CustomerRepositoryImpl;
 import org.junit.jupiter.api.Test;
+import org.util.IntegrationBase;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-class CustomerRepositoryImplTest {
+class CustomerRepositoryImplTest extends IntegrationBase {
 
     Integer custId = 1000;
 

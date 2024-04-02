@@ -26,7 +26,7 @@ import java.util.Optional;
 public class ChargingPolicyResource {
 
     @Inject
-    ChargingPolicyRepositoryImpl policyRepository;
+    ChargingPolicyRepository policyRepository;
 
     @Inject
     ChargingPolicyMapper policyMapper;

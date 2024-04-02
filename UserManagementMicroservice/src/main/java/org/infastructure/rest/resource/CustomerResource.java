@@ -9,14 +9,14 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import org.domain.customer.Customer;
 import org.domain.customer.CustomerRepository;
-import org.infastructure.persistence.CustomerRepositoryImpl;
+import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.representation.CustomerMapper;
 import org.infastructure.rest.representation.CustomerRepresentation;
 
 import java.net.URI;
 import java.util.List;
 
-@Path("customer")
+@Path(ApiPath.Root.CUSTOMER)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped

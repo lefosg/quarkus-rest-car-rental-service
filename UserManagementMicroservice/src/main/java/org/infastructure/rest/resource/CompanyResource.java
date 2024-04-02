@@ -11,13 +11,14 @@ import org.domain.company.ChargingPolicyRepository;
 import org.domain.company.Company;
 import org.domain.company.CompanyRepository;
 import org.infastructure.persistence.CompanyRepositoryImpl;
+import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.representation.*;
 
 import java.lang.annotation.Repeatable;
 import java.net.URI;
 import java.util.List;
 
-@Path("company")
+@Path(ApiPath.Root.COMPANY)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped

@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.UriBuilder;
 import jakarta.ws.rs.core.UriInfo;
 import org.domain.company.ChargingPolicy;
 import org.domain.company.ChargingPolicyRepository;
-import org.infastructure.persistence.ChargingPolicyRepositoryImpl;
+import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.representation.ChargingPolicyMapper;
 import org.infastructure.rest.representation.ChargingPolicyRepresentation;
 
@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-@Path("policy")
+@Path(ApiPath.Root.CHARGING_POLICY)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped

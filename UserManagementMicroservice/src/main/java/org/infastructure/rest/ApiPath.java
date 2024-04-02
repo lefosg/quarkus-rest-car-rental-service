@@ -5,9 +5,9 @@ public class ApiPath {
     public static final String ROOT = "/api";
 
     public static class Root {
-        public static final String ORDERS = ROOT + "/orders";
 
-        public static final String CARTS = ROOT + "/carts";
-        public static final String CUSTOMERS = ROOT + "/customers";
+        public static final String CHARGING_POLICY = ROOT + "/policy";
+        public static final String COMPANY = ROOT + "/company";
+        public static final String CUSTOMER = ROOT + "/customer";
     }
 }

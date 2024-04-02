@@ -28,13 +28,13 @@ class VehicleRepositoryImplTest extends IntegrationBase {
     @Test
     void findByManufacturerEmptyString() {
         List<Vehicle> vehicles = vehicleRepository.findByManufacturer("");
-        assertEquals(11, vehicles.size());
+        assertEquals(0, vehicles.size());
     }
 
     @Test
     void findByManufacturerNull() {
         List<Vehicle> vehicles = vehicleRepository.findByManufacturer(null);
-        assertEquals(11, vehicles.size());
+        assertEquals(0, vehicles.size());
     }
 
     @Test

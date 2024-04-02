@@ -38,7 +38,7 @@ class VehicleMapperTest extends IntegrationBase {
         assertEquals(model.getPlateNumber(), representation.plateNumber);
         assertEquals(model.getVehicleState(), representation.vehicleState);
         assertEquals(model.getYear(), representation.year);
-        assertEquals(model.getId(), representation.companyId);
+        assertEquals(model.getCompanyId(), representation.companyId);
 
 //        Company company = model.getCompany();
 //        assertNotNull(company);
@@ -60,7 +60,7 @@ class VehicleMapperTest extends IntegrationBase {
         assertEquals(model.getYear(), representation.year);
         assertEquals(model.getPlateNumber(), representation.plateNumber);
         assertEquals(model.getVehicleType(), representation.vehicleType);
-        assertEquals(model.getId(), representation.companyId);
+        assertEquals(model.getCompanyId(), representation.companyId);
     }
 
 

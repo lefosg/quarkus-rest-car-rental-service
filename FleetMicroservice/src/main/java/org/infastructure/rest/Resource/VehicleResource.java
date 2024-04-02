@@ -7,13 +7,16 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.domain.Vehicle.Vehicle;
 import org.domain.Vehicle.VehicleRepository;
+import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleMapper;
 import org.infastructure.rest.Representation.VehicleRepresentation;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-@Path("vehicle")
+@Path(ApiPath.Root.VEHICLE)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
@@ -32,7 +35,9 @@ public class VehicleResource {
 
     @GET
     @Transactional
-    public List<VehicleRepresentation> listAllVehicles(@DefaultValue("") @QueryParam("manufacturer") String manufacturer) {
+    public List<VehicleRepresentation> listAllVehicles(
+            @DefaultValue("") @QueryParam("manufacturer") String manufacturer) {
+        //todo show available vehicles
         return vehicleMapper.toRepresentationList(vehicleRepository.findByManufacturer(manufacturer));
     }
 
@@ -40,10 +45,9 @@ public class VehicleResource {
     @Path("{vehicleId: [0-9]+}")
     @Transactional
     public VehicleRepresentation listVehicleById(@PathParam("vehicleId") String vehicleId) {
-        Vehicle vehicle = vehicleRepository.findVehicleById(Integer.parseInt(vehicleId));
-        if (vehicle == null) {
-            throw new NotFoundException("[!] GET /vehicle/"+vehicleId+"\n\tCould not find vehicle with id " + vehicleId);
-        }
+        Vehicle vehicle = vehicleRepository.findVehicleByIdOptional(Integer.parseInt(vehicleId))
+                .orElseThrow(() -> new NotFoundException("[!] GET /vehicle/"+vehicleId+"\n\tCould not find vehicle with id " + vehicleId));
+
         return vehicleMapper.toRepresentation(vehicle);
     }
 
@@ -58,14 +62,13 @@ public class VehicleResource {
 //        return companyMapper.toRepresentation(vehicle.getCompany());
 //    }
 
-
     // ---------- PUT ----------
 
-    //todo: test this
     @PUT
     @Transactional
     public Response create(VehicleRepresentation representation) {
-        if (representation.id == null || vehicleRepository.findVehicleById(representation.id) != null) {  //if id is null or already exists
+        //todo: check if company_id exists (call user microservice)
+        if (representation.id == null || vehicleRepository.findVehicleByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /vehicle\n\tCould not create vehicle, invalid id");
         }
         Vehicle vehicle = vehicleMapper.toModel(representation);
@@ -100,12 +103,12 @@ public class VehicleResource {
     @Path("{vehicleId: [0-9]+}")
     @Transactional
     public Response deleteVehicle(@PathParam("vehicleId") Integer vehicleId) {
-        if (vehicleId == null || vehicleRepository.findVehicleById(vehicleId) == null) {
+        if (vehicleId == null || vehicleRepository.findVehicleByIdOptional(vehicleId).isEmpty()) {
             throw new NotFoundException("[!] DELETE /vehicle" + vehicleId + "\n\tCould not delete vehicle with id " + vehicleId + "(id not found)");
         }
 
         vehicleRepository.deleteVehicle(vehicleId);
-        boolean deleted = vehicleRepository.findVehicleById(vehicleId) == null;
+        boolean deleted = vehicleRepository.findVehicleByIdOptional(vehicleId).isEmpty();
         if (!deleted) {
             throw new RuntimeException("[!] DELETE /vehicle" + vehicleId + "\n\tCould not delete vehicle with id " + vehicleId);
         }

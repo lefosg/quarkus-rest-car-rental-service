@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     protected Integer id;
 
@@ -55,6 +55,7 @@ public class Vehicle {
 //    @JoinColumn(name="company_id")
 //    private Company company;
 
+    @Column(name="company_id", nullable = false)
     private Integer companyId;
 
     public Vehicle() {

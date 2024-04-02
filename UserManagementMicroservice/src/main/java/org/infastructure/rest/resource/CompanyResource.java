@@ -24,7 +24,7 @@ import java.util.List;
 public class CompanyResource {
 
     @Inject
-    CompanyRepositoryImpl companyRepository;
+    CompanyRepository companyRepository;
 
     @Inject
     CompanyMapper companyMapper;
@@ -35,14 +35,11 @@ public class CompanyResource {
     @Inject
     ChargingPolicyMapper policyMapper;
 
-//    @Inject
-//    UserService userService;
-
     @Context
     UriInfo uriInfo;
 
     // ---------- GET ----------
-//todo edo ti fash???
+
     @GET
     @Transactional
     public List<CompanyRepresentation> listAllCompanies(@DefaultValue("") @QueryParam("city") String city) {
@@ -53,13 +50,9 @@ public class CompanyResource {
     @Path("{companyId: [0-9]+}")
     @Transactional
     public CompanyRepresentation listCompanyById(@PathParam("companyId") Integer companyId) {
-//        Company company = companyRepository.findByIdOptional(companyId)
-//                .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
-        Company company = companyRepository.findById(companyId);
+       Company company = companyRepository.findByCompanyIdOptional(companyId)
+               .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
 
-        if (company ==  null) {
-            throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId);
-        }
         return companyMapper.toRepresentation(company);
     }
 
@@ -83,7 +76,7 @@ public class CompanyResource {
     public ChargingPolicyRepresentation listCompanyPolicy(@PathParam("companyId") Integer companyId) {
 //        Company company = companyRepository.findByIdOptional(companyId)
 //                .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company"));
-        Company company = companyRepository.findById(companyId);
+        Company company = companyRepository.findCompanyById(companyId);
 
         if (company ==  null) {
             throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");
@@ -96,14 +89,11 @@ public class CompanyResource {
     @PUT
     @Transactional
     public Response create(CompanyRepresentation representation) {
-//        if (representation.id == null || companyRepository.findByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
-//            throw new NotFoundException("[!] PUT /company\n\tCould not create company, invalid id");
-//        }
-        if (representation.id == null ||  companyRepository.findById(representation.id) != null ) {  //if id is null or already exists
+        if (representation.id == null || companyRepository.findByCompanyIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /company\n\tCould not create company, invalid id");
         }
         Company company = companyMapper.toModel(representation);
-        companyRepository.persist(company);
+        companyRepository.persistCompany(company);
         URI uri = UriBuilder.fromResource(CompanyResource.class).path(String.valueOf(company.getId())).build();
         return Response.created(uri).entity(companyMapper.toRepresentation(company)).build();
     }
@@ -118,7 +108,7 @@ public class CompanyResource {
         }
 
         Company company = companyMapper.toModel(representation);
-        companyRepository.getEntityManager().merge(company);
+        companyRepository.getCompanyEntityManager().merge(company);
         return Response.noContent().build();
     }
 
@@ -126,7 +116,7 @@ public class CompanyResource {
     //@Transactional
     //@Path("/{companyId:[0-9]+}/updatePolicy")
     public Response updatePolicy(@PathParam("companyId") Integer companyId, ChargingPolicyRepresentation policyRepresentation) {
-        if (companyId == null || companyRepository.findByIdOptional(companyId).isEmpty()) {
+        if (companyId == null || companyRepository.findByCompanyIdOptional(companyId).isEmpty()) {
             throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find company, invalid id");
         }
 //       todo des charging Policy resource
@@ -134,12 +124,12 @@ public class CompanyResource {
 //            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find policy, invalid id");
 //        }
 
-        Company company = companyRepository.findByIdOptional(companyId)
+        Company company = companyRepository.findByCompanyIdOptional(companyId)
                 .orElseThrow(() -> new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tThis policy does not belong to the specified company"));
 
         ChargingPolicy policy = policyMapper.toModel(policyRepresentation);
         company.setPolicy(policy);
-        companyRepository.getEntityManager().merge(company);
+        companyRepository.getCompanyEntityManager().merge(company);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -181,12 +171,12 @@ public class CompanyResource {
     @Transactional
     @Path("{companyId: [0-9]+}")
     public Response deleteCompany(@PathParam("companyId") Integer companyId) {
-        if (companyId == null || companyRepository.findByIdOptional(companyId).isEmpty()) {
+        if (companyId == null || companyRepository.findByCompanyIdOptional(companyId).isEmpty()) {
             throw new NotFoundException("[!] DELETE /company" + companyId + "\n\tCould not find company with id " + companyId);
         }
 
         companyRepository.deleteCompany(companyId);
-        boolean deleted = companyRepository.findByIdOptional(companyId).isEmpty();
+        boolean deleted = companyRepository.findByCompanyIdOptional(companyId).isEmpty();
         if (!deleted) {
             throw new RuntimeException("[!] DELETE /company" + companyId + "\n\tCould not delete company with id " + companyId);
         }

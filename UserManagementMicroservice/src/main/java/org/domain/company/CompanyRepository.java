@@ -21,13 +21,13 @@ public interface CompanyRepository {
 
     List<Company> findByAFM(String AFM);
 
-    Optional<Company> findByIdOptional(Integer integer);
+    Optional<Company> findByCompanyIdOptional(Integer integer);
 
-    //List<Company> listAll();
+    List<Company> listAllCompanies();
 
-    //void persist(Company company);
+    void persistCompany(Company company);
 
-    //EntityManager getEntityManager();
+    EntityManager getCompanyEntityManager();
 
-    //Company findById(Integer integer);
+    Company findCompanyById(Integer integer);
 }

@@ -17,29 +17,29 @@ import java.util.Optional;
 public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Integer>, CompanyRepository {
 
     @Override
-    public Optional<Company> findByIdOptional(Integer integer) {
-        return PanacheRepositoryBase.super.findByIdOptional(integer);
+    public Optional<Company> findByCompanyIdOptional(Integer integer) {
+        return findByIdOptional(integer);
     }
 
-//    @Override
-//    public List<Company> listAll() {
-//        return PanacheRepositoryBase.super.listAll();
-//    }
-//
-//    @Override
-//    public Company findById(Integer integer) {
-//        return PanacheRepositoryBase.super.findById(integer);
-//    }
+    @Override
+    public List<Company> listAllCompanies() {
+       return listAll();
+    }
 
-//    @Override
-//    public void persist(Company company) {
-//        PanacheRepositoryBase.super.persist(company);
-//    }
+    @Override
+    public Company findCompanyById(Integer integer) {
+        return findById(integer);
+    }
 
-//    @Override
-//    public EntityManager getEntityManager() {
-//        return PanacheRepositoryBase.super.getEntityManager();
-//    }
+    @Override
+    public void persistCompany(Company company) {
+        persist(company);
+    }
+
+    @Override
+    public EntityManager getCompanyEntityManager() {
+        return getEntityManager();
+    }
 
 
 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.infastructure.rest.representation.ChargingPolicyRepresentation;
 import org.util.Constants;
 import org.util.DamageType;
+import org.util.IntegrationBase;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-public class ChargingPolicyResourceTest {
+public class ChargingPolicyResourceTest extends IntegrationBase {
 
     Integer polId = 1500;
 

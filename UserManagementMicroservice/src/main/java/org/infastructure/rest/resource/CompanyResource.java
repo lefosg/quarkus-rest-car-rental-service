@@ -42,7 +42,7 @@ public class CompanyResource {
     UriInfo uriInfo;
 
     // ---------- GET ----------
-
+//todo edo ti fash???
     @GET
     @Transactional
     public List<CompanyRepresentation> listAllCompanies(@DefaultValue("") @QueryParam("city") String city) {

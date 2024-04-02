@@ -1,6 +1,7 @@
 package org.infastructure.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
@@ -10,7 +11,7 @@ import org.domain.company.ChargingPolicyRepository;
 import java.util.List;
 import java.util.Optional;
 
-@RequestScoped
+@ApplicationScoped
 public class ChargingPolicyRepositoryImpl implements PanacheRepositoryBase<ChargingPolicy, Integer>, ChargingPolicyRepository {
 
 //    @Override

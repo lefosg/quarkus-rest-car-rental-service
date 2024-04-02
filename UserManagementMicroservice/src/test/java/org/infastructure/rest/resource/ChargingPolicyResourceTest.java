@@ -27,7 +27,7 @@ public class ChargingPolicyResourceTest {
 
     @Test
     public void getAllPolicies() {
-        List<ChargingPolicyRepresentation> policies = when().get("/policy")
+        List<ChargingPolicyRepresentation> policies = when().get("policy")
                 .then()
                 .extract()
                 .as(new TypeRef<List<ChargingPolicyRepresentation>>() {});

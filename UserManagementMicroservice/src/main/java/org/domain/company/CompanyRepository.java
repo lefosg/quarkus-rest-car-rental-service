@@ -23,11 +23,11 @@ public interface CompanyRepository {
 
     Optional<Company> findByIdOptional(Integer integer);
 
-    List<Company> listAll();
+    //List<Company> listAll();
 
-    void persist(Company company);
+    //void persist(Company company);
 
-    EntityManager getEntityManager();
+    //EntityManager getEntityManager();
 
-    Company findById(Integer integer);
+    //Company findById(Integer integer);
 }

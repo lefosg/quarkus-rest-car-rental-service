@@ -2,6 +2,7 @@ package org.infastructure.persistence;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.NotFoundException;
@@ -12,7 +13,7 @@ import org.domain.company.CompanyRepository;
 import java.util.List;
 import java.util.Optional;
 
-@RequestScoped
+@ApplicationScoped
 public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Integer>, CompanyRepository {
 
     @Override
@@ -20,31 +21,31 @@ public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Int
         return PanacheRepositoryBase.super.findByIdOptional(integer);
     }
 
-    @Override
-    public List<Company> listAll() {
-        return PanacheRepositoryBase.super.listAll();
-    }
+//    @Override
+//    public List<Company> listAll() {
+//        return PanacheRepositoryBase.super.listAll();
+//    }
+//
+//    @Override
+//    public Company findById(Integer integer) {
+//        return PanacheRepositoryBase.super.findById(integer);
+//    }
 
-    @Override
-    public Company findById(Integer integer) {
-        return PanacheRepositoryBase.super.findById(integer);
-    }
+//    @Override
+//    public void persist(Company company) {
+//        PanacheRepositoryBase.super.persist(company);
+//    }
 
-    @Override
-    public void persist(Company company) {
-        PanacheRepositoryBase.super.persist(company);
-    }
-
-    @Override
-    public EntityManager getEntityManager() {
-        return PanacheRepositoryBase.super.getEntityManager();
-    }
+//    @Override
+//    public EntityManager getEntityManager() {
+//        return PanacheRepositoryBase.super.getEntityManager();
+//    }
 
 
 
     @Override
     public void deleteAllCompanies() {
-        List<Company> companies = listAll();
+        List<Company> companies = this.listAll();
         for (Company c : companies) {
             //todo c.getVehicles().clear();
             delete(c);

@@ -25,9 +25,9 @@ public interface CustomerRepository {
 
     Optional<Customer> findByIdOptional(Integer integer);
 
-    Customer findById(Integer integer);
+    //Customer findById(Integer integer);
 
     void persist(Customer customer);
 
-    EntityManager getEntityManager();
+//    EntityManager getEntityManager();
 }

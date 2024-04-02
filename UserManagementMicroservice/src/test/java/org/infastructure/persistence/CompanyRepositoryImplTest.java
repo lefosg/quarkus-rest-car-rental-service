@@ -2,6 +2,7 @@ package org.infastructure.persistence;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import org.domain.company.Company;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CompanyRepositoryImplTest extends IntegrationBase {
 
     //todo? replace impl with interface (qualifier?)
+    //todo Edo doulevi me to Impl alla den doylevi me to kanoniko
     @Inject
     CompanyRepositoryImpl companyRepository;
 

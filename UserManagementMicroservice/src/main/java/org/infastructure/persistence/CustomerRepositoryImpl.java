@@ -3,6 +3,7 @@ package org.infastructure.persistence;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Parameters;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.NotFoundException;
@@ -12,23 +13,23 @@ import org.domain.customer.CustomerRepository;
 import java.util.List;
 import java.util.Optional;
 
-@RequestScoped
+@ApplicationScoped
 public class CustomerRepositoryImpl implements PanacheRepositoryBase<Customer,Integer>, CustomerRepository {
 
-    @Override
-    public EntityManager getEntityManager() {
-        return PanacheRepositoryBase.super.getEntityManager();
-    }
+//    @Override
+//    public EntityManager getEntityManager() {
+//        return PanacheRepositoryBase.super.getEntityManager();
+//    }
 
     @Override
     public void persist(Customer customer) {
         PanacheRepositoryBase.super.persist(customer);
     }
 
-    @Override
-    public Customer findById(Integer integer) {
-        return PanacheRepositoryBase.super.findById(integer);
-    }
+//    @Override
+//    public Customer findById(Integer integer) {
+//        return PanacheRepositoryBase.super.findById(integer);
+//    }
 
     @Override
     public Optional<Customer> findByIdOptional(Integer integer) {

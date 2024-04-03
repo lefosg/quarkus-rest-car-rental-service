@@ -8,8 +8,10 @@ import org.domain.Vehicle.Vehicle;
 import org.domain.Vehicle.VehicleRepository;
 import org.junit.jupiter.api.Test;
 import org.util.IntegrationBase;
+import org.util.VehicleState;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,4 +66,31 @@ class VehicleRepositoryImplTest extends IntegrationBase {
             vehicleRepository.deleteVehicle(3015);  //id 3015 not in db
         });
     }
+
+    @Test
+    void listAllVehicles() {
+        assertEquals(11, vehicleRepository.listAllVehicles().size());
+    }
+
+    @Test
+    void findById() {
+        //find by id
+        assertEquals(3000, vehicleRepository.findVehicleById(3000).getId());
+        assertNull(vehicleRepository.findVehicleById(1234));
+
+        //find by id optional
+        assertEquals(3000, vehicleRepository.findVehicleByIdOptional(3000).get().getId());
+        assertThrows(NoSuchElementException.class, () -> {
+            vehicleRepository.findVehicleByIdOptional(1234).get().getId();
+        });
+    }
+
+    @Test
+    void findByManufacturerAndState() {
+        assertEquals(2, vehicleRepository.findByManufacturerAndState("TOYOTA", VehicleState.Available).size());
+        assertEquals(0, vehicleRepository.findByManufacturerAndState("TOYOTA", VehicleState.Rented).size());
+        assertEquals(0, vehicleRepository.findByManufacturerAndState("TOYOTA", VehicleState.Service).size());
+    }
+
+
 }

@@ -10,10 +10,8 @@ import org.domain.Vehicle.VehicleRepository;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleMapper;
 import org.infastructure.rest.Representation.VehicleRepresentation;
-
+import org.util.VehicleState;
 import java.net.URI;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path(ApiPath.Root.VEHICLE)
@@ -36,9 +34,14 @@ public class VehicleResource {
     @GET
     @Transactional
     public List<VehicleRepresentation> listAllVehicles(
-            @DefaultValue("") @QueryParam("manufacturer") String manufacturer) {
-        //todo show available vehicles
-        return vehicleMapper.toRepresentationList(vehicleRepository.findByManufacturer(manufacturer));
+            //@DefaultValue("") @QueryParam("manufacturer") String manufacturer,
+            //@DefaultValue("") @QueryParam("vehicleState") VehicleState vehicleState
+    ) {
+        //if query parameters are empty strings, return all vehicles
+        //if (manufacturer.equals("") && vehicleState.equals("")) {
+            return vehicleMapper.toRepresentationList(vehicleRepository.listAllVehicles());
+        //}
+        //return vehicleMapper.toRepresentationList(vehicleRepository.findByManufacturerAndState(manufacturer, vehicleState));
     }
 
     @GET

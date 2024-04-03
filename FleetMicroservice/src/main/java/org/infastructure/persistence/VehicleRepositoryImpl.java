@@ -13,7 +13,9 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import org.util.VehicleState;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -73,6 +75,15 @@ public class VehicleRepositoryImpl implements PanacheRepositoryBase<Vehicle,Inte
 
         return find("select vehicle from Vehicle vehicle where vehicle.vehicleState = :vehicleState",
                 Parameters.with("vehicleState", state).map()).list();
+    }
+
+    @Override
+    public List<Vehicle> findByManufacturerAndState(String manufacturer, VehicleState vehicleState) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("vehicleState", vehicleState);
+        params.put("manufacturer", manufacturer);
+        return find("select vehicle from Vehicle vehicle where vehicle.vehicleState = :vehicleState and vehicle.manufacturer = :manufacturer",
+               params).list();
     }
 
     @Override

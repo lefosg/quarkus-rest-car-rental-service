@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface VehicleRepository {
 
-    public List<Vehicle> listAllVehicles();
+    List<Vehicle> listAllVehicles();
 
     Vehicle findVehicleById(Integer id);
 
@@ -26,5 +26,7 @@ public interface VehicleRepository {
     List<Vehicle> findByManufacturer(String manufacturer);
 
     List<Vehicle> findByState(String state);
+
+    List<Vehicle> findByManufacturerAndState(String manufacturer, VehicleState vehicleState);
 
 }

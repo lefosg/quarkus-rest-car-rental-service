@@ -5,12 +5,12 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import org.application.VehicleService;
 import org.domain.Vehicle.Vehicle;
 import org.domain.Vehicle.VehicleRepository;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleMapper;
 import org.infastructure.rest.Representation.VehicleRepresentation;
-import org.util.VehicleState;
 import java.net.URI;
 import java.util.List;
 
@@ -25,6 +25,9 @@ public class VehicleResource {
 
     @Inject
     VehicleMapper vehicleMapper;
+
+    @Inject
+    VehicleService vehicleService;
 
     @Context
     UriInfo uriInfo;
@@ -71,6 +74,10 @@ public class VehicleResource {
     @Transactional
     public Response create(VehicleRepresentation representation) {
         //todo: check if company_id exists (call user microservice)
+        if (!vehicleService.companyExists(representation.companyId)) {
+            System.out.println("company does not exist");
+            throw new NotFoundException("[!] PUT /vehicle\n\tCould not create vehicle, invalid company id");
+        }
         if (representation.id == null || vehicleRepository.findVehicleByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /vehicle\n\tCould not create vehicle, invalid id");
         }

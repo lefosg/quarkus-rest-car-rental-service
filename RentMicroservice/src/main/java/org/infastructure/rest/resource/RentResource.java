@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import org.application.RentService;
 import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
 import org.domain.TechnicalCheck.TechnicalCheck;
@@ -13,13 +14,12 @@ import org.infastructure.rest.representation.RentMapper;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckMapper;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
+import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.util.VehicleState;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
-import static org.infastructure.rest.ApiPath.Root.RENTS;
 
 @Path("rent")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -33,6 +33,8 @@ public class RentResource {
     @Inject
     RentMapper rentMapper;
 
+    @Inject
+    RentService rentService;
 //    @Inject
 //    CustomerMapper customerMapper;
 //
@@ -78,16 +80,16 @@ public class RentResource {
 
 // todo all these fpr USer fleet
 
-//    @GET
-//    @Transactional
-//    @Path("{rentId: [0-9]+}/customer")
-//    public CustomerRepresentation listCustomerOfRent(@PathParam("rentId") Integer rentId) {
-//        if (rentId == null || rentRepository.findById(rentId) == null) {  //if id null or not in db
-//            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find customer for rent with id " + rentId);
-//        }
-//        Rent rent = rentRepository.findById(rentId);
-//        return customerMapper.toRepresentation(rent.getCustomer());
-//    }
+    @GET
+    @Transactional
+    @Path("{rentId: [0-9]+}/customer")
+    public CustomerRepresentation listCustomerOfRent(@PathParam("rentId") Integer rentId) {
+        Rent rent = rentRepository.findRentById(rentId);
+        if (rent == null) {
+            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find rent with id " + rentId);
+        }
+        return rentService.returnCustomerWithId(rent.getCustomerId());
+    }
 //
 //    @GET
 //    @Transactional
@@ -115,6 +117,14 @@ public class RentResource {
     @PUT
     @Transactional
     public Response create(RentRepresentation representation) {
+        if (!rentService.rentedVehicleExist(representation.vehicleId)) {
+            System.out.println("Vehicle does not exist");
+            throw new NotFoundException("[!] PUT /rent\n\tCould not create rent, invalid Vehicle id");
+        }
+        if (!rentService.customerExist(representation.customerId)) {
+            System.out.println("Customer does not exist");
+            throw new NotFoundException("[!] PUT /rent\n\tCould not create rent, invalid Customer id");
+        }
         if (representation.id == null || rentRepository.findRentByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /policy\n\tCould not create rent, invalid id");
         }

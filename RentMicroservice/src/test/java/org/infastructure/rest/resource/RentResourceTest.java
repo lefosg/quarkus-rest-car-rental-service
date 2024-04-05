@@ -262,7 +262,7 @@ class RentResourceTest extends IntegrationBase {
         representation.damageCost = new Money(0);  //assume no damage
         representation.totalCost = new Money(representation.mileageCost.getAmount() +
                 representation.fixedCost.getAmount() + representation.damageCost.getAmount());
-        representation.vehicleId = 3007;
+        representation.vehicleId = 3000;
         representation.customerId = 1000;
         representation.technicalCheck = 1;
         return representation;

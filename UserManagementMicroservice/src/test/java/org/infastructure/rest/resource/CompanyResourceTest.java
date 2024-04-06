@@ -14,6 +14,7 @@ import org.util.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static org.infastructure.rest.ApiPath.Root.COMPANY;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -26,7 +27,7 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void listAllCompanies() {
-        List<CompanyRepresentation> companies = when().get("/company")
+        List<CompanyRepresentation> companies = when().get(COMPANY)
                 .then()
                 .extract()
                 .as(new TypeRef<List<CompanyRepresentation>>() {});
@@ -36,7 +37,7 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void listCompaniesByCityValid() {
-        List<CompanyRepresentation> companies = when().get("/company?city=ΑΘΗΝΑ")
+        List<CompanyRepresentation> companies = when().get(COMPANY + "/" + "?city=ΑΘΗΝΑ")
                 .then()
                 .extract()
                 .as(new TypeRef<List<CompanyRepresentation>>() {});
@@ -46,7 +47,7 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void listCompaniesByCityInvalid() {
-        List<CompanyRepresentation> companies = when().get("/company?city=ΚΟΖΑΝΗ")  //ΚΟΖΑΝΗ not in db
+        List<CompanyRepresentation> companies = when().get(COMPANY+ "/" + "?city=ΚΟΖΑΝΗ")  //ΚΟΖΑΝΗ not in db
                 .then()
                 .extract()
                 .as(new TypeRef<List<CompanyRepresentation>>() {});
@@ -56,7 +57,7 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void listCompanyByIdValid() {
-        CompanyRepresentation company = when().get("/company/" + compId)
+        CompanyRepresentation company = when().get(COMPANY + "/" + compId)
                 .then()
                 .extract()
                 .as(CompanyRepresentation.class);
@@ -66,7 +67,7 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void listCompanyByIdInvalid() {
-        when().get("/company/" + 2003)  //id 2003 not existent in db
+        when().get(COMPANY + "/" + 2003)  //id 2003 not existent in db
                 .then()
                 .statusCode(404);
     }
@@ -85,7 +86,7 @@ class CompanyResourceTest extends IntegrationBase {
 
     @Test
     public void listCompanyPolicy() {
-        ChargingPolicyRepresentation policyRepresentation = when().get("/company/" + compId + "/policy")
+        ChargingPolicyRepresentation policyRepresentation = when().get(COMPANY + "/" + compId + "/policy")
                 .then()
                 .extract()
                 .as(ChargingPolicyRepresentation.class);
@@ -103,8 +104,8 @@ class CompanyResourceTest extends IntegrationBase {
         CompanyRepresentation created = given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/company/")
-                .then().statusCode(201).header("Location", Constants.API_ROOT+"/company/"+representation.id)
+                .when().put(COMPANY)
+                .then().statusCode(201).header("Location", Constants.API_ROOT+ COMPANY + "/" +representation.id)
                 .extract().as(CompanyRepresentation.class);
 
         assertEquals(2002, created.id);
@@ -119,7 +120,7 @@ class CompanyResourceTest extends IntegrationBase {
         given()
             .contentType(ContentType.JSON)
             .body(representation)
-            .when().put("/company/")
+            .when().put(COMPANY)
             .then().statusCode(404);
     }
 
@@ -131,14 +132,14 @@ class CompanyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/company/")
+                .when().put(COMPANY)
                 .then().statusCode(404);
     }
 
     @Test
     public void updateCompanyValid() {
         //get the resource
-        CompanyRepresentation representation = when().get("/company/"+compId)
+        CompanyRepresentation representation = when().get(COMPANY+ "/" +compId)
                 .then().statusCode(200).extract().as(CompanyRepresentation.class);
 
         assertEquals(compId, representation.id);
@@ -150,11 +151,11 @@ class CompanyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/company/"+compId)
+                .when().put(COMPANY + "/"+compId)
                 .then().statusCode(204);
 
         //get the resource again to validate the update
-        CompanyRepresentation updated = when().get("/company/"+compId)
+        CompanyRepresentation updated = when().get(COMPANY + "/"+compId)
                 .then().statusCode(200).extract().as(CompanyRepresentation.class);
 
         assertEquals(compId, updated.id);
@@ -164,7 +165,7 @@ class CompanyResourceTest extends IntegrationBase {
     @Test
     public void updateCompanyInvalid() {
         //get the resource
-        CompanyRepresentation representation = when().get("/company/"+compId)
+        CompanyRepresentation representation = when().get(COMPANY+ "/" + compId)
                 .then().statusCode(200).extract().as(CompanyRepresentation.class);
 
         assertEquals(compId, representation.id);
@@ -175,7 +176,7 @@ class CompanyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/company/"+compId)
+                .when().put(COMPANY+ "/" +compId)
                 .then().statusCode(500);
 
         //make the update
@@ -185,14 +186,14 @@ class CompanyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/company/"+compId)
+                .when().put(COMPANY+ "/" +compId)
                 .then().statusCode(500);
     }
 
     //@Test
     public void updateChargingPolicyValid() {
         //get the resource
-        ChargingPolicyRepresentation policyRepresentation = when().get("/company/" + compId + "/policy")
+        ChargingPolicyRepresentation policyRepresentation = when().get(COMPANY+ "/" + compId + "/policy")
                 .then()
                 .extract()
                 .as(ChargingPolicyRepresentation.class);

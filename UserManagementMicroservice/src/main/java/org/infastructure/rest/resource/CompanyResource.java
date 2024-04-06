@@ -18,7 +18,9 @@ import java.lang.annotation.Repeatable;
 import java.net.URI;
 import java.util.List;
 
-@Path(ApiPath.Root.COMPANY)
+import static org.infastructure.rest.ApiPath.Root.COMPANY;
+
+@Path(COMPANY)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped

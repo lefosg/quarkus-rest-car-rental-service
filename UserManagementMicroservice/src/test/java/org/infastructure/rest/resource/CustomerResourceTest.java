@@ -12,6 +12,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static org.infastructure.rest.ApiPath.Root.CUSTOMER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,7 +26,7 @@ class CustomerResourceTest extends IntegrationBase {
 
     @Test
     public void listAllCustomers() {
-        List<CustomerRepresentation> representations = when().get("/customer")
+        List<CustomerRepresentation> representations = when().get(CUSTOMER)
                .then()
                 .extract().as(new TypeRef<List<CustomerRepresentation>>() {});
 
@@ -33,7 +34,7 @@ class CustomerResourceTest extends IntegrationBase {
     }
     @Test
     public void listCustomerByIdValid() {
-        CustomerRepresentation customer = when().get("/customer/" + custId)
+        CustomerRepresentation customer = when().get(CUSTOMER + "/" + custId)
                 .then()
                 .extract()
                 .as(CustomerRepresentation.class);
@@ -43,7 +44,7 @@ class CustomerResourceTest extends IntegrationBase {
 
     @Test
     public void listCustomerByIdInvalid() {
-        when().get("/customer/" + 2003)  //id 2003 not existent in db
+        when().get(CUSTOMER + "/" + 2003)  //id 2003 not existent in db
                 .then()
                 .statusCode(404);
     }
@@ -56,7 +57,7 @@ class CustomerResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/customer/")
+                .when().put(CUSTOMER)
                 .then().statusCode(404);
     }
 
@@ -67,8 +68,8 @@ class CustomerResourceTest extends IntegrationBase {
         CustomerRepresentation created = given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/customer/")
-                .then().statusCode(201).header("Location", Constants.API_ROOT+"/customer/"+representation.id)
+                .when().put(CUSTOMER)
+                .then().statusCode(201).header("Location", Constants.API_ROOT + CUSTOMER +"/"+representation.id)
                 .extract().as(CustomerRepresentation.class);
 
         assertEquals(55, created.id);
@@ -78,7 +79,7 @@ class CustomerResourceTest extends IntegrationBase {
     @Test
     public void updateCustomerValid() {
         //get the resource
-        CustomerRepresentation representation = when().get("/customer/"+custId)
+        CustomerRepresentation representation = when().get(CUSTOMER + "/" + custId)
                 .then().statusCode(200).extract().as(CustomerRepresentation.class);
 
         assertEquals(custId, representation.id);
@@ -90,11 +91,11 @@ class CustomerResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/customer/"+custId)
+                .when().put(CUSTOMER + "/" + custId)
                 .then().statusCode(204);
 
         //get the resource again to validate the update
-        CustomerRepresentation updated = when().get("/customer/"+custId)
+        CustomerRepresentation updated = when().get(CUSTOMER + "/" + custId)
                 .then().statusCode(200).extract().as(CustomerRepresentation.class);
 
         assertEquals(custId, updated.id);
@@ -105,22 +106,22 @@ class CustomerResourceTest extends IntegrationBase {
 
     @Test
     public void deleteAllCustomers() {
-        when().delete("/customer/")
+        when().delete(CUSTOMER)
             .then().statusCode(200);
 
-        when().get("/customer/"+1000)
+        when().get(CUSTOMER + "/" + 1000)
             .then().statusCode(404);
-        when().get("/customer/"+1001)
+        when().get(CUSTOMER + "/" + 1001)
             .then().statusCode(404);
     }
 
     @Test
     public void deleteOneCustomer() {
-        when().delete("/customer/" + custId)
+        when().delete(CUSTOMER + "/" + custId)
             .then().statusCode(200);
-        when().get("/customer/" + custId)
+        when().get(CUSTOMER + "/" + custId)
             .then().statusCode(404);
-        when().get("/customer/" + 1005)  //1005 not in db
+        when().get(CUSTOMER + "/" + custId)  //1005 not in db
             .then().statusCode(404);
     }
     private CustomerRepresentation createCustomerRepresentation(Integer id) {

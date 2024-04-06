@@ -20,7 +20,9 @@ import org.util.DamageType;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("technicalCheck")
+import static org.infastructure.rest.ApiPath.Root.CHECKS;
+
+@Path(CHECKS)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped

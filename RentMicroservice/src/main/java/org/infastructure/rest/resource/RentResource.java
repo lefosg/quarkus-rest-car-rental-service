@@ -14,14 +14,18 @@ import org.infastructure.rest.representation.RentMapper;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckMapper;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
+import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.util.VehicleState;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
+import static org.infastructure.rest.ApiPath.Root.RENTS;
 
-@Path("rent")
+
+@Path(RENTS)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
@@ -90,17 +94,17 @@ public class RentResource {
         }
         return rentService.returnCustomerWithId(rent.getCustomerId());
     }
-//
-//    @GET
-//    @Transactional
-//    @Path("{rentId: [0-9]+}/vehicle")
-//    public VehicleRepresentation listVehicleOfRent(@PathParam("rentId") Integer rentId) {
-//        if (rentId == null || rentRepository.findById(rentId) == null) {  //if id null or not in db
-//            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find vehicle for rent with id " + rentId);
-//        }
-//        Rent rent = rentRepository.findById(rentId);
-//        return vehicleMapper.toRepresentation(rent.getRentedVehicle());
-//    }
+
+    @GET
+    @Transactional
+    @Path("{rentId: [0-9]+}/vehicle")
+    public VehicleRepresentation listVehicleOfRent(@PathParam("rentId") Integer rentId) {
+        Rent rent = rentRepository.findRentById(rentId);
+        if (rent == null) {
+            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find rent with id " + rentId);
+        }
+        return rentService.returnVehicleWithId(rent.getVehicleId());
+    }
 
     @GET
     @Transactional
@@ -135,48 +139,49 @@ public class RentResource {
     }
 //todo olo to paradoteo einai edo
 
-//    @POST
-//    @Transactional
-//    @Path("/newRent/{customerId:[0-9]+}")
-//    public Response makeRent(
-//            @QueryParam("startDate") String start,
-//            @QueryParam("endDate") String end,
-//            @QueryParam("vehicleId") Integer vehicleId,
-//            @PathParam("customerId") Integer customerId) {
-//
-//        LocalDate startDate = null;
-//        LocalDate endDate = null;
-//        if ((start != null && end != null) && (!start.equals("") && !end.equals(""))) {
-//            startDate = LocalDate.parse(start);
-//            endDate = LocalDate.parse(end);
-//        } else {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
-//        }
-//        if (customerId == null) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid customer id").build();
-//        }
-//        if (vehicleId == null) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid vehicle id").build();
-//        }
-//
-//        Customer customer = customerRepository.findById(customerId);
-//        Vehicle vehicle = vehicleRepository.findById(vehicleId);
-//
-//        if (customer == null) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist").build();
-//        }
-//        if (vehicle == null) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist").build();
-//        }
-//
-//        if (vehicle.getVehicleState() != VehicleState.Available) {
-//            return Response.status(Response.Status.OK).entity("Vehicle not available until " + end).build();
-//        }
-//
-//        customer.rent(startDate, endDate, vehicle);
-//        customerRepository.getEntityManager().merge(customer);
-//        return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
-//    }
+    @POST
+    @Transactional
+    @Path("/newRent/{customerId:[0-9]+}")
+    public Response makeRent(
+            @QueryParam("startDate") String start,
+            @QueryParam("endDate") String end,
+            @QueryParam("vehicleId") Integer vehicleId,
+            @PathParam("customerId") Integer customerId) {
+
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        if ((start != null && end != null) && (!start.equals("") && !end.equals(""))) {
+            startDate = LocalDate.parse(start);
+            endDate = LocalDate.parse(end);
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
+        }
+        if (customerId == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid customer id").build();
+        }
+        if (vehicleId == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid vehicle id").build();
+        }
+
+        CustomerRepresentation customer = rentService.returnCustomerWithId(customerId);
+        VehicleRepresentation vehicle = rentService.returnVehicleWithId(vehicleId);
+
+        if (customer == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist").build();
+        }
+        if (vehicle == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist").build();
+        }
+
+        if (vehicle.vehicleState != VehicleState.Available) {
+            return Response.status(Response.Status.OK).entity("Vehicle not available until " + end).build();
+        }
+
+
+        Rent rent = new Rent(rentRepository.findMaxId()+1,startDate, endDate,vehicleId,customerId);
+        rentRepository.persistRent(rent);
+        return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
+    }
 
 //    @POST
 //    @Transactional

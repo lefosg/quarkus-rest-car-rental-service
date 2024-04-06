@@ -4,8 +4,12 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jakarta.inject.Inject;
+import org.domain.Rents.RentRepository;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
+import org.infastructure.service.fleet.representation.VehicleRepresentation;
+import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +20,8 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static org.infastructure.rest.ApiPath.Root.CHECKS;
+import static org.infastructure.rest.ApiPath.Root.RENTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,6 +31,8 @@ class RentResourceTest extends IntegrationBase {
     Integer rentId;
     LocalDate startDate;
     Integer compId;
+    @Inject
+    RentRepository rentRepository;
 
     @BeforeEach
     public void setup() {
@@ -39,7 +47,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listAllRents() {
-        List<RentRepresentation> rents = when().get("/rent")
+        List<RentRepresentation> rents = when().get(RENTS)
                 .then()
                 .extract()
                 .as(new TypeRef<List<RentRepresentation>>() {});
@@ -49,7 +57,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listRentsByMonth() {
-        List<RentRepresentation> rents = when().get("/rent?month=12")
+        List<RentRepresentation> rents = when().get(RENTS +"?month=12")
                 .then()
                 .extract()
                 .as(new TypeRef<List<RentRepresentation>>() {});
@@ -59,7 +67,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listRentsByMonthInvalid() {
-        List<RentRepresentation> rents = when().get("/rent?month=13")  //month 13 does not exist, should return listAll
+        List<RentRepresentation> rents = when().get(RENTS +"?month=13")  //month 13 does not exist, should return listAll
                 .then()
                 .extract()
                 .as(new TypeRef<List<RentRepresentation>>() {});
@@ -69,7 +77,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listRentByIdValid() {
-        RentRepresentation representation = when().get("/rent/"+rentId)
+        RentRepresentation representation = when().get(RENTS+"/"+rentId)
                 .then()
                 .extract()
                 .as(RentRepresentation.class);
@@ -79,7 +87,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listRentByIdInvalid() {
-        when().get("/rent/" + 4005)  //id 4005 not in db
+        when().get(RENTS+"/" + 4005)  //id 4005 not in db
                 .then()
                 .statusCode(404);
 
@@ -87,46 +95,46 @@ class RentResourceTest extends IntegrationBase {
 
     //customer get
 
-//    @Test
-//    public void listCustomerOfRentValid() {
-//        CustomerRepresentation representation = when().get("/rent/"+rentId+"/customer")
-//                .then()
-//                .extract()
-//                .as(CustomerRepresentation.class);
-//
-//        assertEquals(1000, representation.id);
-//    }
+    @Test
+    public void listCustomerOfRentValid() {
+        CustomerRepresentation representation = when().get(RENTS+ "/" +rentId+"/customer")
+                .then()
+                .extract()
+                .as(CustomerRepresentation.class);
+
+        assertEquals(1000, representation.id);
+    }
 
     @Test
     public void listCustomerOfRentInvalid() {
-        when().get("/rent/"+4005+"/customer")  //id 4005 not in db
+        when().get(RENTS + "/" + 4005 +"/customer")  //id 4005 not in db
                 .then()
                 .statusCode(404);
 
-        when().get("/rent/"+null+"/customer")  //id null invalid
+        when().get(RENTS + "/"+ null+ "/customer")  //id null invalid
                 .then()
                 .statusCode(404);
     }
 
     //vehicle get
 
-//    @Test
-//    public void listVehicleOfRentValid() {
-//        VehicleRepresentation representation = when().get("/rent/"+rentId+"/vehicle")
-//                .then()
-//                .extract()
-//                .as(VehicleRepresentation.class);
-//
-//        assertEquals(3000, representation.id);
-//    }
+    @Test
+    public void listVehicleOfRentValid() {
+        VehicleRepresentation representation = when().get(RENTS + "/" +rentId+"/vehicle")
+                .then()
+                .extract()
+                .as(VehicleRepresentation.class);
+
+        assertEquals(3000, representation.id);
+    }
 
     @Test
     public void listVehicleOfRentInvalid() {
-        when().get("/rent/"+4005+"/vehicle")  //id 4005 not in db
+        when().get(RENTS + "/" + 4005 + "/vehicle")  //id 4005 not in db
                 .then()
                 .statusCode(404);
 
-        when().get("/rent/"+null+"/vehicle")  //id null invalid
+        when().get(RENTS + "/" + null + "/vehicle")  //id null invalid
                 .then()
                 .statusCode(404);
     }
@@ -135,7 +143,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listTechnicalCheckOfRentValid() {
-        TechnicalCheckRepresentation representation = when().get("/rent/"+rentId+"/technicalCheck")
+        TechnicalCheckRepresentation representation = when().get(RENTS + "/" + rentId + "/technicalCheck")
                 .then()
                 .extract()
                 .as(TechnicalCheckRepresentation.class);
@@ -145,11 +153,11 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listTechnicalCheckOfRentInvalid() {
-        when().get("/rent/"+4005+"/technicalCheck")  //id 4005 not in db
+        when().get(RENTS + "/" + 4005 + "/technicalCheck")  //id 4005 not in db
                 .then()
                 .statusCode(404);
 
-        when().get("/rent/"+null+"/technicalCheck")  //id null invalid
+        when().get(RENTS + "/" + null + "/technicalCheck")  //id null invalid
                 .then()
                 .statusCode(404);
     }
@@ -158,33 +166,55 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void createRentValid() {
-        RentRepresentation representation = createRentRepresentation((Integer) 4002);
+        RentRepresentation representation = createRentRepresentation((Integer) 4002,1000,3000);
 
         RentRepresentation created = given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/rent")
-                .then().statusCode(201).header("Location", Constants.API_ROOT + "/rent/"+ representation.id)
+                .when().put(RENTS)
+                .then().statusCode(201).header("Location", Constants.API_ROOT + RENTS + "/" + representation.id)
                 .extract().as(RentRepresentation.class);
 
         assertEquals(4002, created.id);
     }
 
     @Test
-    public void createRentInvalid() {
-        RentRepresentation representation = createRentRepresentation(4000);  //4000 already in db
+    public void createRentInvalidId() {
+        RentRepresentation representation = createRentRepresentation(4000,1000,3002);  //4000 already in db
 
         given()
             .contentType(ContentType.JSON)
             .body(representation)
-            .when().put("/rent")
+            .when().put(RENTS)
             .then().statusCode(404);
+    }
+
+    @Test
+    public void createRentInvalidCustomer() {
+        RentRepresentation representation = createRentRepresentation(4005,4444,3002);  //4000 already in db
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put(RENTS)
+                .then().statusCode(404);
+    }
+
+    @Test
+    public void createRentInvalidVehicle() {
+        RentRepresentation representation = createRentRepresentation(4006,1001,4000);  //4000 already in db
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put(RENTS)
+                .then().statusCode(404);
     }
 
     @Test
     public void updateRentValid() {
         //get the resource
-        RentRepresentation representation = when().get("/rent/"+rentId)
+        RentRepresentation representation = when().get(RENTS + "/" + rentId)
                 .then().statusCode(200).extract().as(RentRepresentation.class);
 
         assertEquals(rentId, representation.id);
@@ -197,11 +227,11 @@ class RentResourceTest extends IntegrationBase {
         given()
             .contentType(ContentType.JSON)
             .body(representation)
-            .when().put("/rent/"+rentId)
+            .when().put(RENTS + "/" + rentId)
             .then().statusCode(204);
 
         //get the resource again to validate
-        RentRepresentation updated = when().get("/rent/"+rentId)
+        RentRepresentation updated = when().get(RENTS + "/" + rentId)
                 .then().statusCode(200).extract().as(RentRepresentation.class);
 
         assertEquals(rentId, updated.id);
@@ -212,7 +242,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void deleteAllRents() {
-        when().delete("/rent/")  //deletes all companies
+        when().delete(RENTS)  //deletes all companies
                 .then().statusCode(200);
 
         when().get("/rent/"+4000)
@@ -220,19 +250,19 @@ class RentResourceTest extends IntegrationBase {
         when().get("/rent/"+4001)
                 .then().statusCode(404);  //get must return 404
 
-        List<RentRepresentation> rents = when().get("rent/")
+        List<RentRepresentation> rents = when().get(RENTS)
                 .then().extract().as(new TypeRef<List<RentRepresentation>>() {});
 
         assertEquals(0, rents.size());
 
-        List<TechnicalCheckRepresentation> technicalChecks = when().get("/technicalCheck/")
+        List<TechnicalCheckRepresentation> technicalChecks = when().get(CHECKS)
                 .then().extract().as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
         assertEquals(0, technicalChecks.size());
     }
 
     @Test
     public void deleteOneRentValid() {
-        when().delete("/rent/" + rentId)
+        when().delete(RENTS + "/" + rentId)
                 .then().statusCode(200);
 
         when().get("/rent/" + rentId)
@@ -243,14 +273,14 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void deleteOneRentInvalid() {
-        when().get("/rent/" + 4005)  //4005 not in db
+        when().get(RENTS + "/" + 4005)  //4005 not in db
                 .then().statusCode(404);  //get must return 404
     }
 
 
     // ---------- misc ----------
 
-    private RentRepresentation createRentRepresentation(Integer id) {
+    private RentRepresentation createRentRepresentation(Integer id,Integer customerId,Integer vehicleId) {
         RentRepresentation representation = new RentRepresentation();
         representation.id = id;
         representation.startDate = LocalDate.of(2023,10,10).toString();
@@ -262,8 +292,8 @@ class RentResourceTest extends IntegrationBase {
         representation.damageCost = new Money(0);  //assume no damage
         representation.totalCost = new Money(representation.mileageCost.getAmount() +
                 representation.fixedCost.getAmount() + representation.damageCost.getAmount());
-        representation.vehicleId = 3000;
-        representation.customerId = 1000;
+        representation.vehicleId = vehicleId;
+        representation.customerId = customerId;
         representation.technicalCheck = 1;
         return representation;
     }
@@ -308,30 +338,30 @@ class RentResourceTest extends IntegrationBase {
     }
 
 /*makeRent Tests */
-
-//@Test
-//public void makeRent() {
+//todo more work to be done here
+@Test
+public void makeRent() {
 //    CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
 //    VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3000);
-//
-//    Response response = given().contentType(ContentType.JSON)
-//            .queryParam("startDate", LocalDate.now().toString())
-//            .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-//            .queryParam("vehicleId", vehicleRepresentation.id)
-//            .when().post("/rent/newRent/"+customerRepresentation.id)
-//            .then().extract().response();
-//    System.out.println("Response: " + response.getBody().asString());
-//
-//    assertEquals(200, response.getStatusCode());
-//    assertEquals("You rented the vehicle", response.getBody().asString());
-//
-//    VehicleRepresentation v = when().get("/vehicle/" + vehicleRepresentation.id)
-//            .then()
-//            .extract()
-//            .as(VehicleRepresentation.class);
-//    assertEquals(vehicleRepresentation.id, v.id);
-//    assertEquals(v.vehicleState, VehicleState.Rented);
-//}
+
+    Response response = given().contentType(ContentType.JSON)
+            .queryParam("startDate", LocalDate.now().toString())
+            .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+            .queryParam("vehicleId", 3000)
+            .when().post(RENTS + "/newRent/"+1000)
+            .then().extract().response();
+    System.out.println("Response: " + response.getBody().asString());
+
+    assertEquals(200, response.getStatusCode());
+    assertEquals("You rented the vehicle", response.getBody().asString());
+
+    VehicleRepresentation v = when().get(RENTS + "/" + rentRepository.findMaxId() + "/vehicle")
+            .then()
+            .extract()
+            .as(VehicleRepresentation.class);
+    assertEquals(3000, v.id);
+    assertEquals(v.vehicleState, VehicleState.Rented);
+}
 //
 //    @Test
 //    public void makeRentWithInvalidDates() {

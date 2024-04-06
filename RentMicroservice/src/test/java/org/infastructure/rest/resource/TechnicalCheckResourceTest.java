@@ -15,6 +15,8 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static org.infastructure.rest.ApiPath.Root.CHECKS;
+import static org.infastructure.rest.ApiPath.Root.RENTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
@@ -32,7 +34,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
     //----GET-----
   @Test
     public void listAllTechnicalChecks() {
-       List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck")
+       List<TechnicalCheckRepresentation> technicalCheck = when().get(CHECKS)
               .then()
               .extract()
                .as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
@@ -48,7 +50,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
 
      @Test
       public void listTechnicalCheckIdValid() {
-        TechnicalCheckRepresentation technicalCheck = when().get("/technicalCheck/" + technicalCheckId)
+        TechnicalCheckRepresentation technicalCheck = when().get(CHECKS+"/" + technicalCheckId)
               .then()
                .extract()
               .as(TechnicalCheckRepresentation.class);
@@ -57,7 +59,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
     }
       @Test
        public void listByTechnicalCheckUnknown() {
-           List<TechnicalCheckRepresentation> technicalCheck = when().get("/technicalCheck?damageType=Engine")
+           List<TechnicalCheckRepresentation> technicalCheck = when().get(CHECKS+"?damageType=Engine")
                   .then()
                    .extract()
                   .as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
@@ -70,7 +72,7 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
     @Test
     public void updateTechnicalCheckValid() {
         //get the resource
-        TechnicalCheckRepresentation representation = when().get("/technicalCheck/"+technicalCheckId)
+        TechnicalCheckRepresentation representation = when().get(CHECKS +"/" + technicalCheckId)
                 .then().statusCode(200).extract().as(TechnicalCheckRepresentation.class);
 
         assertEquals(technicalCheckId, representation.id);
@@ -83,11 +85,11 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/technicalCheck/"+technicalCheckId)
+                .when().put(CHECKS + "/" + technicalCheckId)
                 .then().statusCode(204);
 
         //get the resource again to validate
-        TechnicalCheckRepresentation updated = when().get("/technicalCheck/"+technicalCheckId)
+        TechnicalCheckRepresentation updated = when().get(CHECKS + "/" + technicalCheckId)
                 .then().statusCode(200).extract().as(TechnicalCheckRepresentation.class);
         assertEquals(technicalCheckId, updated.id);
         assertEquals(type, updated.damageType);
@@ -97,34 +99,34 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
 
     @Test
     public void deleteAllTechnicalChecks() {
-        when().delete("/technicalCheck")
+        when().delete(CHECKS)
                 .then().statusCode(200);
 
-        when().get("/technicalCheck/"+5000)
+        when().get(CHECKS + "/" + 5000)
                 .then().statusCode(404);  //get must return 404
-        when().get("/technicalCheck/"+5001)
+        when().get(CHECKS + "/" + 5001)
                 .then().statusCode(404);  //get must return 404
 
-        List<TechnicalCheckRepresentation> representations = when().get("/technicalCheck")
+        List<TechnicalCheckRepresentation> representations = when().get(CHECKS)
                 .then().extract().as(new TypeRef<List<TechnicalCheckRepresentation>>() {});
         assertEquals(0, representations.size());
 
-        List<RentRepresentation> rents = when().get("/rent")
+        List<RentRepresentation> rents = when().get(RENTS)
                 .then().extract().as(new TypeRef<List<RentRepresentation>>() {});
         assertEquals(2, rents.size());
     }
 
     @Test
     public void deleteTechnicalCheckValid() {
-        when().delete("/technicalCheck/"+technicalCheckId)
+        when().delete(CHECKS + "/" + technicalCheckId)
                 .then().statusCode(200);
-        when().get("/technicalCheck/" + technicalCheckId)
+        when().get(CHECKS + "/" + technicalCheckId)
                 .then().statusCode(404);  //get must return 404
     }
 
     @Test
     public void deleteTechnicalCheckInvalid() {
-        when().delete("/technicalCheck" + 5005)  //5005 not in db
+        when().delete(CHECKS + "/" + 5005)  //5005 not in db
                 .then().statusCode(404);
     }
 

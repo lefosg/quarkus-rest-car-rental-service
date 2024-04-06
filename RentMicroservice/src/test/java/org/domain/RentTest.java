@@ -18,11 +18,10 @@ class RentTest {
 
     Rent rent;
     LocalDate startDate, endDate;
-//    Customer customer;
-//    Vehicle vehicle;
-//    Company company;
+
     Integer vehicleId;
     Integer customerId;
+    Integer rentId;
 
     @BeforeEach
     public void setup() {
@@ -37,7 +36,8 @@ class RentTest {
 //        vehicle.setCompany(company);
         vehicleId = 1500;
         customerId = 1000;
-        rent = new Rent(startDate, endDate, vehicleId, customerId);
+        rentId = 4000;
+        rent = new Rent(rentId,startDate, endDate, vehicleId, customerId);
         rent.setTechnicalCheck(new TechnicalCheckStub(rent));
 
     }
@@ -49,7 +49,7 @@ class RentTest {
 
     @Test
     public void getDurationInDaysSameDate() {
-        Rent rent = new Rent(startDate, startDate, vehicleId, customerId);
+        Rent rent = new Rent(rentId,startDate, startDate, vehicleId, customerId);
         assertEquals(1, rent.getDurationInDays());
     }
 

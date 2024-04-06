@@ -62,16 +62,6 @@ public class Rent {
     })
     private Money totalCost;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @OnDelete(action = OnDeleteAction.SET_NULL)
-//    @JoinColumn(name = "vehicle_id")
-//    private Vehicle rentedVehicle;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @OnDelete(action = OnDeleteAction.SET_NULL)
-//    @JoinColumn(name = "customer_id")
-//    private Customer customer;
-
     @Column(name="vehicleId")
     private Integer vehicleId;
 
@@ -88,7 +78,8 @@ public class Rent {
         //this.technicalCheck = new TechnicalCheckImpl(this);
     }
 
-    public Rent(LocalDate startDate, LocalDate endDate, Integer vehicleId, Integer customerId) {
+    public Rent(Integer id,LocalDate startDate, LocalDate endDate, Integer vehicleId, Integer customerId) {
+        this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.vehicleId = vehicleId;

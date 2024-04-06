@@ -70,4 +70,17 @@ public class RentRepositoryImpl implements PanacheRepositoryBase<Rent, Integer>,
     public List<Rent> listAllRents() {
         return listAll();
     }
+
+    //todo test this
+    @Override
+    public Integer findMaxId() {
+        List<Rent> rents = listAllRents();
+        int maxId = 0;
+        for (Rent rent : rents) {
+            if (rent.getId() > maxId) {
+                maxId = rent.getId();
+            }
+        }
+        return maxId;
+    }
 }

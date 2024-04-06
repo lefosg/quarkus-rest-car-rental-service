@@ -27,4 +27,6 @@ public interface RentRepository {
     EntityManager getEntityManagerRent();
 
     List<Rent> listAllRents();
+
+    Integer findMaxId();
 }

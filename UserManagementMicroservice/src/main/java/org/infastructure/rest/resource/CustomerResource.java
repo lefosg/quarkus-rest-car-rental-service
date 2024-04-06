@@ -9,14 +9,15 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import org.domain.customer.Customer;
 import org.domain.customer.CustomerRepository;
-import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.representation.CustomerMapper;
 import org.infastructure.rest.representation.CustomerRepresentation;
 
 import java.net.URI;
 import java.util.List;
 
-@Path(ApiPath.Root.CUSTOMER)
+import static org.infastructure.rest.ApiPath.Root.CUSTOMER;
+
+@Path(CUSTOMER)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
@@ -36,7 +37,7 @@ public class CustomerResource {
         return customerMapper.toRepresentationList(customerRepository.listAllCustomers());
     }
     @GET
-    @Path("{customerId: [0-9]+}")
+    @Path("/{customerId: [0-9]+}")
     @Transactional
     public CustomerRepresentation listCustomerById(@PathParam("customerId") Integer customerId) {
         Customer customer = customerRepository.findByCustomerIdOptional(customerId)

@@ -3,6 +3,7 @@ package org.application;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 
 @RequestScoped
@@ -25,6 +26,11 @@ public class RentService {
     @Transactional
     public CustomerRepresentation returnCustomerWithId(Integer id) {
         return userManagementService.customerById(id);
+    }
+
+    @Transactional
+    public VehicleRepresentation returnVehicleWithId(Integer id) {
+        return fleetService.vehicleById(id);
     }
 
 }

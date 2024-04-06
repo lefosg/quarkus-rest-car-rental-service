@@ -7,7 +7,6 @@ public class ApiPath {
     public static class Root {
 
         public static final String RENTS = ROOT + "/rent";
-        public static final String COMPANY = ROOT + "/company";
-        public static final String CUSTOMER = ROOT + "/customer";
+        public static final String CHECKS = ROOT + "/technicalCheck";
     }
 }

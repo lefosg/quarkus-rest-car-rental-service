@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 
 import static io.restassured.RestAssured.given;
+import static org.infastructure.rest.ApiPath.Root.CHARGING_POLICY;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.restassured.http.ContentType;
@@ -28,7 +29,7 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
 
     @Test
     public void getAllPolicies() {
-        List<ChargingPolicyRepresentation> policies = when().get("policy")
+        List<ChargingPolicyRepresentation> policies = when().get(CHARGING_POLICY)
                 .then()
                 .extract()
                 .as(new TypeRef<List<ChargingPolicyRepresentation>>() {});
@@ -37,7 +38,7 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
 
     @Test
     public void getPolicyByIdValid() {
-        ChargingPolicyRepresentation representation = when().get("/policy/"+polId)
+        ChargingPolicyRepresentation representation = when().get(CHARGING_POLICY + "/"+polId)
                 .then()
                 .extract()
                 .as(ChargingPolicyRepresentation.class);
@@ -89,7 +90,7 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
     @Test
     public void updatePolicyValid() {
         //get the resource
-        ChargingPolicyRepresentation representation = when().get("/policy/"+polId)
+        ChargingPolicyRepresentation representation = when().get(CHARGING_POLICY + "/"+polId)
                 .then().statusCode(200).extract().as(ChargingPolicyRepresentation.class);
 
         assertEquals(polId, representation.id);
@@ -101,11 +102,11 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/policy/"+polId)
+                .when().put(CHARGING_POLICY + "/"+polId)
                 .then().statusCode(204);
 
         //get the resource again to validate
-        ChargingPolicyRepresentation updated = when().get("/policy/"+polId)
+        ChargingPolicyRepresentation updated = when().get(CHARGING_POLICY + "/"+polId)
                 .then().statusCode(200).extract().as(ChargingPolicyRepresentation.class);
 
         assertEquals(polId, updated.id);
@@ -115,7 +116,7 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
     @Test
     public void updatePolicyInvalid() {
         //get the resource
-        ChargingPolicyRepresentation representation = when().get("/policy/"+polId)
+        ChargingPolicyRepresentation representation = when().get(CHARGING_POLICY + "/"+polId)
                 .then().statusCode(200).extract().as(ChargingPolicyRepresentation.class);
 
         assertEquals(polId, representation.id);
@@ -127,7 +128,7 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/policy/1503")
+                .when().put(CHARGING_POLICY + "/1503")
                 .then().statusCode(404);
 
         //make another update, set id to null -> should return 404

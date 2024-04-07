@@ -33,4 +33,7 @@ public class RentService {
         return fleetService.vehicleById(id);
     }
 
+    @Transactional
+    public boolean makeVehicleRented(Integer id){return fleetService.changeVehicleState(id);}
+
 }

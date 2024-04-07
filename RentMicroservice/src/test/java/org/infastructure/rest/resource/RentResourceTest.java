@@ -17,6 +17,7 @@ import org.util.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -31,6 +32,8 @@ class RentResourceTest extends IntegrationBase {
     Integer rentId;
     LocalDate startDate;
     Integer compId;
+    Integer customerId;
+    Integer vehicleId;
     @Inject
     RentRepository rentRepository;
 
@@ -38,6 +41,8 @@ class RentResourceTest extends IntegrationBase {
     public void setup() {
         rentId = 4000;
         compId = 2000;
+        vehicleId = 3001;
+        customerId = 1000;
         startDate = LocalDate.of(2023, 12, 5);
     }
 
@@ -341,13 +346,10 @@ class RentResourceTest extends IntegrationBase {
 //todo more work to be done here
 @Test
 public void makeRent() {
-//    CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
-//    VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3000);
-
     Response response = given().contentType(ContentType.JSON)
             .queryParam("startDate", LocalDate.now().toString())
             .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-            .queryParam("vehicleId", 3000)
+            .queryParam("vehicleId", vehicleId)
             .when().post(RENTS + "/newRent/"+1000)
             .then().extract().response();
     System.out.println("Response: " + response.getBody().asString());
@@ -359,67 +361,57 @@ public void makeRent() {
             .then()
             .extract()
             .as(VehicleRepresentation.class);
-    assertEquals(3000, v.id);
+    assertEquals(vehicleId, v.id);
     assertEquals(v.vehicleState, VehicleState.Rented);
 }
-//
-//    @Test
-//    public void makeRentWithInvalidDates() {
-//        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1001);
-//        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3001);
-//
-//        Response response = given().contentType(ContentType.JSON)
-//                .queryParam("startDate", LocalDate.now().plusDays(5).toString())
-//                .queryParam("endDate", LocalDate.now().toString())
-//                .queryParam("vehicleId", vehicleRepresentation.id)
-//                .when().post("/rent/newRent/"+customerRepresentation.id)
-//                .then().extract().response();
-//
-//        System.out.println("Response: " + response.getBody().asString());
-//        assertTrue(response.getBody().asString().contains("Not good dates"));
-//    }
-//
-//    @Test
-//    public void makeRentInvalidVehicle() {
-//        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1001);
-//        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(null);  //id null invalid
-//
-//        given().contentType(ContentType.JSON)
-//                .queryParam("startDate", LocalDate.now().toString())
-//                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-//                .queryParam("vehicleId", vehicleRepresentation.id)
-//                .when().post("/rent/newRent/"+customerRepresentation.id)
-//                .then().statusCode(404);
-//
-//        vehicleRepresentation = createVehicleRepresentation(3020);  //3020 not in db
-//        given().contentType(ContentType.JSON)
-//                .queryParam("startDate", LocalDate.now().toString())
-//                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-//                .queryParam("vehicleId", vehicleRepresentation.id)
-//                .when().post("/rent/newRent/"+customerRepresentation.id)
-//                .then().statusCode(400);
-//    }
-//
-//    @Test
-//    public void makeRentInvalidCustomer() {
-//        CustomerRepresentation customerRepresentation = createCustomerRepresentation(null);
-//        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3001);  //id null invalid
-//
-//        given().contentType(ContentType.JSON)
-//                .queryParam("startDate", LocalDate.now().toString())
-//                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-//                .queryParam("vehicleId", vehicleRepresentation.id)
-//                .when().post("/customer/" + customerRepresentation.id + "/rent/")
-//                .then().statusCode(404);
-//
-//        vehicleRepresentation = createVehicleRepresentation(1007);  //1007 not in db
-//        given().contentType(ContentType.JSON)
-//                .queryParam("startDate", LocalDate.now().toString())
-//                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-//                .queryParam("vehicleId", vehicleRepresentation.id)
-//                .when().post("/customer/" + customerRepresentation.id + "/rent/")
-//                .then().statusCode(404);
-//    }
+
+    @Test
+    public void makeRentWithInvalidDates() {
+        Response response = given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("endDate", LocalDate.now().toString())
+                .queryParam("vehicleId", vehicleId)
+                .when().post(RENTS + "/newRent/"+1000)
+                .then().extract().response();
+
+        System.out.println("Response: " + response.getBody().asString());
+        assertTrue(response.getBody().asString().contains("Invalid date parameters"));
+    }
+
+    @Test
+    public void makeRentInvalidVehicle() {
+       given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", Optional.empty())
+                .when().post(RENTS + "/newRent/"+1000)
+                .then().statusCode(400);
+
+
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", 3929)
+                .when().post(RENTS + "/newRent/"+1000)
+                .then().statusCode(404);
+    }
+
+    @Test
+    public void makeRentInvalidCustomer() {
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleId)
+                .when().post(RENTS + "/newRent/"+1111)
+                .then().statusCode(404);
+
+        given().contentType(ContentType.JSON)
+                .queryParam("startDate", LocalDate.now().toString())
+                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
+                .queryParam("vehicleId", vehicleId)
+                .when().post(RENTS + "/newRent/"+ 99999999)
+                .then().statusCode(400);
+    }
 ///*returnVehicle tests*/
 //
 //    @Test

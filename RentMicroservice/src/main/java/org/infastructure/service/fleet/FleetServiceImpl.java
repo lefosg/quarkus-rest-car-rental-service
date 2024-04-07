@@ -7,6 +7,7 @@ import org.application.FleetService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
+import org.util.VehicleState;
 
 @ApplicationScoped
 public class FleetServiceImpl implements FleetService {
@@ -42,6 +43,18 @@ public class FleetServiceImpl implements FleetService {
             return vehicle;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Override
+    public boolean changeVehicleState(Integer id) {
+        try{
+            VehicleRepresentation vehicle = fleetAPI.listVehicleById(id);
+            vehicle.vehicleState = VehicleState.Rented;
+            fleetAPI.update(id, vehicle);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

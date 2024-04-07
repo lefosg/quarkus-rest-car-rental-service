@@ -150,7 +150,7 @@ public class RentResource {
 
         LocalDate startDate = null;
         LocalDate endDate = null;
-        if ((start != null && end != null) && (!start.equals("") && !end.equals(""))) {
+        if ((start != null && end != null) && (!start.equals("") && !end.equals("")) && LocalDate.parse(start).isBefore(LocalDate.parse(end))) {
             startDate = LocalDate.parse(start);
             endDate = LocalDate.parse(end);
         } else {
@@ -167,10 +167,10 @@ public class RentResource {
         VehicleRepresentation vehicle = rentService.returnVehicleWithId(vehicleId);
 
         if (customer == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Customer does not exist").build();
         }
         if (vehicle == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Vehicle does not exist").build();
         }
 
         if (vehicle.vehicleState != VehicleState.Available) {
@@ -179,6 +179,8 @@ public class RentResource {
 
 
         Rent rent = new Rent(rentRepository.findMaxId()+1,startDate, endDate,vehicleId,customerId);
+        //edo xreiazetai ena api call poy tha allazei thn katastash toy Vehicle
+        rentService.makeVehicleRented(vehicleId);
         rentRepository.persistRent(rent);
         return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
     }

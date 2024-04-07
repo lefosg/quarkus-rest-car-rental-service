@@ -34,6 +34,5 @@ public class RentService {
     }
 
     @Transactional
-    public boolean makeVehicleRented(Integer id){return fleetService.changeVehicleState(id);}
-
+    public void makeVehicleRented(Integer id){fleetService.changeVehicleState(id);}
 }

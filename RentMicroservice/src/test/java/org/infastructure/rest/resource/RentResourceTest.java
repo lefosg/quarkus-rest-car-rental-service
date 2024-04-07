@@ -383,7 +383,7 @@ public void makeRent() {
        given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-                .queryParam("vehicleId", Optional.empty())
+                .queryParam("vehicleId", "car123")
                 .when().post(RENTS + "/newRent/"+1000)
                 .then().statusCode(400);
 
@@ -393,7 +393,7 @@ public void makeRent() {
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
                 .queryParam("vehicleId", 3929)
                 .when().post(RENTS + "/newRent/"+1000)
-                .then().statusCode(404);
+                .then().statusCode(400);
     }
 
     @Test
@@ -403,13 +403,13 @@ public void makeRent() {
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
                 .queryParam("vehicleId", vehicleId)
                 .when().post(RENTS + "/newRent/"+1111)
-                .then().statusCode(404);
+                .then().statusCode(400);
 
         given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
                 .queryParam("vehicleId", vehicleId)
-                .when().post(RENTS + "/newRent/"+ 99999999)
+                .when().post(RENTS + "/newRent/notValid")
                 .then().statusCode(400);
     }
 ///*returnVehicle tests*/

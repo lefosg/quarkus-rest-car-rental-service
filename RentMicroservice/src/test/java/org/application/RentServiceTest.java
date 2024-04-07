@@ -23,6 +23,7 @@ public class RentServiceTest {
     Integer nonExistingVehicle = 4444;
 
     VehicleRepresentation vehicle;
+    VehicleRepresentation changedVehicle;
     @InjectMock
     FleetService fleetService;
     @Inject
@@ -33,6 +34,8 @@ public class RentServiceTest {
         Mockito.when(fleetService.vehicleExists(existingVehicle)).thenReturn(true);
         Mockito.when(fleetService.vehicleExists(nonExistingVehicle)).thenReturn(false);
         vehicle = createVehicleRepresentation(existingVehicle);
+        changedVehicle = vehicle;
+        changedVehicle.vehicleState = VehicleState.Rented;
         when(fleetService.vehicleById(existingVehicle)).thenReturn(vehicle);
     }
 
@@ -41,6 +44,13 @@ public class RentServiceTest {
 
     @Test
     public void getNonExistingVehicle(){assertFalse(rentService.rentedVehicleExist(nonExistingVehicle));}
+
+    @Test
+    public void changeVehicleStateTest(){
+        rentService.makeVehicleRented(existingVehicle);
+        assertEquals(changedVehicle,rentService.returnVehicleWithId(existingVehicle));
+        assertEquals(VehicleState.Rented,changedVehicle.vehicleState);
+    }
 
     @Test
     public void getCustomerRepresentationTest(){

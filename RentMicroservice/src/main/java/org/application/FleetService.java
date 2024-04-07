@@ -1,6 +1,5 @@
 package org.application;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 
 public interface FleetService {
@@ -9,5 +8,5 @@ public interface FleetService {
 
     VehicleRepresentation vehicleById(Integer id);
 
-    boolean changeVehicleState(Integer id);
+    void changeVehicleState(Integer id);
 }

@@ -167,10 +167,10 @@ public class RentResource {
         VehicleRepresentation vehicle = rentService.returnVehicleWithId(vehicleId);
 
         if (customer == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Customer does not exist").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist").build();
         }
         if (vehicle == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Vehicle does not exist").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist").build();
         }
 
         if (vehicle.vehicleState != VehicleState.Available) {
@@ -179,50 +179,52 @@ public class RentResource {
 
 
         Rent rent = new Rent(rentRepository.findMaxId()+1,startDate, endDate,vehicleId,customerId);
-        //edo xreiazetai ena api call poy tha allazei thn katastash toy Vehicle
+        //fixme problem with Bad requests
         rentService.makeVehicleRented(vehicleId);
         rentRepository.persistRent(rent);
         return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
     }
 
-//    @POST
-//    @Transactional
-//    @Path("/returnVehicle/{customerId:[0-9]+}")
-//    public Response returnVehicle(
-//            @PathParam("customerId") Integer customerId,
-//            @QueryParam("vehicleId") Integer vehicleId,
-//            @QueryParam("miles") float miles
-//    ) {
-//        if (customerId == null || customerRepository.findById(customerId) == null) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist or id was null").build();
+    @POST
+    @Transactional
+    @Path("/returnVehicle/{customerId:[0-9]+}")
+    public Response returnVehicle(
+            @PathParam("customerId") Integer customerId,
+            @QueryParam("vehicleId") Integer vehicleId,
+            @QueryParam("miles") float miles
+    ) {
+        if (customerId == null || rentService.returnCustomerWithId(customerId) == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist or id was null").build();
+        }
+        if (vehicleId == null || rentService.returnCustomerWithId(customerId) == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist or id was null").build();
+        }
+        if (miles <= 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Miles provided are negative").build();
+        }
+
+        CustomerRepresentation customer = rentService.returnCustomerWithId(customerId);
+        VehicleRepresentation vehicle = rentService.returnVehicleWithId(vehicleId);
+
+//        for (Rent rent : customer.getRents()) {
+//            if (rent.getRentedVehicle().equals(vehicle)) {
+//                if (rent.getRentedVehicle().getVehicleState() != VehicleState.Available) {
+//                    return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
+//                }
+//            }
 //        }
-//        if (vehicleId == null || vehicleRepository.findById(vehicleId) == null) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist or id was null").build();
-//        }
-//        if (miles <= 0) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Miles provided are negative").build();
-//        }
-//
-//        Customer customer = customerRepository.findById(customerId);
-//        Vehicle vehicle = vehicleRepository.findById(vehicleId);
-//
-////        for (Rent rent : customer.getRents()) {
-////            if (rent.getRentedVehicle().equals(vehicle)) {
-////                if (rent.getRentedVehicle().getVehicleState() != VehicleState.Available) {
-////                    return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
-////                }
-////            }
-////        }
-//
-//        if (vehicle.getVehicleState() == VehicleState.Available) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
-//        }
-//
+
+        if (vehicle.vehicleState == VehicleState.Available) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
+        }
+
+//fixme na ftiaksoyme th logikh poy ekteloyse h customer.returnVehicle
+
 //        customer.returnVehicle(vehicle, miles);
 //        customerRepository.getEntityManager().merge(customer);
-//        return Response.status(Response.Status.OK).entity("Vehicle returned").build();
-//
-//    }
+        return Response.status(Response.Status.OK).entity("Vehicle returned").build();
+
+    }
 
     @PUT
     @Transactional

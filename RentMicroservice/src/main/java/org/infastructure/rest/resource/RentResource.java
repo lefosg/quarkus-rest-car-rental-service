@@ -88,10 +88,12 @@ public class RentResource {
     @Transactional
     @Path("{rentId: [0-9]+}/customer")
     public CustomerRepresentation listCustomerOfRent(@PathParam("rentId") Integer rentId) {
-        Rent rent = rentRepository.findRentById(rentId);
-        if (rent == null) {
-            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find rent with id " + rentId);
+        if (rentId == null) {
+            throw new NotFoundException("[!] GET /rent/null/customer"+"\n\tCould not find rent with id null");
         }
+        Rent rent = rentRepository.findRentByIdOptional(rentId)
+                .orElseThrow(() -> new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find rent with id " + rentId));
+
         return rentService.returnCustomerWithId(rent.getCustomerId());
     }
 
@@ -99,10 +101,12 @@ public class RentResource {
     @Transactional
     @Path("{rentId: [0-9]+}/vehicle")
     public VehicleRepresentation listVehicleOfRent(@PathParam("rentId") Integer rentId) {
-        Rent rent = rentRepository.findRentById(rentId);
-        if (rent == null) {
-            throw new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find rent with id " + rentId);
+        if (rentId == null) {
+            throw new NotFoundException("[!] GET /rent/null/vehicle"+"\n\tCould not find rent with id null");
         }
+        Rent rent = rentRepository.findRentByIdOptional(rentId)
+                .orElseThrow(() -> new NotFoundException("[!] GET /rent/"+rentId+"\n\tCould not find rent with id " + rentId));
+
         return rentService.returnVehicleWithId(rent.getVehicleId());
     }
 
@@ -110,8 +114,11 @@ public class RentResource {
     @Transactional
     @Path("{rentId: [0-9]+}/technicalCheck")
     public TechnicalCheckRepresentation listTechnicalCheckOfRent(@PathParam("rentId") Integer rentId) {
+        if (rentId == null) {
+            throw new NotFoundException("[!] GET /rent/null/technicalCheck"+"\n\tCould not find rent with id null");
+        }
         Rent rent = rentRepository.findRentByIdOptional(rentId)
-                .orElseThrow(() -> new NotFoundException("[!] GET /policy/"+rentId+"\n\tCould not find policy with id " + rentId));
+                .orElseThrow(() -> new NotFoundException("[!] GET /rent"+rentId+"/policy/\n\tCould not find policy with id " + rentId));
 
         return technicalCheckMapper.toRepresentation(rent.getTechnicalCheck());
     }

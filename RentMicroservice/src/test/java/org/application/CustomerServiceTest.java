@@ -6,9 +6,8 @@ import jakarta.inject.Inject;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import java.time.LocalDate;
+import org.mockito.Mockito;
 
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;

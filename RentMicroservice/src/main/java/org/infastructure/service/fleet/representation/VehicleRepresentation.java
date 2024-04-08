@@ -18,7 +18,7 @@ public class VehicleRepresentation {
     public VehicleState vehicleState;
     public Money fixedCharge;
     public Integer companyId;
-    public Integer getId() {
-        return id;
-    }
+//    public Integer getId() {
+//        return id;
+//    }
 }

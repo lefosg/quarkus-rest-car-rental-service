@@ -1,4 +1,4 @@
-package org.infastructure.service.userManagement.representation;
+package org.infastructure.service.userManagement;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.GET;
@@ -6,6 +6,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
+import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 
 @Path("/api")
 @ApplicationScoped

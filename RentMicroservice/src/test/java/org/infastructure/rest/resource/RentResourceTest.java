@@ -1,10 +1,12 @@
 package org.infastructure.rest.resource;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import jakarta.inject.Inject;
+import org.application.RentService;
 import org.domain.Rents.RentRepository;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
@@ -12,19 +14,16 @@ import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.util.*;
-
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.infastructure.rest.ApiPath.Root.CHECKS;
 import static org.infastructure.rest.ApiPath.Root.RENTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.mockito.Mockito;
 
 @QuarkusTest
 class RentResourceTest extends IntegrationBase {
@@ -32,18 +31,37 @@ class RentResourceTest extends IntegrationBase {
     Integer rentId;
     LocalDate startDate;
     Integer compId;
-    Integer customerId;
-    Integer vehicleId;
+    Integer customerId, nonExistingCustomer;
+    Integer vehicleId, audiId, nonExistingVehicle;
+
     @Inject
     RentRepository rentRepository;
+
+    @InjectMock
+    RentService rentService;
 
     @BeforeEach
     public void setup() {
         rentId = 4000;
         compId = 2000;
         vehicleId = 3001;
+        audiId = 3007;
         customerId = 1000;
+        nonExistingCustomer = 9000;
+        nonExistingVehicle = 8000;
         startDate = LocalDate.of(2023, 12, 5);
+
+        //mock: if customer id exists, return it else return null
+        Mockito.when(rentService.returnCustomerWithId(customerId))
+                .thenReturn(createCustomerRepresentation(customerId));
+        Mockito.when(rentService.returnCustomerWithId(nonExistingCustomer))
+                .thenReturn(null);
+        //mock: if vehicle id exists, return it else return null
+        Mockito.when(rentService.returnVehicleWithId(audiId))
+                .thenReturn(createVehicleRepresentation(audiId));
+        Mockito.when(rentService.returnVehicleWithId(nonExistingVehicle))
+                .thenReturn(null);
+
     }
 
     // ---------- GET ----------
@@ -96,6 +114,9 @@ class RentResourceTest extends IntegrationBase {
                 .then()
                 .statusCode(404);
 
+        when().get(RENTS+"/" + null)  //id 4005 not in db
+                .then()
+                .statusCode(404);
     }
 
     //customer get
@@ -303,37 +324,37 @@ class RentResourceTest extends IntegrationBase {
         return representation;
     }
 
-//    private VehicleRepresentation createVehicleRepresentation(Integer id) {
-//        VehicleRepresentation representation = new VehicleRepresentation();
-//        representation.id = id;
-//        representation.manufacturer = "AUDI";
-//        representation.model = "A7";
-//        representation.year = 2021;
-//        representation.miles = 100000;
-//        representation.plateNumber = "MMA-8745";
-//        representation.vehicleType = VehicleType.Sedan;
-//        representation.vehicleState = VehicleState.Available;
-//        representation.fixedCharge = new Money(70);
-//        return representation;
-//    }
+    private VehicleRepresentation createVehicleRepresentation(Integer id) {
+        VehicleRepresentation representation = new VehicleRepresentation();
+        representation.id = id;
+        representation.manufacturer = "AUDI";
+        representation.model = "A7";
+        representation.year = 2021;
+        representation.miles = 100000;
+        representation.plateNumber = "MMA-8745";
+        representation.vehicleType = VehicleType.Sedan;
+        representation.vehicleState = VehicleState.Available;
+        representation.fixedCharge = new Money(70);
+        return representation;
+    }
 
-//    private CustomerRepresentation createCustomerRepresentation(Integer id) {
-//        CustomerRepresentation representation = new CustomerRepresentation();
-//        representation.id = id;
-//        representation.name = "ΙΩΑΝΝΗΣ";
-//        representation.email = "evangellou@gmail.com";
-//        representation.password = "johnjohn";
-//        representation.phone = "6941603677";
-//        representation.street = "ΛΕΥΚΑΔΟΣ 22";
-//        representation.city = "ΑΘΗΝΑ";
-//        representation.zipcode = "35896";
-//        representation.AFM = "166008282";
-//        representation.surname = "ΕΥΑΓΓΕΛΟΥ";
-//        representation.expirationDate = LocalDate.of(2027,11,26).toString();
-//        representation.number = "7894665213797564";
-//        representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ";
-//        return representation;
-//    }
+    private CustomerRepresentation createCustomerRepresentation(Integer id) {
+        CustomerRepresentation representation = new CustomerRepresentation();
+        representation.id = id;
+        representation.name = "ΙΩΑΝΝΗΣ";
+        representation.email = "evangellou@gmail.com";
+        representation.password = "johnjohn";
+        representation.phone = "6941603677";
+        representation.street = "ΛΕΥΚΑΔΟΣ 22";
+        representation.city = "ΑΘΗΝΑ";
+        representation.zipcode = "35896";
+        representation.AFM = "166008282";
+        representation.surname = "ΕΥΑΓΓΕΛΟΥ";
+        representation.expirationDate = LocalDate.of(2027,11,26).toString();
+        representation.number = "7894665213797564";
+        representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ";
+        return representation;
+    }
 
     private TechnicalCheckRepresentation createTechnicalCheckRepresentation(Integer id) {
         TechnicalCheckRepresentation representation = new TechnicalCheckRepresentation();

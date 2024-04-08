@@ -1,10 +1,11 @@
-package org.infastructure.service.userManagement.representation;
+package org.infastructure.service.userManagement;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.application.UserManagementService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.infastructure.service.fleet.representation.VehicleRepresentation;
+import org.infastructure.service.userManagement.UserManagementAPI;
+import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 
 @ApplicationScoped
 public class UserManagementServiceImpl implements UserManagementService {

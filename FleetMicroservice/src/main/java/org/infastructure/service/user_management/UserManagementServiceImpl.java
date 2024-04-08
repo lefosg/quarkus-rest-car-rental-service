@@ -23,5 +23,15 @@ public class UserManagementServiceImpl implements UserManagementService {
         }
     }
 
+    @Override
+    public CompanyRepresentation getCompany(Integer id) {
+        try {
+            CompanyRepresentation company = userApi.getCompany(id);
+            return company;
+        } catch (Exception e) {
+            return new CompanyRepresentation();
+        }
+    }
+
 
 }

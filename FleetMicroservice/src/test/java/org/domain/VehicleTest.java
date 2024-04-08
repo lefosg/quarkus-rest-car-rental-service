@@ -47,7 +47,6 @@ class VehicleTest {
         });
     }
 
-
     @Test
     public void testGetManufacturer() {
         assertEquals("TOYOTA", vehicle.getManufacturer());
@@ -116,7 +115,6 @@ class VehicleTest {
         assertEquals(new Money(30), vehicle.getFixedCharge());
     }
 
-
     @Test
     public void testGetModel() {
         assertEquals("YARIS", vehicle.getModel());
@@ -150,7 +148,6 @@ class VehicleTest {
         vehicle.setMiles(100000);
         assertEquals(100000, vehicle.getMiles());
     }
-
 
     @Test
     public void testGetCountDamages() {

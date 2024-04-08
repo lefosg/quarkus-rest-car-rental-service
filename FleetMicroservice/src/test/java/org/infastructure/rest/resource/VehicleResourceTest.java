@@ -1,19 +1,22 @@
 package org.infastructure.rest.resource;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import jakarta.ws.rs.NotFoundException;
+import org.application.UserManagementService;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleRepresentation;
+import org.infastructure.service.user_management.representation.CompanyRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.util.*;
-
 import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class VehicleResourceTest extends IntegrationBase {
@@ -21,12 +24,26 @@ public class VehicleResourceTest extends IntegrationBase {
     Integer vehId;
     String vehManufacturer;
     String vehModel;
+    Integer existingCompany = 2000;
+    Integer nonExistingCompany = 5000;
+
+    @InjectMock
+    UserManagementService userService;
 
     @BeforeEach
     public void setup() {
         vehId = 3000;
         vehManufacturer = "TOYOTA";
         vehModel = "YARIS";
+
+        Mockito.when(userService.companyExists(existingCompany))
+                .thenReturn(true);
+        Mockito.when(userService.companyExists(nonExistingCompany))
+                .thenReturn(false);
+        Mockito.when(userService.getCompany(existingCompany))
+                .thenReturn(createCompanyRepresentation(existingCompany));
+        Mockito.when(userService.getCompany(nonExistingCompany))
+                .thenThrow(new NotFoundException("[!] GET /company/"+nonExistingCompany+"\n\tCould not find company with id " + nonExistingCompany));
     }
 
     // ---------- GET ----------
@@ -41,36 +58,6 @@ public class VehicleResourceTest extends IntegrationBase {
 
         assertEquals(11, vehicles.size());
     }
-
-//    @Test
-//    public void listByManufacturerValid() {
-//        List<VehicleRepresentation> vehicles = when().get(ApiPath.Root.VEHICLE + "?manufacturer="+vehManufacturer)
-//                .then()
-//                .extract()
-//                .as(new TypeRef<List<VehicleRepresentation>>() {});
-//
-//        assertEquals(2, vehicles.size());
-//    }
-
-//    @Test
-//    public void listByManufacturerUnknown() {
-//        List<VehicleRepresentation> vehicles = when().get(ApiPath.Root.VEHICLE + "?manufacturer=MASERATI")
-//                .then()
-//                .extract()
-//                .as(new TypeRef<List<VehicleRepresentation>>() {});
-//
-//        assertEquals(0, vehicles.size());
-//    }
-
-//    @Test
-//    public void listByManufacturerInvalid() {
-//        List<VehicleRepresentation> vehicles = when().get(ApiPath.Root.VEHICLE + "?manufacturer=")
-//                .then()
-//                .extract()
-//                .as(new TypeRef<List<VehicleRepresentation>>() {});
-//
-//        assertEquals(11, vehicles.size());
-//    }
 
     @Test
     public void listVehicleIdValid() {
@@ -88,22 +75,37 @@ public class VehicleResourceTest extends IntegrationBase {
                 .then()
                 .statusCode(404);
     }
-//
-//    @Test
-//    public void listCompanyOfVehicleValidId() {
-//        CompanyRepresentation representation = when().get("/vehicle/" + vehId + "/company")
-//                .then()
-//                .extract()
-//                .as(CompanyRepresentation.class);
-//
-//        assertEquals(2000, representation.id);
-//    }
+
+    @Test
+    public void listCompanyOfVehicleValidId() {
+        CompanyRepresentation representation = when().get(ApiPath.Root.VEHICLE + "/" + vehId + "/company")
+                .then()
+                .extract()
+                .as(CompanyRepresentation.class);
+
+        assertEquals(2000, representation.id);
+    }
 
     @Test
     public void listCompanyOfVehicleInvalidId() {
         when().get( ApiPath.Root.VEHICLE + "/" + 3020 + "/company") //id 3020 not existent
             .then()
             .statusCode(404);
+    }
+
+    @Test
+    public void listWrongCompanyForValidVehicle() {
+        //just for this test, on purpose make a right call return an exception
+        Mockito.when(userService.getCompany(existingCompany))
+                .thenThrow(new NotFoundException("[!] GET /company/"+existingCompany+"\n\tCould not find company with id " + existingCompany));
+
+        CompanyRepresentation representation = when().get(ApiPath.Root.VEHICLE + "/" + vehId + "/company")
+            .then()
+            .extract()
+            .as(CompanyRepresentation.class);
+
+        assertEquals((new CompanyRepresentation()).id, representation.id);
+        assertNull(representation.id);
     }
 
     // ---------- PUT ----------
@@ -194,9 +196,17 @@ public class VehicleResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put(ApiPath.Root.VEHICLE + "/3000")
+                .when().put(ApiPath.Root.VEHICLE + "/" + vehId)
                 .then().statusCode(404);
 
+        //make another update, set companyId to non-existing company -> should return 404
+        representation.id = 3000;  //fix id from previous invalid update
+        representation.companyId = nonExistingCompany;
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put(ApiPath.Root.VEHICLE + "/" + vehId)
+                .then().statusCode(404);
     }
 
     // ---------- DELETE ----------
@@ -244,24 +254,24 @@ public class VehicleResourceTest extends IntegrationBase {
         representation.vehicleType = VehicleType.Hatchback;
         representation.vehicleState = VehicleState.Available;
         representation.fixedCharge = new Money(30);
-        representation.companyId = 2000;
+        representation.companyId = existingCompany;
         return representation;
     }
 
-//    private CompanyRepresentation createCompanyRepresentation(Integer id) {
-//        CompanyRepresentation representation = new CompanyRepresentation();
-//        representation.id = id;
-//        representation.name = "HOLYDAYCARS";
-//        representation.email = "holydaycrs@gmail.com";
-//        representation.phone = "2218603784";
-//        representation.street = "ΜΑΚΕΔΟΝΙΑΣ 87";
-//        representation.city = "ΘΕΣΣΑΛΟΝΙΚΗ";
-//        representation.zipcode = "47895";
-//        representation.password = "topcars123";
-//        representation.AFM = "998678010";
-//        representation.IBAN = "GR12564789652365";
-//        return representation;
-//    }
+    private CompanyRepresentation createCompanyRepresentation(Integer id) {
+        CompanyRepresentation representation = new CompanyRepresentation();
+        representation.id = id;
+        representation.name = "HOLYDAYCARS";
+        representation.email = "holydaycrs@gmail.com";
+        representation.phone = "2218603784";
+        representation.street = "ΜΑΚΕΔΟΝΙΑΣ 87";
+        representation.city = "ΘΕΣΣΑΛΟΝΙΚΗ";
+        representation.zipcode = "47895";
+        representation.password = "topcars123";
+        representation.AFM = "998678010";
+        representation.IBAN = "GR12564789652365";
+        return representation;
+    }
 
 
 }

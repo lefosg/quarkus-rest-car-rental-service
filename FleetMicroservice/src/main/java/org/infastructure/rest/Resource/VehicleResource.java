@@ -11,6 +11,8 @@ import org.domain.Vehicle.VehicleRepository;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleMapper;
 import org.infastructure.rest.Representation.VehicleRepresentation;
+import org.infastructure.service.user_management.representation.CompanyRepresentation;
+
 import java.net.URI;
 import java.util.List;
 
@@ -57,23 +59,28 @@ public class VehicleResource {
         return vehicleMapper.toRepresentation(vehicle);
     }
 
-//    @GET
-//    @Path("{vehicleId: [0-9]+}/company")
-//    @Transactional
-//    public CompanyRepresentation listCompanyOfVehicle(@PathParam("vehicleId") String vehicleId) {
-//        Vehicle vehicle = vehicleRepository.findById(Integer.parseInt(vehicleId));
-//        if (vehicle == null) {
-//            throw new NotFoundException("[!] GET /vehicle/"+vehicleId+"\n\tCould not find vehicle with id " + vehicleId);
-//        }
-//        return companyMapper.toRepresentation(vehicle.getCompany());
-//    }
+    @GET
+    @Path("{vehicleId: [0-9]+}/company")
+    @Transactional
+    public CompanyRepresentation listCompanyOfVehicle(@PathParam("vehicleId") String vehicleId) {
+        //1. find the vehicle
+        Vehicle vehicle = vehicleRepository.findVehicleByIdOptional(Integer.parseInt(vehicleId))
+                .orElseThrow(() -> new NotFoundException("[!] GET /vehicle/"+vehicleId+"\n\tCould not find vehicle with id " + vehicleId));
+        //2. check if the company of the vehicle exists
+        try {
+            return vehicleService.getCompany(vehicle.getCompanyId());
+        } catch (Exception e ) {
+            //e.printStackTrace();
+            return new CompanyRepresentation();
+        }
+    }
 
     // ---------- PUT ----------
 
     @PUT
     @Transactional
     public Response create(VehicleRepresentation representation) {
-        //todo: check if company_id exists (call user microservice)
+        //first check if company id exists
         if (!vehicleService.companyExists(representation.companyId)) {
             System.out.println("company does not exist");
             throw new NotFoundException("[!] PUT /vehicle\n\tCould not create vehicle, invalid company id");
@@ -91,6 +98,11 @@ public class VehicleResource {
     @Path("{vehicleId:[0-9]+}")
     @Transactional
     public Response update(@PathParam("vehicleId") Integer vehicleId, VehicleRepresentation representation) {
+        //first check if company id exists
+        if (!vehicleService.companyExists(representation.companyId)) {
+            System.out.println("company does not exist");
+            throw new NotFoundException("[!] PUT /vehicle\n\tCould not create vehicle, invalid company id");
+        }
         if (vehicleId == null || !(vehicleId).equals(representation.id)) {
             throw new NotFoundException("[!] PUT /vehicle\n\tCould not update vehicle, id mismatching");
         }

@@ -163,19 +163,20 @@ public class RentResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid vehicle id").build();
         }
 
-        CustomerRepresentation customer = rentService.returnCustomerWithId(customerId);
-        VehicleRepresentation vehicle = rentService.returnVehicleWithId(vehicleId);
-
-        if (customer == null) {
+        try {
+            CustomerRepresentation customer = rentService.returnCustomerWithId(customerId);
+        } catch (Exception e){
             return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist").build();
         }
-        if (vehicle == null) {
+        try {
+            VehicleRepresentation vehicle = rentService.returnVehicleWithId(vehicleId);
+            if (vehicle.vehicleState != VehicleState.Available) {
+                return Response.status(Response.Status.OK).entity("Vehicle not available until " + end).build();
+            }
+        } catch (Exception e){
             return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle does not exist").build();
         }
 
-        if (vehicle.vehicleState != VehicleState.Available) {
-            return Response.status(Response.Status.OK).entity("Vehicle not available until " + end).build();
-        }
 
 
         Rent rent = new Rent(rentRepository.findMaxId()+1,startDate, endDate,vehicleId,customerId);

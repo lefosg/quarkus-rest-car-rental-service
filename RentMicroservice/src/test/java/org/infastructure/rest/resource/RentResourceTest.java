@@ -383,7 +383,7 @@ public void makeRent() {
        given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-                .queryParam("vehicleId", "car123")
+                .queryParam("vehicleId", (Object) null)
                 .when().post(RENTS + "/newRent/"+1000)
                 .then().statusCode(400);
 
@@ -402,7 +402,7 @@ public void makeRent() {
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
                 .queryParam("vehicleId", vehicleId)
-                .when().post(RENTS + "/newRent/"+1111)
+                .when().post(RENTS + "/newRent/"+5000)
                 .then().statusCode(400);
 
         given().contentType(ContentType.JSON)

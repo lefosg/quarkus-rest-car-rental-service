@@ -29,4 +29,6 @@ public interface RentRepository {
     List<Rent> listAllRents();
 
     Integer findMaxId();
+
+    List<Rent> findRentByCustomerAndVehicle(Integer customerId, Integer vehicleId);
 }

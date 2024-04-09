@@ -5,10 +5,12 @@ import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.ws.rs.NotFoundException;
 import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,5 +84,20 @@ public class RentRepositoryImpl implements PanacheRepositoryBase<Rent, Integer>,
             }
         }
         return maxId;
+    }
+
+    @Override
+    public List<Rent> findRentByCustomerAndVehicle(Integer customerId, Integer vehicleId) {
+        if (customerId == null || vehicleId == null)
+            return null;
+
+        TypedQuery<Rent> query = getEntityManager().createQuery(
+                "select rent from Rent rent where rent.customerId = :customerId and rent.vehicleId = :vehicleId" , Rent.class);
+        List<Rent> rents = query
+                .setParameter("customerId", customerId)
+                .setParameter("vehicleId", vehicleId)
+                .getResultList();
+
+        return rents;
     }
 }

@@ -12,6 +12,11 @@ import java.util.Random;
 @DiscriminatorValue("Impl")
 public class TechnicalCheckImpl extends TechnicalCheck {
 
+    @Override
+    public DamageType checkForDamage() {
+        return null;
+    }
+
     public TechnicalCheckImpl() { }
 
     public TechnicalCheckImpl(Rent rent) {

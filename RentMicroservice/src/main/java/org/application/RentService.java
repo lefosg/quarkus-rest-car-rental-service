@@ -47,7 +47,7 @@ public class RentService {
     public void makeVehicleRented(Integer id){fleetService.changeVehicleState(id);}
 
     @Transactional
-    public double calculateCosts(Integer id){
+    public float calculateCosts(Integer id, float miles){
         float costs = 0;
         Rent rent;
         try {
@@ -56,6 +56,7 @@ public class RentService {
             return 0;//todo edo na valo exception
         }
         RentRepresentation rentRepresentation = rentMapper.toRepresentation(rent);
+
 
         costs = calculateMilageCosts(rent.getMiles(),rent.getVehicleId());/* + calculateDamageCost(rent) + calculateFixedCost(rent) + calculateTotalCost(rent);*/
         return costs;

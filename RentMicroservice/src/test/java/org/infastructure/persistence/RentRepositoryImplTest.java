@@ -10,6 +10,8 @@ import org.domain.TechnicalCheck.TechnicalCheckRepository;
 import org.junit.jupiter.api.Test;
 import org.util.IntegrationBase;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,6 +72,23 @@ class RentRepositoryImplTest extends IntegrationBase {
         assertThrows(NotFoundException.class, () -> {
             rentRepository.deleteRent(2002);
         });
+    }
+
+    @Test
+    @Transactional
+    void findRentByCustomerAndVehicle() {
+        Integer customerId = 1000;
+        Integer vehicleId = 3000;
+
+        ArrayList<Rent> rents = (ArrayList<Rent>) rentRepository.findRentByCustomerAndVehicle(customerId, vehicleId);
+        Rent r = rents.get(rents.size()-1);
+        assertEquals(4000, r.getId());
+
+        Rent rent = new Rent(4002, LocalDate.now(), LocalDate.now().plusDays(4),3000, 1000);
+        rentRepository.persistRent(rent);
+        rents = (ArrayList<Rent>) rentRepository.findRentByCustomerAndVehicle(customerId, vehicleId);
+        assertEquals(2, rents.size());
+        assertEquals(4002, rents.get(rents.size()-1).getId());
     }
 
 }

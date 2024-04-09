@@ -22,6 +22,8 @@ public abstract class TechnicalCheck {
     @JoinColumn(name="rent_id")
     protected Rent rent;
 
+    public abstract DamageType checkForDamage();
+
     public TechnicalCheck() { }
 
     public TechnicalCheck(Rent rent) {

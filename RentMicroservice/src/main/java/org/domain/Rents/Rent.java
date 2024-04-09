@@ -91,7 +91,6 @@ public class Rent {
 
     // domain logic
 
-//   todo fleet/User
 //    private void calculateDamageCost() {
 //        DamageType damageType = technicalCheck.checkForDamage();
 //        this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(damageType);
@@ -105,13 +104,12 @@ public class Rent {
 //    private void calculateFixedCost() {
 //        this.fixedCost = this.rentedVehicle.getCompany().calculateFixedCharge(this.startDate, this.endDate, this.rentedVehicle.getFixedCharge());
 //    }
+//
+//    private void calculateTotalCost() {
+//        double total = fixedCost.getAmount() + mileageCost.getAmount() + damageCost.getAmount();
+//        totalCost = new Money(total);
+//    }
 
-    private void calculateTotalCost() {
-        double total = fixedCost.getAmount() + mileageCost.getAmount() + damageCost.getAmount();
-        totalCost = new Money(total);
-    }
-
-//  todo fleet/User
 //    public void calculateCosts(float miles) {
 //        this.calculateMileageCost(miles);
 //        this.calculateDamageCost();

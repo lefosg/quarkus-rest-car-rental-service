@@ -382,7 +382,7 @@ class RentResourceTest extends IntegrationBase {
     }
 
 
-//returnVehicle tests
+    //returnVehicle tests
 
     @Test
     public void returnVehicle() {

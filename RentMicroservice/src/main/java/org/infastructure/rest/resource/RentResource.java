@@ -210,7 +210,7 @@ public class RentResource {
         }
 
 //fixme na ftiaksoyme th logikh poy ekteloyse h customer.returnVehicle
-
+        rentService.calculateCosts(null, miles);
 //        customer.returnVehicle(vehicle, miles);
 //        customerRepository.getEntityManager().merge(customer);
         return Response.status(Response.Status.OK).entity("Vehicle returned").build();

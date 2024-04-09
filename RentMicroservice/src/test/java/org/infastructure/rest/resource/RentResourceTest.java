@@ -6,7 +6,11 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
+import org.application.FleetService;
 import org.application.RentService;
+import org.application.UserManagementService;
 import org.domain.Rents.RentRepository;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
@@ -37,14 +41,18 @@ class RentResourceTest extends IntegrationBase {
     @Inject
     RentRepository rentRepository;
 
-    @InjectMock
-    RentService rentService;
+//    @InjectMock
+//    RentService rentService;
 
+    @InjectMock
+    UserManagementService userManagementService;
+    @InjectMock
+    FleetService fleetService;
     @BeforeEach
     public void setup() {
         rentId = 4000;
         compId = 2000;
-        vehicleId = 3001;
+        vehicleId = 3000;
         audiId = 3007;
         customerId = 1000;
         nonExistingCustomer = 9000;
@@ -52,16 +60,30 @@ class RentResourceTest extends IntegrationBase {
         startDate = LocalDate.of(2023, 12, 5);
 
         //mock: if customer id exists, return it else return null
-        Mockito.when(rentService.returnCustomerWithId(customerId))
-                .thenReturn(createCustomerRepresentation(customerId));
-        Mockito.when(rentService.returnCustomerWithId(nonExistingCustomer))
-                .thenReturn(null);
-        //mock: if vehicle id exists, return it else return null
-        Mockito.when(rentService.returnVehicleWithId(audiId))
-                .thenReturn(createVehicleRepresentation(audiId));
-        Mockito.when(rentService.returnVehicleWithId(nonExistingVehicle))
-                .thenReturn(null);
+//        Mockito.when(rentService.returnCustomerWithId(customerId))
+//                .thenReturn(createCustomerRepresentation(customerId));
+//        Mockito.when(rentService.returnCustomerWithId(nonExistingCustomer))
+//                .thenReturn(null);
+//        //mock: if vehicle id exists, return it else return null
+//        Mockito.when(rentService.returnVehicleWithId(audiId))
+//                .thenReturn(createVehicleRepresentation(audiId));
+//        Mockito.when(rentService.returnVehicleWithId(nonExistingVehicle))
+//                .thenReturn(null);
+        Mockito.when(userManagementService.customerExists(customerId)).thenReturn(true);
+        Mockito.when(userManagementService.customerExists(nonExistingCustomer)).thenReturn(false);
+        Mockito.when(userManagementService.customerById(customerId)).thenReturn(createCustomerRepresentation(customerId));
+        Mockito.when(userManagementService.customerById(nonExistingCustomer))
+                        .thenThrow(new BadRequestException("[!] GET /customer/"+nonExistingCustomer+"\n\tCould not find customer with id " + nonExistingCustomer));
+        Mockito.when(userManagementService.customerById(null))
+                .thenThrow(new BadRequestException("[!] GET /customer/"+"\n\tCould not find customer with null id "));
 
+        Mockito.when(fleetService.vehicleExists(vehicleId)).thenReturn(true);
+        Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(createVehicleRepresentation(vehicleId));
+        Mockito.when(fleetService.vehicleById(nonExistingVehicle))
+                        .thenThrow(new BadRequestException("[!] GET /vehicle/"+nonExistingVehicle+"\n\tCould not find vehicle with id " + nonExistingVehicle));
+        Mockito.when(fleetService.vehicleExists(nonExistingVehicle)).thenReturn(false);
+        Mockito.when(fleetService.vehicleById(null)).thenReturn(null);
+                //.thenThrow(new BadRequestException("[!] GET /vehicle/"+"\n\tCould not find vehicle with null id "));
     }
 
     // ---------- GET ----------
@@ -333,8 +355,9 @@ class RentResourceTest extends IntegrationBase {
         representation.miles = 100000;
         representation.plateNumber = "MMA-8745";
         representation.vehicleType = VehicleType.Sedan;
-        representation.vehicleState = VehicleState.Available;
+        representation.vehicleState = VehicleState.Rented;
         representation.fixedCharge = new Money(70);
+        representation.companyId = 2000;
         return representation;
     }
 
@@ -371,7 +394,7 @@ public void makeRent() {
             .queryParam("startDate", LocalDate.now().toString())
             .queryParam("endDate", LocalDate.now().plusDays(5).toString())
             .queryParam("vehicleId", vehicleId)
-            .when().post(RENTS + "/newRent/"+1000)
+            .when().post(RENTS + "/newRent/"+customerId)
             .then().extract().response();
     System.out.println("Response: " + response.getBody().asString());
 
@@ -404,7 +427,7 @@ public void makeRent() {
        given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-                .queryParam("vehicleId", (Object) null)
+                .queryParam("vehicleId", nonExistingVehicle)
                 .when().post(RENTS + "/newRent/"+1000)
                 .then().statusCode(400);
 
@@ -412,8 +435,8 @@ public void makeRent() {
         given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-                .queryParam("vehicleId", 3929)
-                .when().post(RENTS + "/newRent/"+1000)
+                .queryParam("vehicleId", "notValid")
+                .when().post(RENTS + "/newRent/no"+1000)
                 .then().statusCode(400);
     }
 
@@ -423,14 +446,14 @@ public void makeRent() {
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
                 .queryParam("vehicleId", vehicleId)
-                .when().post(RENTS + "/newRent/"+5000)
+                .when().post(RENTS + "/newRent/"+nonExistingCustomer)
                 .then().statusCode(400);
 
         given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
                 .queryParam("endDate", LocalDate.now().plusDays(5).toString())
                 .queryParam("vehicleId", vehicleId)
-                .when().post(RENTS + "/newRent/notValid")
+                .when().post(RENTS + "/newRent/" + null)
                 .then().statusCode(400);
     }
 ///*returnVehicle tests*/

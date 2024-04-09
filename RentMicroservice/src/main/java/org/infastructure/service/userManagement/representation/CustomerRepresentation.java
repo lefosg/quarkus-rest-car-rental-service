@@ -1,8 +1,9 @@
 package org.infastructure.service.userManagement.representation;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@RegisterRestClient
+@RegisterForReflection
 public class CustomerRepresentation {
     public Integer id;
     public String name;

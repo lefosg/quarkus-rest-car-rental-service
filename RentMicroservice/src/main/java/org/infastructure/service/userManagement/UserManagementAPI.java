@@ -16,4 +16,9 @@ public interface UserManagementAPI {
     @GET
     @Path("/customer/{customerId: [0-9]+}")
     CustomerRepresentation listCustomerById(@PathParam("customerId") Integer id);
+
+    @GET
+    @Path("/company/getMilageCosts")
+    float getMileageCosts(@PathParam("companyId") Integer id);
+    //todo make resource in company for this
 }

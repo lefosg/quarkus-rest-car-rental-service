@@ -39,11 +39,6 @@ public class RentResource {
 
     @Inject
     RentService rentService;
-//    @Inject
-//    CustomerMapper customerMapper;
-//
-//    @Inject
-//    VehicleMapper vehicleMapper;
 
     @Inject
     TechnicalCheckMapper technicalCheckMapper;
@@ -51,12 +46,6 @@ public class RentResource {
     @Inject
     TechnicalCheckRepository technicalCheckRepository;
 
-
-//    @Inject
-//    CustomerRepository customerRepository;
-//
-//    @Inject
-//    VehicleRepository vehicleRepository;
 
     @Context
     UriInfo uriInfo;

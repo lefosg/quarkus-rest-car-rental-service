@@ -2,6 +2,7 @@ package org.infastructure.service.userManagement;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.application.UserManagementService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.infastructure.service.userManagement.UserManagementAPI;
@@ -34,4 +35,10 @@ public class UserManagementServiceImpl implements UserManagementService {
             return null;
         }
     }
+
+    @Override
+    public float calcMileageCosts(float miles, Integer companyId) {
+        return userManagementAPI.getMileageCosts(companyId);
+    }
+
 }

@@ -6,4 +6,7 @@ public interface UserManagementService {
     boolean customerExists(Integer id);
 
     CustomerRepresentation customerById(Integer id);
+
+    float calcMileageCosts(float miles,Integer companyId);
+
 }

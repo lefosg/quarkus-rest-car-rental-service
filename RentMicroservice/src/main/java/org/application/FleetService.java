@@ -8,6 +8,6 @@ public interface FleetService {
 
     VehicleRepresentation vehicleById(Integer id);
 
-    void changeVehicleState(Integer id);
+    boolean changeVehicleState(Integer id);
 
 }

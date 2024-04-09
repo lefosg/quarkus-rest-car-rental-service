@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -31,13 +32,15 @@ public class CustomerServiceTest {
         when(userManagementService.customerExists(nonExistingCustomer)).thenReturn(false);
         customer = createCustomerRepresentation(existingCustomer);
         when(userManagementService.customerById(existingCustomer)).thenReturn(customer);
+        when(userManagementService.customerById(nonExistingCustomer)).thenReturn(new CustomerRepresentation());
+        when(userManagementService.customerById(null)).thenReturn(new CustomerRepresentation());
     }
 
     @Test
-    public void getExistingCustomer(){assertTrue(rentService.customerExist(existingCustomer));}
+    public void assertCustomerExists(){assertTrue(rentService.customerExist(existingCustomer));}
 
     @Test
-    public void getNonExistingCustomer(){assertFalse(rentService.customerExist(nonExistingCustomer));}
+    public void assertCustomerNotExists(){assertFalse(rentService.customerExist(nonExistingCustomer));}
     
     @Test
     public void getCustomerRepresentationTest(){
@@ -49,6 +52,16 @@ public class CustomerServiceTest {
         assertEquals(customer.AFM,rentService.returnCustomerWithId(existingCustomer).AFM);
         assertEquals(customer.email,rentService.returnCustomerWithId(existingCustomer).email);
         assertEquals(customer.password,rentService.returnCustomerWithId(existingCustomer).password);
+    }
+
+    @Test
+    public void getNonExistingCustomer(){
+        assertNull(userManagementService.customerById(nonExistingCustomer).id);
+    }
+
+    @Test
+    public void getCustomerWithNullId() {
+        assertNull(userManagementService.customerById(null).id);
     }
 
         private CustomerRepresentation createCustomerRepresentation(Integer id) {

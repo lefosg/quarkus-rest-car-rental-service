@@ -32,7 +32,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             customer = userManagementAPI.listCustomerById(id);
             return customer;
         } catch (Exception e) {
-            return null;
+            return new CustomerRepresentation();
         }
     }
 

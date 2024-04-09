@@ -60,6 +60,15 @@ public class VehicleResource {
     }
 
     @GET
+    @Path("/vehiclesByCompany/{companyId: [0-9]+}")
+    @Transactional
+    public List<VehicleRepresentation> listVehiclesByCompanyId(@PathParam("companyId") Integer companyId) {
+        List<Vehicle> vehicles = vehicleRepository.findVehiclesByCompanyId(companyId);
+                //.orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
+        return vehicleMapper.toRepresentationList(vehicles);
+    }
+
+    @GET
     @Path("{vehicleId: [0-9]+}/company")
     @Transactional
     public CompanyRepresentation listCompanyOfVehicle(@PathParam("vehicleId") String vehicleId) {

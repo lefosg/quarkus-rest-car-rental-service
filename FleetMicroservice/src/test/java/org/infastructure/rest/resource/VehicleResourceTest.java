@@ -87,6 +87,14 @@ public class VehicleResourceTest extends IntegrationBase {
     }
 
     @Test
+    public void listVehiclesByCompanyId(){
+        List<VehicleRepresentation> vehicles = when().get(ApiPath.Root.VEHICLE + "/vehiclesByCompany/2001")
+                .then()
+                .extract()
+                .as(new TypeRef<List<VehicleRepresentation>>() {});
+        assertEquals(5,vehicles.size());
+    }
+    @Test
     public void listCompanyOfVehicleInvalidId() {
         when().get( ApiPath.Root.VEHICLE + "/" + 3020 + "/company") //id 3020 not existent
             .then()

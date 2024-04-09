@@ -104,5 +104,12 @@ public class VehicleRepositoryImpl implements PanacheRepositoryBase<Vehicle,Inte
                 Parameters.with("model", model).map()).list();
     }
 
+    @Override
+    public List<Vehicle> findVehiclesByCompanyId(Integer companyId) {
+        if (companyId == null)
+            return listAll();
 
+        return find("select vehicle from Vehicle vehicle where vehicle.companyId = :companyId",
+                Parameters.with("companyId", companyId).map()).list();
+    }
 }

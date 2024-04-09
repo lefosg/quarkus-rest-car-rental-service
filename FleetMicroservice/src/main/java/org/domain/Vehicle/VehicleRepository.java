@@ -23,6 +23,8 @@ public interface VehicleRepository {
 
     List<Vehicle> findByModel(String model);
 
+    List<Vehicle> findVehiclesByCompanyId(Integer companyId);
+//todo testaki edo
     List<Vehicle> findByManufacturer(String manufacturer);
 
     List<Vehicle> findByState(String state);

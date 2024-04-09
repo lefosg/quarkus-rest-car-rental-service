@@ -2,15 +2,25 @@ package org.infastructure.rest.resource;
 
 import static io.restassured.RestAssured.when;
 import static io.restassured.RestAssured.given;
+
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import jakarta.inject.Inject;
+import org.application.FleetService;
+import org.application.UserService;
 import org.infastructure.rest.representation.ChargingPolicyRepresentation;
 import org.infastructure.rest.representation.CompanyRepresentation;
+import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.mockito.Mockito;
 import org.util.*;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -21,10 +31,25 @@ import static org.junit.jupiter.api.Assertions.*;
 class CompanyResourceTest extends IntegrationBase {
 
     Integer compId = 2000;
+    Integer nonCompanyId = 3030;
+    Integer vehicleId = 3000;
     String compCity = "ΑΘΗΝΑ";
+    List<VehicleRepresentation> vehicles = new ArrayList<>();
+    List<VehicleRepresentation> vehicles2 = new ArrayList<>();
+    @Inject
+    UserService userService;
+
+    @InjectMock
+    FleetService fleetService;
 
     // ---------- GET ----------
 
+    @BeforeEach
+    public void setup(){
+        vehicles.add(createVehicleRepresentation(vehicleId,compId));
+        Mockito.when(userService.getFleet(compId)).thenReturn(vehicles);
+        Mockito.when(userService.getFleet(nonCompanyId)).thenReturn(vehicles2);
+    }
     @Test
     public void listAllCompanies() {
         List<CompanyRepresentation> companies = when().get(COMPANY)
@@ -72,16 +97,25 @@ class CompanyResourceTest extends IntegrationBase {
                 .statusCode(404);
     }
 
-//   todo mockito
+
+    @Test
+    public void listCompanyVehicles() {
+        List<VehicleRepresentation> vehicles = when().get(COMPANY + "/" + compId + "/vehicles")
+                .then()
+                .extract()
+                .as(new TypeRef<List<VehicleRepresentation>>() {});
+
+        assertEquals(1, vehicles.size());
+    }
+//   fixme mockito
 
 //    @Test
-//    public void listCompanyVehicles() {
-//        List<VehicleRepresentation> vehicles = when().get("/company/" + compId + "/vehicles")
+//    public void listInvalidCompanyVehicles() {
+//        List<VehicleRepresentation> vehicles = when().get(COMPANY + "/" + nonCompanyId + "/vehicles")
 //                .then()
 //                .extract()
 //                .as(new TypeRef<List<VehicleRepresentation>>() {});
-//
-//        assertEquals(6, vehicles.size());
+//        assertEquals(0, vehicles.size());
 //    }
 
     @Test
@@ -332,21 +366,21 @@ class CompanyResourceTest extends IntegrationBase {
         representation.IBAN = "GR12564789652365";
         return representation;
     }
-//
-//    private VehicleRepresentation createVehicleRepresentation(Integer vehId, Integer companyId) {
-//        VehicleRepresentation representation = new VehicleRepresentation();
-//        representation.id = vehId;
-//        representation.manufacturer = "TOYOTA";
-//        representation.model = "AYGO";
-//        representation.year = 2022;
-//        representation.miles = 50000;
-//        representation.plateNumber = "MMB-8745";
-//        representation.vehicleType = VehicleType.Hatchback;
-//        representation.vehicleState = VehicleState.Available;
-//        representation.fixedCharge = new Money(60);
-//        representation.company = companyId;
-//        return representation;
-//    }
+
+    private VehicleRepresentation createVehicleRepresentation(Integer vehId, Integer companyId) {
+        VehicleRepresentation representation = new VehicleRepresentation();
+        representation.id = vehId;
+        representation.manufacturer = "TOYOTA";
+        representation.model = "AYGO";
+        representation.year = 2022;
+        representation.miles = 50000;
+        representation.plateNumber = "MMB-8745";
+        representation.vehicleType = VehicleType.Hatchback;
+        representation.vehicleState = VehicleState.Available;
+        representation.fixedCharge = new Money(60);
+        representation.companyId = companyId;
+        return representation;
+    }
 
     private ChargingPolicyRepresentation createChargingPolicyRepresentation(Integer id) {
         LinkedHashMap<Integer, Float> mileageScale = new LinkedHashMap();

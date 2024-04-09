@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 //import org.application.UserService;
+import org.application.UserService;
 import org.domain.company.ChargingPolicy;
 import org.domain.company.ChargingPolicyRepository;
 import org.domain.company.Company;
@@ -13,6 +14,7 @@ import org.domain.company.CompanyRepository;
 import org.infastructure.persistence.CompanyRepositoryImpl;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.representation.*;
+import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
 
 import java.lang.annotation.Repeatable;
 import java.net.URI;
@@ -38,6 +40,8 @@ public class CompanyResource {
     @Inject
     ChargingPolicyMapper policyMapper;
 
+    @Inject
+    UserService userService;
     @Context
     UriInfo uriInfo;
 
@@ -59,19 +63,19 @@ public class CompanyResource {
         return companyMapper.toRepresentation(company);
     }
 
-   // todo for fleet
-//    @GET
-//    @Path("{companyId: [0-9]+}/vehicles")
-//    @Transactional
-//    public Response listCompanyVehicles(@PathParam("companyId") Integer companyId) {
-//        Company company = companyRepository.findById(companyId);
-//        if (company ==  null) {
-//            throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");
-//        }
-//
-//        List<VehicleRepresentation> vehicles = userService.getFleet(companyId);
-//        return Response.ok(vehicles).build();
-//    }
+   // todo na grapso testakia
+    @GET
+    @Path("/{companyId: [0-9]+}/vehicles")
+    @Transactional
+    public Response listCompanyVehicles(@PathParam("companyId") Integer companyId) {
+        Company company = companyRepository.findCompanyById(companyId);
+        if (company ==  null) {
+            throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");
+        }
+
+        List<VehicleRepresentation> vehicles = userService.getFleet(companyId);
+        return Response.ok(vehicles).build();
+    }
 
     @GET
     @Path("{companyId: [0-9]+}/policy")

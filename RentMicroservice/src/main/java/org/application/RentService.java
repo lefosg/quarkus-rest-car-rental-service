@@ -11,6 +11,10 @@ import org.infastructure.rest.representation.RentMapper;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
+import org.util.DamageType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @RequestScoped
 public class RentService {
@@ -47,23 +51,30 @@ public class RentService {
     public void makeVehicleRented(Integer id){fleetService.changeVehicleState(id);}
 
     @Transactional
-    public float calculateCosts(Integer id, float miles){
-        float costs = 0;
-        Rent rent;
-        try {
-            rent = rentRepository.findRentById(id);
-        } catch (Exception e){
-            return 0;//todo edo na valo exception
-        }
-        RentRepresentation rentRepresentation = rentMapper.toRepresentation(rent);
+    public HashMap<String, Float> calculateCosts(Integer customerId, Integer vehicleId, float miles){
+        Rent rent = findRent(customerId, vehicleId);
+        DamageType damageType = rent.calculateDamageCost();  //todo technical check
 
-
-        costs = calculateMilageCosts(rent.getMiles(),rent.getVehicleId());/* + calculateDamageCost(rent) + calculateFixedCost(rent) + calculateTotalCost(rent);*/
+        HashMap<String, Float> costs = calculateAllCosts(miles, damageType, rent.getVehicleId());/* + calculateDamageCost(rent) + calculateFixedCost(rent) + calculateTotalCost(rent);*/
         return costs;
     }
 
-    private float calculateMilageCosts(float miles,Integer vehicleId){
+    @Transactional
+    public void pay(Integer vehicleId, float amount_money, float amount_damages) {
         Integer companyId = fleetService.vehicleById(vehicleId).companyId;
-        return userManagementService.calcMileageCosts(miles,companyId);
+        userManagementService.pay(companyId, amount_money, amount_damages);
+    }
+
+    private HashMap<String, Float> calculateAllCosts(float miles, DamageType damageType, Integer vehicleId){
+        Integer companyId = fleetService.vehicleById(vehicleId).companyId;
+        return userManagementService.calcMileageCosts(miles, damageType, companyId);
+    }
+
+    public Rent findRent(Integer customerId, Integer vehicleId) {
+        ArrayList<Rent> rents = (ArrayList<Rent>) rentRepository.findRentByCustomerAndVehicle(customerId, vehicleId);
+        if (rents.isEmpty()) {
+            return null;
+        }
+        return rents.get(rents.size()-1);
     }
 }

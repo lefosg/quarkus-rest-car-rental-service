@@ -16,10 +16,15 @@ import org.infastructure.rest.representation.TechnicalCheckMapper;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
+import org.util.Constants;
+import org.util.Money;
+import org.util.RentState;
 import org.util.VehicleState;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.infastructure.rest.ApiPath.Root.RENTS;
@@ -210,9 +215,19 @@ public class RentResource {
         }
 
 //fixme na ftiaksoyme th logikh poy ekteloyse h customer.returnVehicle
-        rentService.calculateCosts(null, miles);
-//        customer.returnVehicle(vehicle, miles);
-//        customerRepository.getEntityManager().merge(customer);
+        //1st cost calculation
+        HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
+        //2rd set Rent state Finished
+        Rent rent = rentService.findRent(customerId, vehicleId);
+        rent.setRentState(RentState.Finished);
+        //3th setVehicleState = available
+        // 4th setVehicle Miles
+        // 5nd payment
+        Money totalCosts;
+        Money damageCosts = new Money(costs.get(Constants.damageCost));
+        rentService.pay(vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
+
+        rentRepository.getEntityManagerRent().merge(rent);
         return Response.status(Response.Status.OK).entity("Vehicle returned").build();
 
     }

@@ -3,10 +3,14 @@ package org.infastructure.service.userManagement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.ws.rs.core.Response;
 import org.application.UserManagementService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.infastructure.service.userManagement.UserManagementAPI;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
+import org.util.DamageType;
+
+import java.util.HashMap;
 
 @ApplicationScoped
 public class UserManagementServiceImpl implements UserManagementService {
@@ -37,8 +41,14 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public float calcMileageCosts(float miles, Integer companyId) {
-        return userManagementAPI.getMileageCosts(companyId);
+    public HashMap<String, Float> calcMileageCosts(float miles, DamageType damageType, Integer companyId) {
+        return userManagementAPI.getMileageCosts(miles, damageType, companyId);
+    }
+
+    @Override
+    public boolean pay(Integer companyId, float amount_money, float amount_damages) {
+        Response response = userManagementAPI.pay(companyId, amount_money, amount_damages);
+        return response.getStatus() == 200;
     }
 
 }

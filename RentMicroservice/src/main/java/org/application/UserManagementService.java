@@ -1,6 +1,9 @@
 package org.application;
 
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
+import org.util.DamageType;
+
+import java.util.HashMap;
 
 public interface UserManagementService {
 
@@ -8,6 +11,8 @@ public interface UserManagementService {
 
     CustomerRepresentation customerById(Integer id);
 
-    float calcMileageCosts(float miles,Integer companyId);
+    HashMap<String, Float> calcMileageCosts(float miles, DamageType damageType, Integer companyId);
+
+    boolean pay(Integer companyId, float amount_money, float amount_damages);
 
 }

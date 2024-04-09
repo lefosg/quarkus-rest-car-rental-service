@@ -53,6 +53,4 @@ public class FleetServiceImpl implements FleetService {
             return false;
         }
     }
-
-
 }

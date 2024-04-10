@@ -2,6 +2,7 @@ package org.domain.TechnicalCheck;
 
 import jakarta.persistence.*;
 import org.domain.Rents.Rent;
+import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.util.DamageType;
 import org.util.Money;
 import org.util.VehicleState;
@@ -31,33 +32,33 @@ public class TechnicalCheckImpl extends TechnicalCheck {
 
 //  todo ti kanoyme edo??
 
-//    public DamageType checkForDamage() {
-//        rent.getRentedVehicle().setVehicleState(VehicleState.Service);
-//        Random random= new Random();
-//        int number = random.nextInt(10) + 1;
-//        if( number==1 ){
-//            this.damageType = calcDamage();
-//            return damageType;
-//        } else if(number>8 && rent.getRentedVehicle().getCountOfRents()>=1) {
-//            this.damageType = calcDamage();
-//            return damageType;
-//        } else if(number>6 && rent.getRentedVehicle().getCountOfRents()>=2){
-//            this.damageType = calcDamage();
-//            return damageType;
-//        }
-//        rent.getRentedVehicle().setCountOfRents(rent.getRentedVehicle().getCountOfRents()+1);
-//        this.damageType = DamageType.NoDamage;
-//        return DamageType.NoDamage;
-//    }
-//
-//    private DamageType calcDamage(){
-//        rent.getRentedVehicle().setCountDamages(rent.getRentedVehicle().getCountDamages()+1);
-//        Random damage= new Random();
-//        int numberOfType= damage.nextInt(5)+1;
-//        DamageType damageType = DamageType.values()[numberOfType];
-//        rent.setDamageCost(new Money(rent.getRentedVehicle().getCompany().getPolicy().calculateDamageCost(damageType)));
-//        return damageType;
-//    }
+    public DamageType checkForDamage(VehicleRepresentation vehicle) {
+        //rent.getRentedVehicle().setVehicleState(VehicleState.Service);
+        Random random= new Random();
+        int number = random.nextInt(10) + 1;
+        if( number==1 ){
+            this.damageType = calcDamage(vehicle);
+            return damageType;
+        } else if(number>8 && vehicle.countOfRents>=1) {
+            this.damageType = calcDamage(vehicle);
+            return damageType;
+        } else if(number>6 && vehicle.countOfRents>=2){
+            this.damageType = calcDamage(vehicle);
+            return damageType;
+        }
+        //rent.getRentedVehicle().setCountOfRents(rent.getRentedVehicle().getCountOfRents()+1);
+        this.damageType = DamageType.NoDamage;
+        return DamageType.NoDamage;
+    }
+
+    private DamageType calcDamage(VehicleRepresentation vehicle){
+        //rent.getRentedVehicle().setCountDamages(rent.getRentedVehicle().getCountDamages()+1);
+        Random damage= new Random();
+        int numberOfType= damage.nextInt(5)+1;
+        DamageType damageType = DamageType.values()[numberOfType];
+        //rent.setDamageCost(new Money(rent.getRentedVehicle().getCompany().getPolicy().calculateDamageCost(damageType)));
+        return damageType;
+    }
 
     //getters & setters
 

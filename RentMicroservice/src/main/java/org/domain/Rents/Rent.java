@@ -91,31 +91,6 @@ public class Rent {
 
     // domain logic
 
-//    private void calculateDamageCost() {
-//        DamageType damageType = technicalCheck.checkForDamage();
-//        this.damageCost = this.rentedVehicle.getCompany().calculateDamageCost(damageType);
-//    }
-//
-//    private void calculateMileageCost(float miles) {
-//        this.miles = miles;
-//        this.mileageCost = this.rentedVehicle.getCompany().calculateMileageCost(miles);
-//    }
-//
-//    private void calculateFixedCost() {
-//        this.fixedCost = this.rentedVehicle.getCompany().calculateFixedCharge(this.startDate, this.endDate, this.rentedVehicle.getFixedCharge());
-//    }
-//
-//    private void calculateTotalCost() {
-//        double total = fixedCost.getAmount() + mileageCost.getAmount() + damageCost.getAmount();
-//        totalCost = new Money(total);
-//    }
-
-//    public void calculateCosts(float miles) {
-//        this.calculateMileageCost(miles);
-//        this.calculateDamageCost();
-//        this.calculateFixedCost();
-//        this.calculateTotalCost();
-//    }
 
     public int getDurationInDays() {
         return (int) this.startDate.until(this.endDate, ChronoUnit.DAYS)+1;

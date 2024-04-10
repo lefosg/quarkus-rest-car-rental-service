@@ -229,7 +229,6 @@ public class RentResource {
 
         rentRepository.getEntityManagerRent().merge(rent);
         return Response.status(Response.Status.OK).entity("Vehicle returned").build();
-
     }
 
     @PUT

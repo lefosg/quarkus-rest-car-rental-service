@@ -26,6 +26,8 @@ public class RentService {
     RentRepository rentRepository;
     @Inject
     RentMapper rentMapper;
+    @Inject
+    TechnicalCheckService technicalCheckService;
 
     @Transactional
     public boolean rentedVehicleExist(Integer id){
@@ -53,7 +55,7 @@ public class RentService {
     @Transactional
     public HashMap<String, Float> calculateCosts(Integer customerId, Integer vehicleId, float miles){
         Rent rent = findRent(customerId, vehicleId);
-        DamageType damageType = rent.calculateDamageCost();  //todo technical check
+        DamageType damageType = doTechnicalCheck(vehicleId, rent.getTechnicalCheck().getId());
 
         HashMap<String, Float> costs = calculateAllCosts(miles, damageType, rent.getVehicleId());/* + calculateDamageCost(rent) + calculateFixedCost(rent) + calculateTotalCost(rent);*/
         return costs;
@@ -63,6 +65,14 @@ public class RentService {
     public void pay(Integer vehicleId, double amount_money, double amount_damages) {
         Integer companyId = fleetService.vehicleById(vehicleId).companyId;
         userManagementService.pay(companyId, amount_money, amount_damages);
+    }
+
+    private DamageType doTechnicalCheck(Integer vehicleId, Integer technicalCheckId) {
+        DamageType damageType = technicalCheckService.doTechnicalCheck(vehicleId, technicalCheckId);
+        if (damageType == null) {
+            return null;
+        }
+        return damageType;
     }
 
     private HashMap<String, Float> calculateAllCosts(float miles, DamageType damageType, Integer vehicleId){

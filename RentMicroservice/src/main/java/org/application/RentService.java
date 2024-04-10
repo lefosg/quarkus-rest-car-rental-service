@@ -60,7 +60,7 @@ public class RentService {
     }
 
     @Transactional
-    public void pay(Integer vehicleId, float amount_money, float amount_damages) {
+    public void pay(Integer vehicleId, double amount_money, double amount_damages) {
         Integer companyId = fleetService.vehicleById(vehicleId).companyId;
         userManagementService.pay(companyId, amount_money, amount_damages);
     }

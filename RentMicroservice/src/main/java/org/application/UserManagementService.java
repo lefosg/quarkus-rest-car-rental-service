@@ -13,6 +13,6 @@ public interface UserManagementService {
 
     HashMap<String, Float> calcMileageCosts(float miles, DamageType damageType, Integer companyId);
 
-    boolean pay(Integer companyId, float amount_money, float amount_damages);
+    boolean pay(Integer companyId, double amount_money, double amount_damages);
 
 }

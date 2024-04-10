@@ -29,6 +29,6 @@ public interface UserManagementAPI {
     @POST
     @Path("/company/{companyId}: [0-9]+}/pay")
     public Response pay(@PathParam("companyId") Integer id,
-                        @QueryParam("amount_money") float amount_money,
-                        @QueryParam("amount_damages") float amount_damages);
+                        @QueryParam("amount_money") double amount_money,
+                        @QueryParam("amount_damages") double amount_damages);
 }

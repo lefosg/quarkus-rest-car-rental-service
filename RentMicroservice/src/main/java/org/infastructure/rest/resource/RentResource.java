@@ -223,7 +223,7 @@ public class RentResource {
         //3th setVehicleState = available
         // 4th setVehicle Miles
         // 5nd payment
-        Money totalCosts;
+        Money totalCosts = new Money(costs.get(Constants.damageCost) + costs.get(Constants.fixedCost + costs.get(Constants.mileageCost)));
         Money damageCosts = new Money(costs.get(Constants.damageCost));
         rentService.pay(vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
 

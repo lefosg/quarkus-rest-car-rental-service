@@ -46,7 +46,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public boolean pay(Integer companyId, float amount_money, float amount_damages) {
+    public boolean pay(Integer companyId, double amount_money, double amount_damages) {
         Response response = userManagementAPI.pay(companyId, amount_money, amount_damages);
         return response.getStatus() == 200;
     }

@@ -102,6 +102,24 @@ class CustomerResourceTest extends IntegrationBase {
         assertEquals(newName, updated.name);
     }
 
+    //---------- POST ----------
+
+     @Test
+     public void payTest(){
+         given().contentType(ContentType.JSON)
+                 .when().post(CUSTOMER + "/pay/" + custId + "?companyId=" + compId + "&amount_money=1000&amount_damages=1000")
+                 .then().statusCode(200);
+         given().contentType(ContentType.JSON)
+                 .when().post(CUSTOMER + "/pay/3333?companyId=" + compId + "&amount_money=1000&amount_damages=1000")
+                 .then().statusCode(404);
+         given().contentType(ContentType.JSON)
+                         .when().post(CUSTOMER + "/pay/" + custId + "?companyId=2222&amount_money=1000&amount_damages=1000")
+                 .then().statusCode(404);
+         given().contentType(ContentType.JSON)
+                         .when().post(CUSTOMER + "/pay/" + custId + "?companyId=2222&amount_money=&amount_damages=1000")
+                 .then().statusCode(404);
+     }
+
     // ---------- DELETE ----------
 
     @Test

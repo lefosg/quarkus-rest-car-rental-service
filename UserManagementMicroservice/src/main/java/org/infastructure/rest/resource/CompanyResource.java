@@ -15,9 +15,11 @@ import org.infastructure.persistence.CompanyRepositoryImpl;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.representation.*;
 import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
+import org.util.DamageType;
 
 import java.lang.annotation.Repeatable;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.infastructure.rest.ApiPath.Root.COMPANY;
@@ -142,28 +144,16 @@ public class CompanyResource {
 
 
     // ---------- POST ----------
-//todo for vehicle
 
-//    @POST
-//    @Transactional
-//    @Path("{companyId:[0-9]+}/addVehicle")
-//    public Response addVehicle(@PathParam("companyId") Integer companyId, VehicleRepresentation vehicleRepresentation) {
-//        if (companyId == null || companyRepository.findByIdOptional(companyId) == null) {
-//            throw new NotFoundException("[!] POST /company/"+companyId+"/addVehicle\n\tCould not find company, invalid id");
-//        }
-//        if (vehicleRepresentation.id == null || vehicleRepository.findByIdOptional(vehicleRepresentation.id) != null) {
-//            throw new NotFoundException("[!] POST /company/"+companyId+"/addVehicle\n\tCould not find vehicle or already exists");
-//        }
-//        if (!companyId.equals(vehicleRepresentation.company)) {  //company calling this endpoint must be same in companyId and representation.company
-//            throw new NotFoundException("[!] POST /company/"+companyId+"/addVehicle\n\trepresentation.company is not the same as companyId ("+companyId+")");
-//        }
-//        Vehicle vehicle = vehicleMapper.toModel(vehicleRepresentation);
-//        Company company = companyRepository.findByIdOptional(companyId);
-//        company.addVehicle(vehicle);
-//        companyRepository.getEntityManager().merge(company);
-//        URI uri = uriInfo.getAbsolutePathBuilder().path(Integer.toString(vehicle.getId())).build();
-//        return Response.created(uri).entity(vehicleMapper.toRepresentation(vehicle)).status(Response.Status.OK).build();
-//    }
+    @POST
+    @Path("{companyId}: [0-9]+}/calculateCosts")
+    @Transactional
+    public HashMap<String, Float> getAllCosts(
+            @QueryParam("miles") float miles,
+            @QueryParam("damageType") DamageType damageType,
+            @PathParam("companyId") Integer id ) {
+        return null;
+    }
 
     // ---------- DELETE ----------
 

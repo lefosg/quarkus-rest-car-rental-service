@@ -7,14 +7,15 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
+import org.domain.company.Company;
+import org.domain.company.CompanyRepository;
 import org.domain.customer.Customer;
 import org.domain.customer.CustomerRepository;
 import org.infastructure.rest.representation.CustomerMapper;
 import org.infastructure.rest.representation.CustomerRepresentation;
-
+import org.util.Money;
 import java.net.URI;
 import java.util.List;
-
 import static org.infastructure.rest.ApiPath.Root.CUSTOMER;
 
 @Path(CUSTOMER)
@@ -29,6 +30,9 @@ public class CustomerResource {
     @Inject
     CustomerMapper customerMapper;
 
+    @Inject
+    CompanyRepository companyRepository;
+
     // ---------- GET ----------
 
     @GET
@@ -36,6 +40,7 @@ public class CustomerResource {
     public List<CustomerRepresentation> listAllCustomers() {
         return customerMapper.toRepresentationList(customerRepository.listAllCustomers());
     }
+
     @GET
     @Path("/{customerId: [0-9]+}")
     @Transactional
@@ -74,37 +79,33 @@ public class CustomerResource {
         return Response.noContent().build();
     }
 
-//   todo for fleet
-
-//    @GET
-//    @Transactional
-//    @Path("/availableVehicles/{startDate}/{endDate}")
-//    public Response getAvailableVehicles(
-//            @PathParam("startDate") String startDate,
-//            @PathParam("endDate") String endDate) {
-//        LocalDate startLocalDate = null;
-//        LocalDate endLocalDate = null;
-//        if (startDate != null && endDate != null) {
-//            startLocalDate = LocalDate.parse(startDate);
-//            endLocalDate = LocalDate.parse(endDate);
-//        } else {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid date parameters").build();
-//        }
-//        if (startLocalDate.isAfter(endLocalDate)) {
-//            return Response.status(Response.Status.BAD_REQUEST).entity("Start date is after end date").build();
-//        }
-//        List<Vehicle> availableVehicles = vehicleRepository.findByState(VehicleState.Available);
-//        List<VehicleRepresentation> availableVehiclesRep = vehicleMapper.toRepresentationList(availableVehicles);
-//
-//        if (!availableVehicles.isEmpty()) {
-//            return Response.ok(availableVehiclesRep).build();
-//        } else {
-//            return Response.noContent().build();
-//        }
-//    }
-
     // ---------- POST ----------
 
+     @POST
+     @Transactional
+     @Path("/pay/{customerId: [0-9]+}/")
+     public Response pay(@PathParam("customerId") Integer customerId,
+                         @QueryParam("companyId") Integer companyId,
+                         @QueryParam("amount_money") double amount_money,
+                         @QueryParam("amount_damages") double amount_damages){
+         Customer customer = customerRepository.findByCustomerIdOptional(customerId)
+                 .orElseThrow(() -> new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId));
+         if (customer ==  null) {
+             throw new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId);
+         }
+         Company company = companyRepository.findByCompanyIdOptional(companyId)
+                 .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
+         if (company ==  null) {
+             throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId);
+         }
+
+         try{
+             customer.pay(new Money(amount_money),new Money(amount_damages),company);
+         }catch (Exception e){
+             throw new NullPointerException();
+         }
+         return Response.status(200).build();
+     }
     
     // ---------- DELETE ----------
 

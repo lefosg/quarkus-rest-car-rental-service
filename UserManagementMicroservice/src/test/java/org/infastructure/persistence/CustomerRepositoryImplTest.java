@@ -21,22 +21,22 @@ class CustomerRepositoryImplTest extends IntegrationBase {
 
     //todo? replace impl with interface (qualifier?)
     @Inject
-    CustomerRepositoryImpl customerRepository;
+    CustomerRepository customerRepository;
 
     @Test
     @Transactional
     void deleteAllCustomers() {
         customerRepository.deleteAllCustomers();
-        assertEquals(0, customerRepository.listAll().size());
+        assertEquals(0, customerRepository.listAllCustomers().size());
     }
 
     @Test
     @Transactional
     void deleteOneCustomerValid() {
         customerRepository.deleteCustomer(custId);
-        List<Customer> customers = customerRepository.listAll();
+        List<Customer> customers = customerRepository.listAllCustomers();
         assertEquals(1, customers.size());
-        assertNull(customerRepository.findById(custId));
+        assertNull(customerRepository.findByCustomerId(custId));
     }
 
     @Test

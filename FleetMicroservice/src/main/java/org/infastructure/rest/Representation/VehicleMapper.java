@@ -24,6 +24,8 @@ public abstract class VehicleMapper {
     @Mapping(source = "vehicleType", target = "vehicleType")
     @Mapping(source = "vehicleState", target = "vehicleState")
     @Mapping(source = "companyId", target = "companyId")
+    @Mapping(source = "countDamages", target = "countDamages")
+    @Mapping(source = "countOfRents", target = "countOfRents")
     public abstract Vehicle toModel(VehicleRepresentation representation);
 
 //    @AfterMapping

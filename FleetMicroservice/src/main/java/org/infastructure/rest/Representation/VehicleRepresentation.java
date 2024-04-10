@@ -17,4 +17,6 @@ public class VehicleRepresentation {
     public VehicleState vehicleState;
     public Money fixedCharge;
     public Integer companyId;
+    public Integer countDamages;
+    public Integer countOfRents;
 }

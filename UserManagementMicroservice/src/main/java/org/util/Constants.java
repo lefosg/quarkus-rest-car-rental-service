@@ -11,4 +11,8 @@ public class Constants {
         }
         return false;
     }
+
+    public static final String fixedCost = "fixed_cost";
+    public static final String mileageCost = "mileage_cost";
+    public static final String damageCost = "damage_cost";
 }

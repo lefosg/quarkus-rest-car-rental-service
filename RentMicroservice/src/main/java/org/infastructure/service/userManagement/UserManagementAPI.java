@@ -19,8 +19,8 @@ public interface UserManagementAPI {
     @Path("/customer/{customerId: [0-9]+}")
     CustomerRepresentation listCustomerById(@PathParam("customerId") Integer id);
 
-    @GET
-    @Path("/company/{companyId: [0-9]+}/calculateCosts")
+    @POST
+    @Path("/company/calculateCosts/{companyId: [0-9]+}")
     public HashMap<String, Float> getAllCosts(
             @QueryParam("miles") float miles,
             @QueryParam("damageType") DamageType damageType,

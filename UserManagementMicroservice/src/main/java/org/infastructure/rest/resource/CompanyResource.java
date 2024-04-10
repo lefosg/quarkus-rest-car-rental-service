@@ -15,7 +15,9 @@ import org.infastructure.persistence.CompanyRepositoryImpl;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.representation.*;
 import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
+import org.util.Constants;
 import org.util.DamageType;
+import org.util.Money;
 
 import java.lang.annotation.Repeatable;
 import java.net.URI;
@@ -146,13 +148,33 @@ public class CompanyResource {
     // ---------- POST ----------
 
     @POST
-    @Path("{companyId}: [0-9]+}/calculateCosts")
+    @Path("/calculateCosts/{companyId: [0-9]+}")
     @Transactional
     public HashMap<String, Float> getAllCosts(
+            @PathParam("companyId") Integer companyId,
             @QueryParam("miles") float miles,
-            @QueryParam("damageType") DamageType damageType,
-            @PathParam("companyId") Integer id ) {
-        return null;
+            @QueryParam("damageType") DamageType damageType ) {
+
+        if (miles <= 0) {
+            throw new RuntimeException("[!] Company.getAllCosts: miles was <= 0");
+        }
+        if (damageType == null) {
+            throw new RuntimeException("[!] Company.getAllCosts: damageType was null");
+        }
+        if (companyId == null) {
+            throw new RuntimeException("[!] Company.getAllCosts: companyId was null");
+        }
+        Company company = companyRepository.findByCompanyIdOptional(companyId)
+                .orElseThrow(() -> new NotFoundException("[!] Company.getAllCosts: company not found"));
+        ChargingPolicy policy = company.getPolicy();
+
+        Float damage_cost = policy.calculateDamageCost(damageType);
+        Float mileage_cost = policy.calculateMileageCost(miles);
+
+        HashMap<String, Float> costs = new HashMap<>();
+        costs.put(Constants.damageCost, damage_cost);
+        costs.put(Constants.mileageCost, mileage_cost);
+        return costs;
     }
 
     // ---------- DELETE ----------

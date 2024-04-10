@@ -114,7 +114,7 @@ public class RentResource {
         return technicalCheckMapper.toRepresentation(rent.getTechnicalCheck());
     }
 
-    // ---------- PUT ----------
+    // ---------- POST ----------
 
 //    @PUT
 //    @Transactional
@@ -210,16 +210,18 @@ public class RentResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
         }
 
-        //1st cost calculation
-        HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
-        //2nd set Rent state Finished
         Rent rent = rentService.findRent(customerId, vehicleId);
-        rent.setRentState(RentState.Finished);
-        //3th setVehicleState = available
-        // 4th setVehicle Miles
-        // 5nd payment
-        Money totalCosts = new Money(costs.get(Constants.damageCost) + costs.get(Constants.fixedCost + costs.get(Constants.mileageCost)));
+        //1 costs calculation
+        HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
+        double fixedCost = vehicle.fixedCharge.getAmount() * rent.getDurationInDays();
+        Money totalCosts = new Money(costs.get(Constants.damageCost) + costs.get(Constants.mileageCost) + fixedCost);
         Money damageCosts = new Money(costs.get(Constants.damageCost));
+
+        //2 Update Rent: state = Finished
+        rent.setRentState(RentState.Finished);
+        //3 Update Vehicle: setVehicleState = available AND setVehicle Miles
+        //todo vaggelh kane thn super synarthsh poy ta kanei ola se ena gia ayto
+        //4 payment
         boolean isPayed = rentService.pay(customerId,vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
         if(!isPayed){
             throw new BusinessRuleException("Something went wrong with payment");
@@ -228,6 +230,8 @@ public class RentResource {
         rentRepository.getEntityManagerRent().merge(rent);
         return Response.status(Response.Status.OK).entity("Vehicle returned").build();
     }
+
+    // ---------- PUT ----------
 
     @PUT
     @Transactional

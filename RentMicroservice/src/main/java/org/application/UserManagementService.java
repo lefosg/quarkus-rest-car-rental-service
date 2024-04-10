@@ -11,7 +11,7 @@ public interface UserManagementService {
 
     CustomerRepresentation customerById(Integer id);
 
-    HashMap<String, Float> calcMileageCosts(float miles, DamageType damageType, Integer companyId);
+    HashMap<String, Float> getAllCosts(float miles, DamageType damageType, Integer companyId);
 
     boolean pay(Integer companyId, double amount_money, double amount_damages);
 

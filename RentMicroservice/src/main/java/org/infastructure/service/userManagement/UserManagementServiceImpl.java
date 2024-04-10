@@ -41,8 +41,8 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public HashMap<String, Float> calcMileageCosts(float miles, DamageType damageType, Integer companyId) {
-        return userManagementAPI.getMileageCosts(miles, damageType, companyId);
+    public HashMap<String, Float> getAllCosts(float miles, DamageType damageType, Integer companyId) {
+        return userManagementAPI.getAllCosts(miles, damageType, companyId);
     }
 
     @Override

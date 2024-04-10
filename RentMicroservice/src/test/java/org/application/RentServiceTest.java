@@ -7,20 +7,24 @@ import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.util.Money;
-import org.util.VehicleState;
-import org.util.VehicleType;
+import org.util.*;
+
+import java.util.HashMap;
 
 import static io.smallrye.common.constraint.Assert.assertFalse;
 import static io.smallrye.common.constraint.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 
 @QuarkusTest
 public class RentServiceTest {
-    Integer existingVehicle = 3005;
-    Integer nonExistingVehicle = 4444;
+    Integer existingVehicleId = 3000;
+    Integer nonExistingVehicleId = 4444;
+    Integer existingTechnicalCheckId = 5000;
+    Integer nonExistingTechnicalCheckId = 9000;
+    Integer existingCustomerId = 1000;
+    Integer nonExistingCustomerId = 8000;
 
     VehicleRepresentation vehicle;
     VehicleRepresentation changedVehicle;
@@ -28,54 +32,110 @@ public class RentServiceTest {
     FleetService fleetService;
     @Inject
     RentService rentService;
+    @InjectMock
+    TechnicalCheckService technicalCheckService;
+    @InjectMock
+    UserManagementService userManagementService;
 
     @BeforeEach
     public void setup(){
-        Mockito.when(fleetService.vehicleExists(existingVehicle)).thenReturn(true);
-        Mockito.when(fleetService.vehicleExists(nonExistingVehicle)).thenReturn(false);
-        vehicle = createVehicleRepresentation(existingVehicle);
+        Mockito.when(fleetService.vehicleExists(existingVehicleId)).thenReturn(true);
+        Mockito.when(fleetService.vehicleExists(nonExistingVehicleId)).thenReturn(false);
+        vehicle = createVehicleRepresentation(existingVehicleId);
         changedVehicle = vehicle;
         changedVehicle.vehicleState = VehicleState.Rented;
-        when(fleetService.vehicleById(existingVehicle)).thenReturn(vehicle);
+        when(fleetService.vehicleById(existingVehicleId)).thenReturn(vehicle);
     }
 
     @Test
-    public void getExistingVehicle(){assertTrue(rentService.rentedVehicleExist(existingVehicle));}
+    public void getExistingVehicle(){assertTrue(rentService.rentedVehicleExist(existingVehicleId));}
 
     @Test
-    public void getNonExistingVehicle(){assertFalse(rentService.rentedVehicleExist(nonExistingVehicle));}
+    public void getNonExistingVehicle(){assertFalse(rentService.rentedVehicleExist(nonExistingVehicleId));}
 
     @Test
     public void changeVehicleStateTest(){
-        rentService.makeVehicleRented(existingVehicle);
-        assertEquals(changedVehicle,rentService.returnVehicleWithId(existingVehicle));
+        rentService.makeVehicleRented(existingVehicleId);
+        assertEquals(changedVehicle,rentService.returnVehicleWithId(existingVehicleId));
         assertEquals(VehicleState.Rented,changedVehicle.vehicleState);
     }
 
     @Test
     public void getCustomerRepresentationTest(){
-        assertEquals(vehicle.id,rentService.returnVehicleWithId(existingVehicle).id);
-        assertEquals(vehicle.manufacturer,rentService.returnVehicleWithId(existingVehicle).manufacturer);
-        assertEquals(vehicle.model,rentService.returnVehicleWithId(existingVehicle).model);
-        assertEquals(vehicle.year,rentService.returnVehicleWithId(existingVehicle).year);
-        assertEquals(vehicle.miles,rentService.returnVehicleWithId(existingVehicle).miles);
-        assertEquals(vehicle.plateNumber,rentService.returnVehicleWithId(existingVehicle).plateNumber);
-        assertEquals(vehicle.vehicleState,rentService.returnVehicleWithId(existingVehicle).vehicleState);
-        assertEquals(vehicle.vehicleType,rentService.returnVehicleWithId(existingVehicle).vehicleType);
-        assertEquals(vehicle.fixedCharge,rentService.returnVehicleWithId(existingVehicle).fixedCharge);
+        assertEquals(vehicle.id,rentService.returnVehicleWithId(existingVehicleId).id);
+        assertEquals(vehicle.manufacturer,rentService.returnVehicleWithId(existingVehicleId).manufacturer);
+        assertEquals(vehicle.model,rentService.returnVehicleWithId(existingVehicleId).model);
+        assertEquals(vehicle.year,rentService.returnVehicleWithId(existingVehicleId).year);
+        assertEquals(vehicle.miles,rentService.returnVehicleWithId(existingVehicleId).miles);
+        assertEquals(vehicle.plateNumber,rentService.returnVehicleWithId(existingVehicleId).plateNumber);
+        assertEquals(vehicle.vehicleState,rentService.returnVehicleWithId(existingVehicleId).vehicleState);
+        assertEquals(vehicle.vehicleType,rentService.returnVehicleWithId(existingVehicleId).vehicleType);
+        assertEquals(vehicle.fixedCharge,rentService.returnVehicleWithId(existingVehicleId).fixedCharge);
     }
+
+    // test calculate all costs
+    @Test
+    void calculateCosts() {
+        float miles = 50;
+        HashMap<String, Float> costsToReturn = new HashMap<>();
+        costsToReturn.put(Constants.fixedCost, 50f);
+        costsToReturn.put(Constants.mileageCost, 50f);
+        costsToReturn.put(Constants.damageCost, 0f);
+        Mockito.when(technicalCheckService.doTechnicalCheck(existingVehicleId, existingTechnicalCheckId)).thenReturn(DamageType.NoDamage);
+        Mockito.when(fleetService.vehicleById(existingVehicleId)).thenReturn(createVehicleRepresentation(existingCustomerId));
+        Mockito.when(userManagementService.getAllCosts(miles, DamageType.NoDamage, 2000)).thenReturn(costsToReturn);
+
+        HashMap<String, Float> costs = rentService.calculateCosts(existingCustomerId, existingVehicleId, miles);
+        assertEquals(50f, costs.get(Constants.fixedCost));
+        assertEquals(50f, costs.get(Constants.mileageCost));
+        assertEquals(0f, costs.get(Constants.damageCost));
+    }
+
+    @Test
+    void calculateCostsInvalid_doTechnicalCheck() {
+        float miles = 50f;
+        //check that no rent is found
+        assertThrows(NullPointerException.class, () -> {
+            rentService.calculateCosts(nonExistingCustomerId, existingVehicleId, miles);
+            rentService.calculateCosts(existingCustomerId, nonExistingVehicleId, miles);
+        });
+
+        //check that doTechnicalCheck returns null
+        Mockito.when(technicalCheckService.doTechnicalCheck(existingVehicleId, existingTechnicalCheckId)).thenReturn(null);
+        Mockito.when(technicalCheckService.doTechnicalCheck(existingVehicleId, nonExistingTechnicalCheckId)).thenReturn(null);
+        assertNull(rentService.calculateCosts(existingCustomerId, existingVehicleId, miles));
+    }
+
+    @Test
+    void calculateCostsInvalid_calculcateAllCosts() {
+        float miles = 50f;
+        //check that calculateAllCosts::fleet returns null
+        Mockito.when(fleetService.vehicleById(existingVehicleId)).thenReturn(new VehicleRepresentation());
+        assertNull(rentService.calculateCosts(existingCustomerId, existingVehicleId, miles));
+
+        //check that calculateAllCosts::user.getAllCosts returns null
+        Mockito.when(fleetService.vehicleById(existingVehicleId)).thenReturn(createVehicleRepresentation(existingVehicleId));
+        Mockito.when(userManagementService.getAllCosts(miles, DamageType.NoDamage, 2000)).thenReturn(null);
+        assertNull(rentService.calculateCosts(existingCustomerId, existingVehicleId, miles));
+    }
+
+
+
 
     private VehicleRepresentation createVehicleRepresentation(Integer id) {
         VehicleRepresentation representation = new VehicleRepresentation();
         representation.id = id;
-        representation.manufacturer = "AUDI";
-        representation.model = "A7";
-        representation.year = 2021;
+        representation.manufacturer = "TOYOTA";
+        representation.model = "YARIS";
+        representation.year = 2015;
         representation.miles = 100000;
-        representation.plateNumber = "MMA-8745";
-        representation.vehicleType = VehicleType.Sedan;
+        representation.plateNumber = "YMB-6325";
+        representation.vehicleType = VehicleType.Hatchback;
         representation.vehicleState = VehicleState.Available;
-        representation.fixedCharge = new Money(70);
+        representation.fixedCharge = new Money(30);
+        representation.countDamages=0;
+        representation.countOfRents=0;
+        representation.companyId = 2000;
         return representation;
     }
 }

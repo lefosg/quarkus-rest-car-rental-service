@@ -21,7 +21,7 @@ public interface UserManagementAPI {
 
     @GET
     @Path("/company/{companyId}: [0-9]+}/calculateCosts")
-    public HashMap<String, Float> getMileageCosts(
+    public HashMap<String, Float> getAllCosts(
             @QueryParam("miles") float miles,
             @QueryParam("damageType") DamageType damageType,
             @PathParam("companyId") Integer id);

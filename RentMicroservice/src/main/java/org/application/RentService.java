@@ -56,15 +56,11 @@ public class RentService {
     public HashMap<String, Float> calculateCosts(Integer customerId, Integer vehicleId, float miles){
         Rent rent = findRent(customerId, vehicleId);
         DamageType damageType = doTechnicalCheck(vehicleId, rent.getTechnicalCheck().getId());
+        if (damageType == null)
+            return null;
 
         HashMap<String, Float> costs = calculateAllCosts(miles, damageType, rent.getVehicleId());/* + calculateDamageCost(rent) + calculateFixedCost(rent) + calculateTotalCost(rent);*/
         return costs;
-    }
-
-    @Transactional
-    public void pay(Integer vehicleId, double amount_money, double amount_damages) {
-        Integer companyId = fleetService.vehicleById(vehicleId).companyId;
-        userManagementService.pay(companyId, amount_money, amount_damages);
     }
 
     private DamageType doTechnicalCheck(Integer vehicleId, Integer technicalCheckId) {
@@ -77,7 +73,9 @@ public class RentService {
 
     private HashMap<String, Float> calculateAllCosts(float miles, DamageType damageType, Integer vehicleId){
         Integer companyId = fleetService.vehicleById(vehicleId).companyId;
-        return userManagementService.calcMileageCosts(miles, damageType, companyId);
+        if (companyId == null)
+            return null;
+        return userManagementService.getAllCosts(miles, damageType, companyId);
     }
 
     public Rent findRent(Integer customerId, Integer vehicleId) {
@@ -86,5 +84,11 @@ public class RentService {
             return null;
         }
         return rents.get(rents.size()-1);
+    }
+
+    @Transactional
+    public void pay(Integer vehicleId, double amount_money, double amount_damages) {
+        Integer companyId = fleetService.vehicleById(vehicleId).companyId;
+        userManagementService.pay(companyId, amount_money, amount_damages);
     }
 }

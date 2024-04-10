@@ -214,7 +214,6 @@ public class RentResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
         }
 
-//fixme na ftiaksoyme th logikh poy ekteloyse h customer.returnVehicle
         //1st cost calculation
         HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
         //2rd set Rent state Finished

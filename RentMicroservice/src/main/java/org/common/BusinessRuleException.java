@@ -1,4 +1,4 @@
-package org.util;
+package org.common;
 
 public class BusinessRuleException extends RuntimeException {
 

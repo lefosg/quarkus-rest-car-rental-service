@@ -87,8 +87,13 @@ public class RentService {
     }
 
     @Transactional
-    public void pay(Integer vehicleId, double amount_money, double amount_damages) {
-        Integer companyId = fleetService.vehicleById(vehicleId).companyId;
-        userManagementService.pay(companyId, amount_money, amount_damages);
+    public boolean pay(Integer customerId, Integer vehicleId, double amount_money, double amount_damages) {
+        VehicleRepresentation vehicleRepresentation = fleetService.vehicleById(vehicleId);
+        Integer companyId = null;
+        if(fleetService.vehicleById(vehicleId)==null){
+            return false;
+        }
+        companyId = vehicleRepresentation.companyId;
+        return userManagementService.pay(customerId, companyId, amount_money, amount_damages);
     }
 }

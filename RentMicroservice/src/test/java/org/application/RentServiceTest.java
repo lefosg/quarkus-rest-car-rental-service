@@ -26,6 +26,14 @@ public class RentServiceTest {
     Integer existingCustomerId = 1000;
     Integer nonExistingCustomerId = 8000;
 
+    //gia pay
+    Integer existingVehicle = 3005;
+    Integer nonExistingVehicle = 4444;
+    Integer existingCustomer = 3005;
+    Integer nonExistingCustomer = 4444;
+    Integer existingCompany = 2000;
+    Integer nonExistingCompany = 4404;
+
     VehicleRepresentation vehicle;
     VehicleRepresentation changedVehicle;
     @InjectMock
@@ -45,6 +53,7 @@ public class RentServiceTest {
         changedVehicle = vehicle;
         changedVehicle.vehicleState = VehicleState.Rented;
         when(fleetService.vehicleById(existingVehicleId)).thenReturn(vehicle);
+
     }
 
     @Test
@@ -71,6 +80,26 @@ public class RentServiceTest {
         assertEquals(vehicle.vehicleState,rentService.returnVehicleWithId(existingVehicleId).vehicleState);
         assertEquals(vehicle.vehicleType,rentService.returnVehicleWithId(existingVehicleId).vehicleType);
         assertEquals(vehicle.fixedCharge,rentService.returnVehicleWithId(existingVehicleId).fixedCharge);
+    }
+
+    //test pay
+    @Test
+    public void payTestValidVehicle() {
+        when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
+        when(fleetService.changeVehicleState(existingVehicle)).thenReturn(true);
+
+        when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
+        when(userManagementService.pay(nonExistingCustomer, nonExistingCompany, 1000,1000)).thenReturn(false);
+        assertTrue(rentService.pay(existingCustomer,existingVehicle,1000,1000));
+    }
+    @Test
+    public void payTestInValidVehicle() {
+        when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
+        when(fleetService.changeVehicleState(existingVehicle)).thenReturn(true);
+
+        when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
+        when(userManagementService.pay(nonExistingCustomer, nonExistingCompany, 1000,1000)).thenReturn(false);
+        assertFalse(rentService.pay(existingCustomer,nonExistingVehicle,1000,1000));
     }
 
     // test calculate all costs

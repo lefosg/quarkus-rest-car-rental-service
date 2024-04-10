@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class CustomerServiceTest {
     Integer existingCustomer = 1000;
     Integer nonExistingCustomer = 4444;
-
+    Integer companyId = 1000;
     CustomerRepresentation customer;
     @InjectMock
     UserManagementService userManagementService;
@@ -34,6 +34,7 @@ public class CustomerServiceTest {
         when(userManagementService.customerById(existingCustomer)).thenReturn(customer);
         when(userManagementService.customerById(nonExistingCustomer)).thenReturn(new CustomerRepresentation());
         when(userManagementService.customerById(null)).thenReturn(new CustomerRepresentation());
+        when(userManagementService.pay(existingCustomer,companyId, 100,100)).thenReturn(true);
     }
 
     @Test
@@ -41,7 +42,7 @@ public class CustomerServiceTest {
 
     @Test
     public void assertCustomerNotExists(){assertFalse(rentService.customerExist(nonExistingCustomer));}
-    
+
     @Test
     public void getCustomerRepresentationTest(){
         assertEquals(customer.id,rentService.returnCustomerWithId(existingCustomer).id);
@@ -64,7 +65,12 @@ public class CustomerServiceTest {
         assertNull(userManagementService.customerById(null).id);
     }
 
-        private CustomerRepresentation createCustomerRepresentation(Integer id) {
+    @Test
+    public void payTest() {
+        assertTrue(userManagementService.pay(existingCustomer, companyId, 100, 100));
+    }
+
+    private CustomerRepresentation createCustomerRepresentation(Integer id) {
         CustomerRepresentation representation = new CustomerRepresentation();
         representation.id = id;
         representation.name = "ΙΩΑΝΝΗΣ";

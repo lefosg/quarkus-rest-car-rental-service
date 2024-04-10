@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.application.RentService;
+import org.common.BusinessRuleException;
 import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
 import org.domain.TechnicalCheck.TechnicalCheck;
@@ -16,10 +17,7 @@ import org.infastructure.rest.representation.TechnicalCheckMapper;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
-import org.util.Constants;
-import org.util.Money;
-import org.util.RentState;
-import org.util.VehicleState;
+import org.util.*;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -50,7 +48,6 @@ public class RentResource {
 
     @Inject
     TechnicalCheckRepository technicalCheckRepository;
-
 
     @Context
     UriInfo uriInfo;
@@ -138,7 +135,6 @@ public class RentResource {
         URI uri = UriBuilder.fromResource(RentResource.class).path(String.valueOf(rent.getId())).build();
         return Response.created(uri).entity(rentMapper.toRepresentation(rent)).build();
     }
-//todo olo to paradoteo einai edo
 
     @POST
     @Transactional
@@ -216,7 +212,7 @@ public class RentResource {
 
         //1st cost calculation
         HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
-        //2rd set Rent state Finished
+        //2nd set Rent state Finished
         Rent rent = rentService.findRent(customerId, vehicleId);
         rent.setRentState(RentState.Finished);
         //3th setVehicleState = available
@@ -224,7 +220,10 @@ public class RentResource {
         // 5nd payment
         Money totalCosts = new Money(costs.get(Constants.damageCost) + costs.get(Constants.fixedCost + costs.get(Constants.mileageCost)));
         Money damageCosts = new Money(costs.get(Constants.damageCost));
-        rentService.pay(vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
+        boolean isPayed = rentService.pay(customerId,vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
+        if(!isPayed){
+            throw new BusinessRuleException("Something went wrong with payment");
+        }
 
         rentRepository.getEntityManagerRent().merge(rent);
         return Response.status(Response.Status.OK).entity("Vehicle returned").build();

@@ -32,8 +32,9 @@ public class UserManagementServiceImpl implements UserManagementService {
     @Override
     public CustomerRepresentation customerById(Integer id) {
         try{
-            CustomerRepresentation customer =  new CustomerRepresentation();
-            customer = userManagementAPI.listCustomerById(id);
+            if (id == null)
+                return new CustomerRepresentation();
+            CustomerRepresentation customer = userManagementAPI.listCustomerById(id);
             return customer;
         } catch (Exception e) {
             return new CustomerRepresentation();
@@ -46,8 +47,8 @@ public class UserManagementServiceImpl implements UserManagementService {
     }
 
     @Override
-    public boolean pay(Integer companyId, double amount_money, double amount_damages) {
-        Response response = userManagementAPI.pay(companyId, amount_money, amount_damages);
+    public boolean pay(Integer customerId, Integer companyId, double amount_money, double amount_damages) {
+        Response response = userManagementAPI.pay(customerId, companyId, amount_money, amount_damages);
         return response.getStatus() == 200;
     }
 

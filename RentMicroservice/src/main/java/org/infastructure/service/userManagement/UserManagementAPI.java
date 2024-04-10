@@ -20,15 +20,16 @@ public interface UserManagementAPI {
     CustomerRepresentation listCustomerById(@PathParam("customerId") Integer id);
 
     @GET
-    @Path("/company/{companyId}: [0-9]+}/calculateCosts")
+    @Path("/company/{companyId: [0-9]+}/calculateCosts")
     public HashMap<String, Float> getAllCosts(
             @QueryParam("miles") float miles,
             @QueryParam("damageType") DamageType damageType,
             @PathParam("companyId") Integer id);
 
     @POST
-    @Path("/company/{companyId}: [0-9]+}/pay")
-    public Response pay(@PathParam("companyId") Integer id,
+    @Path("/customer/pay/{customerId: [0-9]+}/")
+    public Response pay(@PathParam("customerId") Integer customerId,
+                        @QueryParam("companyId") Integer companyId,
                         @QueryParam("amount_money") double amount_money,
                         @QueryParam("amount_damages") double amount_damages);
 }

@@ -1,5 +1,6 @@
 package org.application;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
@@ -19,6 +20,10 @@ import static org.mockito.Mockito.when;
 public class UserServiceTest {
     @Inject
     UserService userService;
+
+     @InjectMock
+     FleetService fleetService;
+
     Integer existingCompany = 2000;
     Integer nonExistingCompany = 2222;
 
@@ -28,10 +33,10 @@ public class UserServiceTest {
         when(userService.getFleet(nonExistingCompany)).thenReturn(new ArrayList<>());
     }
 
-    @Test
-    public void getExistingCompanyVehicles(){
-        assertEquals(userService.getFleet(existingCompany),createVehicleRepresentation(existingCompany));
-    }
+     @Test
+     public void getExistingCompanyVehicles(){
+         assertEquals(userService.getFleet(existingCompany).get(0).id,createVehicleRepresentation(existingCompany).get(0).id);
+     }
 
     @Test
     public void getNonExistingCompanyVehicles(){

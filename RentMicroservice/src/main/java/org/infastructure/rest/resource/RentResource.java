@@ -214,6 +214,7 @@ public class RentResource {
         //1 costs calculation
         HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
         double fixedCost = vehicle.fixedCharge.getAmount() * rent.getDurationInDays();
+        costs.put(Constants.fixedCost, (float)fixedCost);
         Money totalCosts = new Money(costs.get(Constants.damageCost) + costs.get(Constants.mileageCost) + fixedCost);
         Money damageCosts = new Money(costs.get(Constants.damageCost));
 

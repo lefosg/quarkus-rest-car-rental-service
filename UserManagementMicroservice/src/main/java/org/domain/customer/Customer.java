@@ -25,9 +25,6 @@ public class Customer extends User {
     @Column(name="holderName", length=25)
     private String holderName;
 
-    //@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="customer")
-    //private List<Rent> rents = new ArrayList<>();
-
     public Customer() { }
 
     public Customer(String name, String email, String password, String phone, String AFM, String street, String city, String zipcode,

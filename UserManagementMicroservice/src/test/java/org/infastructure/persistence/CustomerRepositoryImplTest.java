@@ -19,7 +19,6 @@ class CustomerRepositoryImplTest extends IntegrationBase {
 
     Integer custId = 1000;
 
-    //todo? replace impl with interface (qualifier?)
     @Inject
     CustomerRepository customerRepository;
 

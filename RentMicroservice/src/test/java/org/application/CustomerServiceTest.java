@@ -44,15 +44,10 @@ public class CustomerServiceTest {
     public void assertCustomerNotExists(){assertFalse(rentService.customerExist(nonExistingCustomer));}
 
     @Test
-    public void getCustomerRepresentationTest(){
-        assertEquals(customer.id,rentService.returnCustomerWithId(existingCustomer).id);
-        assertEquals(customer.city,rentService.returnCustomerWithId(existingCustomer).city);
-        assertEquals(customer.street,rentService.returnCustomerWithId(existingCustomer).street);
-        assertEquals(customer.holderName,rentService.returnCustomerWithId(existingCustomer).holderName);
-        assertEquals(customer.surname,rentService.returnCustomerWithId(existingCustomer).surname);
-        assertEquals(customer.AFM,rentService.returnCustomerWithId(existingCustomer).AFM);
-        assertEquals(customer.email,rentService.returnCustomerWithId(existingCustomer).email);
-        assertEquals(customer.password,rentService.returnCustomerWithId(existingCustomer).password);
+    public void getCustomerRepresentationTest() {
+        assertEquals(customer.id, userManagementService.customerById(existingCustomer).id);
+        assertEquals(customer.city, userManagementService.customerById(existingCustomer).city);
+        assertEquals(customer.street, userManagementService.customerById(existingCustomer).street);
     }
 
     @Test

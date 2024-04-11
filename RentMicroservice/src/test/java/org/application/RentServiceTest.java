@@ -54,6 +54,12 @@ public class RentServiceTest {
         changedVehicle.vehicleState = VehicleState.Rented;
         when(fleetService.vehicleById(existingVehicleId)).thenReturn(vehicle);
 
+        when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
+        when(fleetService.changeVehicleState(existingVehicle)).thenReturn(true);
+
+        when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
+        when(userManagementService.pay(nonExistingCustomer, nonExistingCompany, 1000,1000)).thenReturn(false);
+
     }
 
     @Test
@@ -85,21 +91,11 @@ public class RentServiceTest {
     //test pay
     @Test
     public void payTestValidVehicle() {
-        when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
-        when(fleetService.changeVehicleState(existingVehicle)).thenReturn(true);
-
-        when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
-        when(userManagementService.pay(nonExistingCustomer, nonExistingCompany, 1000,1000)).thenReturn(false);
         assertTrue(rentService.pay(existingCustomer,existingVehicle,1000,1000));
     }
     @Test
     public void payTestInValidVehicle() {
-        when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
-        when(fleetService.changeVehicleState(existingVehicle)).thenReturn(true);
-
-        when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
-        when(userManagementService.pay(nonExistingCustomer, nonExistingCompany, 1000,1000)).thenReturn(false);
-        assertFalse(rentService.pay(existingCustomer,nonExistingVehicle,1000,1000));
+        assertFalse(rentService.pay(nonExistingCustomer,nonExistingVehicle,1000,1000));
     }
 
     // test calculate all costs

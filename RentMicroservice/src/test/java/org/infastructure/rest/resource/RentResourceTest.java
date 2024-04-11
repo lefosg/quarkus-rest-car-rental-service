@@ -7,6 +7,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import jakarta.inject.Inject;
 import org.application.FleetService;
+import org.application.RentService;
 import org.application.UserManagementService;
 import org.domain.Rents.RentRepository;
 import org.infastructure.rest.representation.RentRepresentation;
@@ -36,6 +37,7 @@ class RentResourceTest extends IntegrationBase {
     Integer compId;
     Integer customerId, nonExistingCustomer;
     Integer vehicleId, audiId, nonExistingVehicle;
+    Integer amount_money,amount_damages;
 
     @Inject
     RentRepository rentRepository;
@@ -45,6 +47,9 @@ class RentResourceTest extends IntegrationBase {
 
     @InjectMock
     FleetService fleetService;
+
+    @Inject
+    RentService rentService;
 
     @BeforeEach
     public void setup() {
@@ -56,6 +61,8 @@ class RentResourceTest extends IntegrationBase {
         nonExistingCustomer = 9000;
         nonExistingVehicle = 8000;
         startDate = LocalDate.of(2023, 12, 5);
+        amount_money = 1000;
+        amount_damages = 1000;
 
         Mockito.when(userManagementService.customerExists(customerId)).thenReturn(true);
         Mockito.when(userManagementService.customerExists(nonExistingCustomer)).thenReturn(false);
@@ -72,6 +79,12 @@ class RentResourceTest extends IntegrationBase {
         Mockito.when(fleetService.vehicleExists(nonExistingVehicle)).thenReturn(false);
         Mockito.when(fleetService.vehicleById(null)).thenReturn(new VehicleRepresentation());
                 //.thenThrow(new BadRequestException("[!] GET /vehicle/"+"\n\tCould not find vehicle with null id "));
+
+        Mockito.when(rentService.pay(customerId,vehicleId,amount_money,amount_damages)).thenReturn(true);
+        Mockito.when(rentService.pay(customerId,nonExistingVehicle,amount_money,amount_damages)).thenReturn(false);
+
+        Mockito.when(fleetService.changeVehicleState(vehicleId)).thenReturn(true);
+        Mockito.when(fleetService.changeVehicleState(nonExistingVehicle)).thenReturn(false);
     }
 
     // ---------- GET ----------
@@ -402,10 +415,13 @@ class RentResourceTest extends IntegrationBase {
         assertEquals("You rented the vehicle", response.getBody().asString());
 
         //then return it
+        //todo to ekana VehicleState.Rented giati epairne to customerRepresentation apo thn grammh 400
+        // kai oxi apo th synexeia
+        vehicleRepresentation.vehicleState = VehicleState.Rented;
         response = given().contentType(ContentType.JSON)
                 .queryParam("miles", 50.0f)
                 .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post("/rent/returnVehicle/"+customerRepresentation.id)
+                .when().post(RENTS+ "/returnVehicle/"+customerRepresentation.id)
                 .then().extract().response();
         System.out.println(response.getBody().asString());
         assertEquals(200, response.getStatusCode());

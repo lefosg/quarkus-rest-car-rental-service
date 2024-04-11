@@ -39,10 +39,10 @@ public class FleetServiceImpl implements FleetService {
     }
 
     @Override
-    public boolean changeVehicleState(Integer id) {
+    public boolean changeVehicleState(Integer id,VehicleState vehicleState) {
         try{
             VehicleRepresentation vehicle = fleetAPI.listVehicleById(id);
-            vehicle.vehicleState = VehicleState.Rented;
+            vehicle.vehicleState = vehicleState;
             try {
                 Response response = fleetAPI.update(id, vehicle);
                 return true;

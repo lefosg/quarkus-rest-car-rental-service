@@ -1,6 +1,7 @@
 package org.application;
 
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
+import org.util.VehicleState;
 
 public interface FleetService {
 
@@ -8,6 +9,6 @@ public interface FleetService {
 
     VehicleRepresentation vehicleById(Integer id);
 
-    boolean changeVehicleState(Integer id);
+    boolean changeVehicleState(Integer id, VehicleState vehicleState);
 
 }

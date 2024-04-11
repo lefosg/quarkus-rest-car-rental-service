@@ -70,7 +70,7 @@ class RentTest {
 //        calculateMileageCost.invoke(rent, miles);
 //        assertEquals(new Money(20), rent.getMileageCost());
 //    }
-
+//
 //    @Test
 //    public void calculateDamageCost() throws Exception {
 //        rent.setTechnicalCheck(new TechnicalCheckStub(rent));
@@ -92,8 +92,10 @@ class RentTest {
 //        assertEquals(new Money(20), rent.getDamageCost());
 //    }
 
-//  todo den ksero ti na kano edo
 
+//  todo den ksero ti na kano edo
+    //edo to petame???
+//
 //    @Test
 //    public void calculateCosts() {
 //        rent.setTechnicalCheck(new TechnicalCheckStub(rent));

@@ -29,8 +29,8 @@ class FleetServiceTest {
         Mockito.when(fleetService.vehicleById(existingVehId)).thenReturn(createVehicleRepresentation(existingVehId));
         Mockito.when(fleetService.vehicleById(nonExistingVehId)).thenReturn(new VehicleRepresentation());
         Mockito.when(fleetService.vehicleById(null)).thenReturn(new VehicleRepresentation());
-        Mockito.when(fleetService.changeVehicleState(existingVehId)).thenReturn(true);
-        Mockito.when(fleetService.changeVehicleState(nonExistingVehId)).thenReturn(false);
+        Mockito.when(fleetService.changeVehicleState(existingVehId,VehicleState.Rented)).thenReturn(true);
+        Mockito.when(fleetService.changeVehicleState(nonExistingVehId,VehicleState.Available)).thenReturn(false);
 
     }
 
@@ -61,12 +61,12 @@ class FleetServiceTest {
 
     @Test
     void makeExistingVehicleRented() {
-        assertTrue(fleetService.changeVehicleState(existingVehId));
+        assertTrue(fleetService.changeVehicleState(existingVehId,VehicleState.Rented));
     }
 
     @Test
     void makeNonExistingVehicleRented() {
-        assertFalse(fleetService.changeVehicleState(nonExistingVehId));
+        assertFalse(fleetService.changeVehicleState(nonExistingVehId,VehicleState.Available));
     }
 
     private VehicleRepresentation createVehicleRepresentation(Integer id) {

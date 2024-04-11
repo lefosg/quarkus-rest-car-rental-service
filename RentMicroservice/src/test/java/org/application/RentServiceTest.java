@@ -55,7 +55,7 @@ public class RentServiceTest {
         when(fleetService.vehicleById(existingVehicleId)).thenReturn(vehicle);
 
         when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
-        when(fleetService.changeVehicleState(existingVehicle)).thenReturn(true);
+        when(fleetService.changeVehicleState(existingVehicle,VehicleState.Rented)).thenReturn(true);
 
         when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
         when(userManagementService.pay(nonExistingCustomer, nonExistingCompany, 1000,1000)).thenReturn(false);
@@ -70,7 +70,8 @@ public class RentServiceTest {
 
     @Test
     public void changeVehicleStateTest(){
-        rentService.makeVehicleRented(existingVehicleId);
+        rentService.changeVehicleState(existingVehicleId,VehicleState.Rented);
+        rentService.changeVehicleState(nonExistingVehicle,VehicleState.Available);
         assertEquals(changedVehicle,rentService.returnVehicleWithId(existingVehicleId));
         assertEquals(VehicleState.Rented,changedVehicle.vehicleState);
     }
@@ -137,7 +138,6 @@ public class RentServiceTest {
         //check that calculateAllCosts::fleet returns null
         Mockito.when(fleetService.vehicleById(existingVehicleId)).thenReturn(new VehicleRepresentation());
         assertNull(rentService.calculateCosts(existingCustomerId, existingVehicleId, miles));
-
         //check that calculateAllCosts::user.getAllCosts returns null
         Mockito.when(fleetService.vehicleById(existingVehicleId)).thenReturn(createVehicleRepresentation(existingVehicleId));
         Mockito.when(userManagementService.getAllCosts(miles, DamageType.NoDamage, 2000)).thenReturn(null);

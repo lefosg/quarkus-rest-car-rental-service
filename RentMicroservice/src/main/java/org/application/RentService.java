@@ -12,6 +12,7 @@ import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.util.DamageType;
+import org.util.VehicleState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class RentService {
     }
 
     @Transactional
-    public void makeVehicleRented(Integer id){fleetService.changeVehicleState(id);}
+    public void changeVehicleState(Integer id, VehicleState vehicleState){fleetService.changeVehicleState(id,vehicleState);}
 
     @Transactional
     public HashMap<String, Float> calculateCosts(Integer customerId, Integer vehicleId, float miles){
@@ -73,6 +74,8 @@ public class RentService {
 
     private HashMap<String, Float> calculateAllCosts(float miles, DamageType damageType, Integer vehicleId){
         Integer companyId = fleetService.vehicleById(vehicleId).companyId;
+        //todo lefteri edo nomizo de xreiazetai prepei na figeu aytos o elegxos
+        //todo den pernaei apo edo pote
         if (companyId == null)
             return null;
         return userManagementService.getAllCosts(miles, damageType, companyId);

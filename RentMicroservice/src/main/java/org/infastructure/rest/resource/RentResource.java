@@ -179,7 +179,7 @@ public class RentResource {
 
         Rent rent = new Rent(rentRepository.findMaxId()+1,startDate, endDate,vehicleId,customerId);
 
-        rentService.makeVehicleRented(vehicleId);
+        rentService.changeVehicleState(vehicleId,VehicleState.Available);
         rentRepository.persistRent(rent);
         return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
     }
@@ -222,6 +222,7 @@ public class RentResource {
         rent.setRentState(RentState.Finished);
         //3 Update Vehicle: setVehicleState = available AND setVehicle Miles
         //todo vaggelh kane thn super synarthsh poy ta kanei ola se ena gia ayto
+        rentService.changeVehicleState(vehicleId,VehicleState.Available);
         //4 payment
         boolean isPayed = rentService.pay(customerId,vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
         if(!isPayed){

@@ -47,9 +47,6 @@ public class CustomerResource {
     public CustomerRepresentation listCustomerById(@PathParam("customerId") Integer customerId) {
         Customer customer = customerRepository.findByCustomerIdOptional(customerId)
                 .orElseThrow(() -> new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId));
-        if (customer ==  null) {
-            throw new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId);
-        }
         return customerMapper.toRepresentation(customer);
     }
 
@@ -71,7 +68,7 @@ public class CustomerResource {
     @Path("/{customerId:[0-9]+}")
     public Response update(@PathParam("customerId") Integer customerId, CustomerRepresentation representation) {
         if (! customerId.equals(representation.id)) {
-            throw new RuntimeException("[!] PUT /customer " + customerId + "\n\tCould not update company, id mismatching");
+            throw new RuntimeException("[!] PUT /customer " + customerId + "\n\tCould not update customer, id mismatching");
         }
 
         Customer customer = customerMapper.toModel(representation);
@@ -90,40 +87,34 @@ public class CustomerResource {
                          @QueryParam("amount_damages") double amount_damages){
          Customer customer = customerRepository.findByCustomerIdOptional(customerId)
                  .orElseThrow(() -> new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId));
-         if (customer ==  null) {
-             throw new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId);
-         }
+
          Company company = companyRepository.findByCompanyIdOptional(companyId)
                  .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
-         if (company ==  null) {
-             throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId);
-         }
 
+//todo nomizo edo prepei na vgei to exception giati elegxetai sth pay mesa
          try{
              customer.pay(new Money(amount_money),new Money(amount_damages),company);
          }catch (Exception e){
              throw new NullPointerException();
          }
          return Response.status(200).build();
-     }
-    
-    // ---------- DELETE ----------
+    }// ---------- DELETE ----------
 
     @DELETE
     @Transactional
     public Response deleteAllCustomers() {
         customerRepository.deleteAllCustomers();
-        return Response.status(200).build();
-    }
+        return Response.status(200).build();}
 
     @DELETE
     @Transactional
     @Path("{customerId: [0-9]+}")
     public Response deleteCustomer(@PathParam("customerId") Integer customerId) {
         if (customerId == null || customerRepository.findByCustomerIdOptional(customerId).isEmpty()) {
-            throw new NotFoundException("[!] DELETE /customer " + customerId + "\n\tCould not find customer with id " + customerId);
+            return Response.status(404).build();
         }
         customerRepository.deleteCustomer(customerId);
+        //todo nomizo oti kai edo den xreiazetai
         boolean deleted = customerRepository.findByCustomerIdOptional(customerId).isEmpty();
         if (!deleted) {
             throw new RuntimeException("[!] DELETE /customer " + customerId + "\n\tCould not delete customer with id " + customerId);

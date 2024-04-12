@@ -260,4 +260,18 @@ class CompanyTest {
         company.setDamage_cost(money);
         assertEquals(money, company.getDamage_cost());
     }
+
+    @Test
+    public void testConstructor(){
+        Company company = new Company("SPEED","speed@gmail.com",
+                "ilovecookies", "2644125415","ΛΕΥΚΩΣΙΑΣ 66",
+                "ΠΑΤΡΑ","34785","999641227","GR3687254378963625",
+                new ChargingPolicy());
+
+        assertEquals("SPEED",company.getName());
+        assertEquals("speed@gmail.com",company.getEmail());
+        assertEquals("ilovecookies",company.getPassword());
+        assertEquals("2644125415",company.getPhone());
+        assertEquals("ΛΕΥΚΩΣΙΑΣ 66",company.getStreet());
+    }
 }

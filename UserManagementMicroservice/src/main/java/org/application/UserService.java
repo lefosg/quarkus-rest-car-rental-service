@@ -17,5 +17,5 @@ public class UserService {
     @Transactional
     public List<VehicleRepresentation> getFleet(Integer companyId){
         return fleetService.getFleet(companyId);
-    };// todo na grapso testakia
+    };
 }

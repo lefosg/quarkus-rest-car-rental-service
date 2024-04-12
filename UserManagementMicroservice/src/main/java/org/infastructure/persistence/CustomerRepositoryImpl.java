@@ -23,8 +23,7 @@ public class CustomerRepositoryImpl implements PanacheRepositoryBase<Customer,In
 
     @Override
     public void persistCustomer(Customer customer) {
-        persist(customer);
-    }
+        persist(customer);}
 
     @Override
     public Customer findByCustomerId(Integer integer) {
@@ -81,7 +80,7 @@ public class CustomerRepositoryImpl implements PanacheRepositoryBase<Customer,In
         if (phone == null)
             return listAll();
 
-        return find("select phone from Customer customer where customer.phone = :phone",
+        return find("select customer from Customer customer where customer.phone = :phone",
                 Parameters.with("phone", phone).map()).list();
     }
 
@@ -90,16 +89,16 @@ public class CustomerRepositoryImpl implements PanacheRepositoryBase<Customer,In
         if (AFM == null)
             return listAll();
 
-        return find("select AFM from Customer customer where customer.AFM = :AFM",
+        return find("select customer from Customer customer where customer.AFM = :AFM",
                 Parameters.with("AFM", AFM).map()).list();
     }
 
     @Override
     public List<Customer> findByName(String name) {
-        if (name == null || name.equals(""))
+        if (name == null)
             return listAll();
 
-        return find("select name from Customer customer where customer.name = :name",
+        return find("select customer from Customer customer where customer.name = :name",
                 Parameters.with("name", name).map()).list();
     }
 

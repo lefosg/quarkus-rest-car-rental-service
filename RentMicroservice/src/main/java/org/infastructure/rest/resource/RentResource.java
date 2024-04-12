@@ -179,7 +179,7 @@ public class RentResource {
 
         Rent rent = new Rent(rentRepository.findMaxId()+1,startDate, endDate,vehicleId,customerId);
 
-        rentService.changeVehicleState(vehicleId,VehicleState.Available);
+        rentService.changeVehicleState(vehicleId,VehicleState.Rented);
         rentRepository.persistRent(rent);
         return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
     }
@@ -209,7 +209,7 @@ public class RentResource {
         if (vehicle.vehicleState == VehicleState.Available) {
             return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
         }
-
+        System.out.println("Here");
         Rent rent = rentService.findRent(customerId, vehicleId);
         //1 costs calculation
         HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
@@ -222,13 +222,13 @@ public class RentResource {
         rent.setRentState(RentState.Finished);
         //3 Update Vehicle: setVehicleState = available AND setVehicle Miles
         //todo vaggelh kane thn super synarthsh poy ta kanei ola se ena gia ayto
-        rentService.changeVehicleState(vehicleId,VehicleState.Available);
+
         //4 payment
         boolean isPayed = rentService.pay(customerId,vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
         if(!isPayed){
             throw new BusinessRuleException("Something went wrong with payment");
         }
-
+        rentService.changeVehicleState(vehicleId,VehicleState.Available);
         rentRepository.getEntityManagerRent().merge(rent);
         return Response.status(Response.Status.OK).entity("Vehicle returned").build();
     }

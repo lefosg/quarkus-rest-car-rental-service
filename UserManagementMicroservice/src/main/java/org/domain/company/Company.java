@@ -111,8 +111,6 @@ public class Company extends User {
         }
         if (startDate.isAfter(endDate)) {
             throw new RuntimeException("Έχετε δώσει μεταγενέστερη ημερομηνία έναρξης ενοικίασης");
-        } else if (endDate.isBefore(startDate)) {
-            throw new RuntimeException("Έχετε δώσει προγενέστερη ημερομηνία λήξης ενοικίασης");
         }
 
         //1. calculate #days this vehicle was rented
@@ -122,20 +120,6 @@ public class Company extends User {
         double cost = money.getAmount() * days;
         return new Money(cost);
     }
-
-
-//    public void addVehicle(Vehicle v) {
-//        this.vehicles.add(v);
-//    }
-//
-//    public void removeVehicle(Vehicle v) {
-//        this.vehicles.remove(v);
-//    }
-//    public void removeVehicle(int index) {
-//        this.vehicles.remove(index);
-//    }
-    // TODO for fleetManagement micro
-
 
     // getters & setters
 

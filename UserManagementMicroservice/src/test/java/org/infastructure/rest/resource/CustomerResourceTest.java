@@ -3,6 +3,7 @@ package org.infastructure.rest.resource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import jakarta.ws.rs.NotFoundException;
 import org.infastructure.rest.representation.CustomerRepresentation;
 import org.junit.jupiter.api.Test;
 import org.util.*;
@@ -13,8 +14,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.infastructure.rest.ApiPath.Root.CUSTOMER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 class CustomerResourceTest extends IntegrationBase {
@@ -101,6 +101,18 @@ class CustomerResourceTest extends IntegrationBase {
         assertEquals(custId, updated.id);
         assertEquals(newName, updated.name);
     }
+    @Test
+    public void updateCustomerInvalidId(){
+        CustomerRepresentation representation = when().get(CUSTOMER + "/" + custId)
+                .then().statusCode(200).extract().as(CustomerRepresentation.class);
+        assertNotEquals(representation.id,1001);
+        representation.name = "pao 13";
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put(CUSTOMER + "/" + 1001)
+                .then().statusCode(500);
+    }
 
     //---------- POST ----------
 
@@ -113,7 +125,7 @@ class CustomerResourceTest extends IntegrationBase {
                  .when().post(CUSTOMER + "/pay/3333?companyId=" + compId + "&amount_money=1000&amount_damages=1000")
                  .then().statusCode(404);
          given().contentType(ContentType.JSON)
-                         .when().post(CUSTOMER + "/pay/" + custId + "?companyId=2222&amount_money=1000&amount_damages=1000")
+                 .when().post(CUSTOMER + "/pay/" + custId + "?companyId=2222&amount_money=1000&amount_damages=1000")
                  .then().statusCode(404);
          given().contentType(ContentType.JSON)
                          .when().post(CUSTOMER + "/pay/" + custId + "?companyId=2222&amount_money=&amount_damages=1000")
@@ -142,6 +154,14 @@ class CustomerResourceTest extends IntegrationBase {
         when().get(CUSTOMER + "/" + custId)  //1005 not in db
             .then().statusCode(404);
     }
+
+    @Test
+    public void deleteInvalidCustomer() {
+        given().contentType(ContentType.JSON)
+                .when().delete(CUSTOMER + 1500)
+                .then().statusCode(404);
+    }
+
     private CustomerRepresentation createCustomerRepresentation(Integer id) {
         CustomerRepresentation representation = new CustomerRepresentation();
         representation.id = id;

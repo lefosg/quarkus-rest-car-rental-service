@@ -20,9 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.util.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.infastructure.rest.ApiPath.Root.COMPANY;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +33,6 @@ class CompanyResourceTest extends IntegrationBase {
     Integer vehicleId = 3000;
     String compCity = "ΑΘΗΝΑ";
     List<VehicleRepresentation> vehicles = new ArrayList<>();
-    List<VehicleRepresentation> vehicles2 = new ArrayList<>();
     @Inject
     UserService userService;
 
@@ -48,7 +45,7 @@ class CompanyResourceTest extends IntegrationBase {
     public void setup(){
         vehicles.add(createVehicleRepresentation(vehicleId,compId));
         Mockito.when(userService.getFleet(compId)).thenReturn(vehicles);
-        Mockito.when(userService.getFleet(nonCompanyId)).thenReturn(vehicles2);
+        Mockito.when(userService.getFleet(nonCompanyId)).thenReturn(new ArrayList<>());
     }
     @Test
     public void listAllCompanies() {
@@ -109,14 +106,15 @@ class CompanyResourceTest extends IntegrationBase {
     }
 //   fixme mockito
 
-//    @Test
-//    public void listInvalidCompanyVehicles() {
-//        List<VehicleRepresentation> vehicles = when().get(COMPANY + "/" + nonCompanyId + "/vehicles")
-//                .then()
-//                .extract()
-//                .as(new TypeRef<List<VehicleRepresentation>>() {});
-//        assertEquals(0, vehicles.size());
-//    }
+    @Test
+    public void listInvalidCompanyVehicles() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(vehicles)
+                .when().get(COMPANY + "/" + nonCompanyId + "/vehicles")
+                .then().statusCode(404);
+
+    }
 
     @Test
     public void listCompanyPolicy() {
@@ -253,6 +251,29 @@ class CompanyResourceTest extends IntegrationBase {
 
     // ---------- POST ----------
 //   todo mockito
+
+    @Test
+    public void getAllCostsTest(){
+        HashMap<String, Float> costs =
+                given().contentType(ContentType.JSON)
+                .when().post(COMPANY+"/calculateCosts/2000?miles=34&damageType=Glasses")
+                .then().extract().as(new TypeRef<HashMap<String,Float>>() {} );
+    }
+    @Test
+    public void getAllCostsInvalidsTest(){
+                given().contentType(ContentType.JSON)
+                .queryParam("miles",-50)
+                .queryParam("damageType",DamageType.NoDamage)
+                .when().post(COMPANY+"/calculateCosts/"+compId+"/")
+                .then().statusCode(500);
+        given().contentType(ContentType.JSON)
+                .when().post(COMPANY+"/calculateCosts/"+compId+"/?miles=34")
+                .then().statusCode(500);
+        given().contentType(ContentType.JSON)
+                .when().post(COMPANY+"/calculateCosts/1000?miles=34&damageType=Glasses")
+                .then().statusCode(404);
+    }
+
 //    @Test
 //    public void addVehicleInvalid() {
 //        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(null, compId);
@@ -312,44 +333,38 @@ class CompanyResourceTest extends IntegrationBase {
 //    }
 //
 //    // ---------- DELETE ----------
-//
-//    @Test
-//    public void deleteAllCompanies() {
-//        when().delete("/company/")  //deletes all companies
-//        .then().statusCode(200);
-//
-//        when().get("/company/"+2000)
-//                .then().statusCode(404);  //get must return 404
-//        when().get("/company/"+2001)
-//                .then().statusCode(404);  //get must return 404
-//
-//        when().get("/vehicle/"+3000)
-//                .then().statusCode(404);  //getting a vehicle should return 404 as well
-//
-//        List<CompanyRepresentation> companies = when().get("company")
-//                .then().extract().as(new TypeRef<List<CompanyRepresentation>>() {});
-//        assertEquals(0, companies.size());
-//
-//        List<VehicleRepresentation> vehicles = when().get("vehicle")
-//                .then().extract().as(new TypeRef<List<VehicleRepresentation>>() {});
-//        assertEquals(0, vehicles.size());
-//    }
-//
-//    @Test
-//    public void deleteOneCompanyValid() {
-//        when().delete("/company/" + compId)
-//                .then().statusCode(200);
-//
-//        when().get("/company/" + compId)
-//                .then().statusCode(404);  //get must return 404
-//    }
-//
-//    @Test
-//    public void deleteOneCompanyInvalid() {
-//        when().delete("/company/" + 2005)  //2005 not in db
-//                .then().statusCode(404);
-//    }
-//
+
+    @Test
+    public void deleteAllCompanies() {
+        when().delete(COMPANY)  //deletes all companies
+        .then().statusCode(200);
+
+        when().get(COMPANY+"/"+2000)
+                .then().statusCode(404);  //get must return 404
+        when().get(COMPANY+"/"+2001)
+                .then().statusCode(404);  //get must return 404
+
+        List<CompanyRepresentation> companies = when().get(COMPANY)
+                .then().extract().as(new TypeRef<List<CompanyRepresentation>>() {});
+        assertEquals(0, companies.size());
+
+    }
+
+    @Test
+    public void deleteOneCompanyValid() {
+        when().delete(COMPANY + "/" + compId)
+                .then().statusCode(200);
+
+        when().get(COMPANY + "/" + compId)
+                .then().statusCode(404);  //get must return 404
+    }
+
+    @Test
+    public void deleteOneCompanyInvalid() {
+        when().delete(COMPANY + "/" + 5555)  //2005 not in db
+                .then().statusCode(404);
+    }
+
 //    // ---------- misc ----------
 //
     private CompanyRepresentation createCompanyRepresentation(Integer id) {

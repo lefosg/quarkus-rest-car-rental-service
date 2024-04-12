@@ -71,14 +71,10 @@ public class CompanyResource {
     @GET
     @Path("/{companyId: [0-9]+}/vehicles")
     @Transactional
-    public Response listCompanyVehicles(@PathParam("companyId") Integer companyId) {
-        Company company = companyRepository.findCompanyById(companyId);
-        if (company ==  null) {
-            throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");
-        }
-
-        List<VehicleRepresentation> vehicles = userService.getFleet(companyId);
-        return Response.ok(vehicles).build();
+    public List<VehicleRepresentation> listCompanyVehicles(@PathParam("companyId") Integer companyId) {
+        Company company = companyRepository.findByCompanyIdOptional(companyId)
+                .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
+        return userService.getFleet(companyId);
     }
 
     @GET
@@ -90,8 +86,7 @@ public class CompanyResource {
         Company company = companyRepository.findCompanyById(companyId);
 
         if (company ==  null) {
-            throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");
-        }
+            throw new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company");}
         return policyMapper.toRepresentation(company.getPolicy());
     }
 
@@ -123,28 +118,27 @@ public class CompanyResource {
         return Response.noContent().build();
     }
 
-    //@PUT
-    //@Transactional
-    //@Path("/{companyId:[0-9]+}/updatePolicy")
-    public Response updatePolicy(@PathParam("companyId") Integer companyId, ChargingPolicyRepresentation policyRepresentation) {
-        if (companyId == null || companyRepository.findByCompanyIdOptional(companyId).isEmpty()) {
-            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find company, invalid id");
-        }
-//       todo des charging Policy resource
-//        if (policyRepresentation.id == null || policyRepository.findByIdOptional(policyRepresentation.id).isEmpty()) {
-//            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find policy, invalid id");
+// todo ayto delete etsi???
+// @PUT
+//    //@Transactional
+//    //@Path("/{companyId:[0-9]+}/updatePolicy")
+//    public Response updatePolicy(@PathParam("companyId") Integer companyId, ChargingPolicyRepresentation policyRepresentation) {
+//        if (companyId == null || companyRepository.findByCompanyIdOptional(companyId).isEmpty()) {
+//            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find company, invalid id");
 //        }
-
-        Company company = companyRepository.findByCompanyIdOptional(companyId)
-                .orElseThrow(() -> new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tThis policy does not belong to the specified company"));
-
-        ChargingPolicy policy = policyMapper.toModel(policyRepresentation);
-        company.setPolicy(policy);
-        companyRepository.getCompanyEntityManager().merge(company);
-        return Response.status(Response.Status.OK).build();
-    }
-
-
+////       todo des charging Policy resource
+////        if (policyRepresentation.id == null || policyRepository.findByIdOptional(policyRepresentation.id).isEmpty()) {
+////            throw new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tCould not find policy, invalid id");
+////        }
+//
+//        Company company = companyRepository.findByCompanyIdOptional(companyId)
+//                .orElseThrow(() -> new NotFoundException("[!] PUT /company/"+companyId+"/updatePolicy\n\tThis policy does not belong to the specified company"));
+//
+//        ChargingPolicy policy = policyMapper.toModel(policyRepresentation);
+//        company.setPolicy(policy);
+//        companyRepository.getCompanyEntityManager().merge(company);
+//        return Response.status(Response.Status.OK).build();
+//    }
     // ---------- POST ----------
 
     @POST
@@ -156,21 +150,15 @@ public class CompanyResource {
             @QueryParam("damageType") DamageType damageType ) {
 
         if (miles <= 0) {
-            throw new RuntimeException("[!] Company.getAllCosts: miles was <= 0");
-        }
+            throw new RuntimeException("[!] Company.getAllCosts: miles was <= 0");}
         if (damageType == null) {
-            throw new RuntimeException("[!] Company.getAllCosts: damageType was null");
-        }
-        if (companyId == null) {
-            throw new RuntimeException("[!] Company.getAllCosts: companyId was null");
-        }
+            throw new RuntimeException("[!] Company.getAllCosts: damageType was null");}
         Company company = companyRepository.findByCompanyIdOptional(companyId)
                 .orElseThrow(() -> new NotFoundException("[!] Company.getAllCosts: company not found"));
         ChargingPolicy policy = company.getPolicy();
 
         Float damage_cost = policy.calculateDamageCost(damageType);
         Float mileage_cost = policy.calculateMileageCost(miles);
-
         HashMap<String, Float> costs = new HashMap<>();
         costs.put(Constants.damageCost, damage_cost);
         costs.put(Constants.mileageCost, mileage_cost);
@@ -178,7 +166,6 @@ public class CompanyResource {
     }
 
     // ---------- DELETE ----------
-
     @DELETE
     @Transactional
     public Response deleteAllCompanies() {

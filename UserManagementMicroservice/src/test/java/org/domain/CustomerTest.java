@@ -46,6 +46,19 @@ class CustomerTest {
         assertNotEquals(customer, customer2);
     }
 
+    @Test
+    public void payTestInvalidAmount(){
+        assertThrows(NullPointerException.class, () -> {
+            customer.pay(null,new Money(100),createCompany());
+        });
+        assertThrows(NullPointerException.class, () -> {
+            customer.pay(new Money(100),null,createCompany());
+        });
+        assertThrows(NullPointerException.class, () -> {
+            customer.pay(new Money(100),new Money(100),null);
+        });
+    }
+
 //   todo mockito gamo th tyxh m
 
 //    @Test

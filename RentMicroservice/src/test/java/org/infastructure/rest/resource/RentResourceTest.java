@@ -73,7 +73,7 @@ class RentResourceTest extends IntegrationBase {
                 .thenReturn(new CustomerRepresentation());
 
         Mockito.when(fleetService.vehicleExists(vehicleId)).thenReturn(true);
-        Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(createVehicleRepresentation(vehicleId));
+        Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(createRentedVehicleRepresentation(vehicleId));
         Mockito.when(fleetService.vehicleById(nonExistingVehicle))
                         .thenReturn(new VehicleRepresentation());
         Mockito.when(fleetService.vehicleExists(nonExistingVehicle)).thenReturn(false);
@@ -84,7 +84,7 @@ class RentResourceTest extends IntegrationBase {
         Mockito.when(rentService.pay(customerId,nonExistingVehicle,amount_money,amount_damages)).thenReturn(false);
 
         Mockito.when(fleetService.changeVehicleState(vehicleId,VehicleState.Rented)).thenReturn(true);
-        Mockito.when(fleetService.changeVehicleState(nonExistingVehicle,VehicleState.Available)).thenReturn(false);
+        Mockito.when(fleetService.changeVehicleState(nonExistingVehicle,VehicleState.Available)).thenReturn(true);
     }
 
     // ---------- GET ----------
@@ -354,7 +354,7 @@ class RentResourceTest extends IntegrationBase {
         assertEquals(rentId, updated.id);
         assertEquals(newStartDate, updated.startDate);
     }
-    
+
     // ---------- DELETE ----------
 
     @Test

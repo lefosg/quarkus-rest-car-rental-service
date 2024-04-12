@@ -26,7 +26,6 @@ import static org.infastructure.rest.ApiPath.Root.CHECKS;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
-
 public class TechnicalCheckResource {
 
     @Inject
@@ -65,16 +64,6 @@ public class TechnicalCheckResource {
         return technicalCheckMapper.toRepresentation(technicalCheck);
     }
 
-    @GET
-    @Path("{technicalCheckId: [0-9]+}/rent")
-    @Transactional
-    public RentRepresentation listRentOfTechnicalCheck(@PathParam("technicalCheckId") Integer technicalCheckId) {
-                TechnicalCheck technicalCheck = technicalCheckRepository.findTechnicalCheckByIdOptional(technicalCheckId)
-                .orElseThrow(() -> new NotFoundException("[!] GET /technical check/"+technicalCheckId+"\n\tCould not find technical check with id " + technicalCheckId));
-
-
-        return rentMapper.toRepresentation(technicalCheck.getRent());
-    }
 
     // ---------- PUT ----------
 

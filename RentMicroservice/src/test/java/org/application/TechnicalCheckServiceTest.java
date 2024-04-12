@@ -8,10 +8,7 @@ import org.jboss.resteasy.links.impl.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.util.DamageType;
-import org.util.Money;
-import org.util.VehicleState;
-import org.util.VehicleType;
+import org.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +28,7 @@ class TechnicalCheckServiceTest {
 
     @BeforeEach
     void setup() {
-        Mockito.when(fleetService.vehicleById(existingVehicle)).thenReturn(createVehicleRepresentation(existingVehicle));
+        Mockito.when(fleetService.vehicleById(existingVehicle)).thenReturn(Fixture.createVehicleRepresentation(existingVehicle));
         Mockito.when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(new VehicleRepresentation());
     }
 
@@ -60,28 +57,9 @@ class TechnicalCheckServiceTest {
 
     @Test
     void doTechnicalCheckNonExistingVehicleInvalidTechnicalCheckId() {
-        Mockito.when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(createVehicleRepresentation(nonExistingVehicle));
+        Mockito.when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(Fixture.createVehicleRepresentation(nonExistingVehicle));
         assertThrows(jakarta.ws.rs.NotFoundException.class, ()-> {
             technicalCheckService.doTechnicalCheck(nonExistingVehicle, nonExistingTechnicalCheckId);
         });
-    }
-
-
-
-    private VehicleRepresentation createVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "AUDI";
-        representation.model = "A7";
-        representation.year = 2021;
-        representation.miles = 100000;
-        representation.plateNumber = "MMA-8745";
-        representation.vehicleType = VehicleType.Sedan;
-        representation.vehicleState = VehicleState.Rented;
-        representation.fixedCharge = new Money(70);
-        representation.companyId = 2000;
-        representation.countOfRents = 0;
-        representation.countDamages = 0;
-        return representation;
     }
 }

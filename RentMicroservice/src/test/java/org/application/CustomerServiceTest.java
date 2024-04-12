@@ -38,7 +38,7 @@ public class CustomerServiceTest {
     public void setup(){
         when(userManagementService.customerExists(existingCustomer)).thenReturn(true);
         when(userManagementService.customerExists(nonExistingCustomer)).thenReturn(false);
-        customer = createCustomerRepresentation(existingCustomer);
+        customer = Fixture.createCustomerRepresentation(existingCustomer);
         when(userManagementService.customerById(existingCustomer)).thenReturn(customer);
         when(userManagementService.customerById(nonExistingCustomer)).thenReturn(new CustomerRepresentation());
         when(userManagementService.customerById(null)).thenReturn(new CustomerRepresentation());
@@ -81,7 +81,7 @@ public class CustomerServiceTest {
         incomingCosts.put(Constants.mileageCost, 50f);
         incomingCosts.put(Constants.damageCost, 0f);
         Mockito.when(technicalCheckService.doTechnicalCheck(3000, 1500)).thenReturn(DamageType.NoDamage);
-        Mockito.when(fleetService.vehicleById(3000)).thenReturn(createVehicleRepresentation(3000));
+        Mockito.when(fleetService.vehicleById(3000)).thenReturn(Fixture.createVehicleRepresentation(3000));
         Mockito.when(userManagementService.getAllCosts(miles, DamageType.NoDamage, 2000)).thenReturn(incomingCosts);
 
         assertEquals(50f, incomingCosts.get(Constants.fixedCost));
@@ -106,22 +106,7 @@ public class CustomerServiceTest {
         return representation;
     }
 
-    private VehicleRepresentation createVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "TOYOTA";
-        representation.model = "YARIS";
-        representation.year = 2015;
-        representation.miles = 100000;
-        representation.plateNumber = "YMB-6325";
-        representation.vehicleType = VehicleType.Hatchback;
-        representation.vehicleState = VehicleState.Available;
-        representation.fixedCharge = new Money(30);
-        representation.countDamages=0;
-        representation.countOfRents=0;
-        representation.companyId = 2000;
-        return representation;
-    }
+
 }
 
 

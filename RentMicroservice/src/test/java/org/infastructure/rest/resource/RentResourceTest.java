@@ -29,6 +29,8 @@ import static org.infastructure.rest.ApiPath.Root.CHECKS;
 import static org.infastructure.rest.ApiPath.Root.RENTS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.util.Fixture.createCustomerRepresentation;
+import static org.util.Fixture.createRentedVehicleRepresentation;
 
 import org.mockito.Mockito;
 
@@ -405,7 +407,7 @@ class RentResourceTest extends IntegrationBase {
     public void returnVehicleInvalidCustomer() {
         //first make a rent
         CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
-        VehicleRepresentation vehicleRepresentation =createVehicleRepresentation(3000);
+        VehicleRepresentation vehicleRepresentation =Fixture.createVehicleRepresentation(3000);
 
         Response response = given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
@@ -449,7 +451,7 @@ class RentResourceTest extends IntegrationBase {
     public void returnVehicleInvalidVehicle() {
         //first make a rent
         CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
-        VehicleRepresentation vehicleRepresentation = createVehicleRepresentation(3000);
+        VehicleRepresentation vehicleRepresentation = Fixture.createVehicleRepresentation(3000);
 
         Response response = given().contentType(ContentType.JSON)
                 .queryParam("startDate", LocalDate.now().toString())
@@ -470,7 +472,7 @@ class RentResourceTest extends IntegrationBase {
 
         //now return a vehicle that is not rented
         Mockito.when(fleetService.vehicleById(3001))
-                .thenReturn(createAvailableVehicleRepresentation(3001));
+                .thenReturn(Fixture.createAvailableVehicleRepresentation(3001));
         vehicleRepresentation.id = 3001;
         response = given().contentType(ContentType.JSON)
                 .queryParam("miles", 50.0f)
@@ -480,108 +482,5 @@ class RentResourceTest extends IntegrationBase {
         assertEquals(400, response.getStatusCode());
     }
 
-    // ---------- misc ----------
 
-    private RentRepresentation createRentRepresentation(Integer id,Integer customerId,Integer vehicleId) {
-        RentRepresentation representation = new RentRepresentation();
-        representation.id = id;
-        representation.startDate = LocalDate.of(2023,10,10).toString();
-        representation.endDate = LocalDate.of(2023,10,20).toString();
-        representation.rentState = RentState.Finished;
-        representation.fixedCost = new Money(770);  //assume vehicle with id 3007 is rented
-        representation.miles = 130;  //company with id 2001 which owns the vehicles 3007, policy: .15 -> 100, .25 -> 200
-        representation.mileageCost = new Money(45.25);
-        representation.damageCost = new Money(0);  //assume no damage
-        representation.totalCost = new Money(representation.mileageCost.getAmount() +
-                representation.fixedCost.getAmount() + representation.damageCost.getAmount());
-        representation.vehicleId = vehicleId;
-        representation.customerId = customerId;
-        representation.technicalCheck = 1;
-        return representation;
-    }
-
-    private VehicleRepresentation createAvailableVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "TOYOTA";
-        representation.model = "YARIS";
-        representation.year = 2015;
-        representation.miles = 100000;
-        representation.plateNumber = "YMB-6325";
-        representation.vehicleType = VehicleType.Hatchback;
-        representation.vehicleState = VehicleState.Available;
-        representation.fixedCharge = new Money(30);
-        representation.companyId = 2000;
-        return representation;
-    }
-
-    private VehicleRepresentation createRentedVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "TOYOTA";
-        representation.model = "YARIS";
-        representation.year = 2015;
-        representation.miles = 100000;
-        representation.plateNumber = "YMB-6325";
-        representation.vehicleType = VehicleType.Hatchback;
-        representation.vehicleState = VehicleState.Rented;
-        representation.fixedCharge = new Money(30);
-        representation.companyId = 2000;
-        return representation;
-    }
-
-    private VehicleRepresentation createVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "TOYOTA";
-        representation.model = "YARIS";
-        representation.year = 2015;
-        representation.miles = 100000;
-        representation.plateNumber = "YMB-6325";
-        representation.vehicleType = VehicleType.Hatchback;
-        representation.vehicleState = VehicleState.Available;
-        representation.fixedCharge = new Money(30);
-        representation.companyId = 2000;
-        return representation;
-    }
-
-    private VehicleRepresentation createAudiVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "AUDI";
-        representation.model = "A7";
-        representation.year = 2021;
-        representation.miles = 100000;
-        representation.plateNumber = "MMA-8745";
-        representation.vehicleType = VehicleType.Sedan;
-        representation.vehicleState = VehicleState.Available;
-        representation.fixedCharge = new Money(70);
-        representation.companyId = 2000;
-        return representation;
-    }
-
-    private CustomerRepresentation createCustomerRepresentation(Integer id) {
-        CustomerRepresentation representation = new CustomerRepresentation();
-        representation.id = id;
-        representation.name = "ΙΩΑΝΝΗΣ";
-        representation.email = "evangellou@gmail.com";
-        representation.password = "johnjohn";
-        representation.phone = "6941603677";
-        representation.street = "ΛΕΥΚΑΔΟΣ 22";
-        representation.city = "ΑΘΗΝΑ";
-        representation.zipcode = "35896";
-        representation.AFM = "166008282";
-        representation.surname = "ΕΥΑΓΓΕΛΟΥ";
-        representation.expirationDate = LocalDate.of(2027,11,26).toString();
-        representation.number = "7894665213797564";
-        representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ";
-        return representation;
-    }
-
-    private TechnicalCheckRepresentation createTechnicalCheckRepresentation(Integer id) {
-        TechnicalCheckRepresentation representation = new TechnicalCheckRepresentation();
-        representation.id = 5002;
-        representation.damageType = DamageType.NoDamage;
-        return representation;
-    }
 }

@@ -6,11 +6,13 @@ import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.util.Fixture;
 import org.util.Money;
 import org.util.VehicleState;
 import org.util.VehicleType;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.util.Fixture.createVehicleRepresentation;
 
 @QuarkusTest
 class FleetServiceTest {
@@ -69,18 +71,4 @@ class FleetServiceTest {
         assertFalse(fleetService.changeVehicleState(nonExistingVehId,VehicleState.Available));
     }
 
-    private VehicleRepresentation createVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "AUDI";
-        representation.model = "A7";
-        representation.year = 2021;
-        representation.miles = 100000;
-        representation.plateNumber = "MMA-8745";
-        representation.vehicleType = VehicleType.Sedan;
-        representation.vehicleState = VehicleState.Rented;
-        representation.fixedCharge = new Money(70);
-        representation.companyId = 2000;
-        return representation;
-    }
 }

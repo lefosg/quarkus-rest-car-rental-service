@@ -10,6 +10,7 @@ import org.domain.TechnicalCheck.TechnicalCheckRepository;
 import org.junit.jupiter.api.Test;
 
 import org.util.DamageType;
+import org.util.Fixture;
 import org.util.IntegrationBase;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +28,7 @@ class TechnicalCheckMapperTest extends IntegrationBase {
     @Transactional
     @Test
     public void testToModel() {
-        TechnicalCheckRepresentation representation = createTechnicalCheckRepresentation(5000);
+        TechnicalCheckRepresentation representation = Fixture.createTechnicalCheckRepresentation(5000);
 
         TechnicalCheck model = technicalCheckMapper.toModel(representation);
         assertNotNull(model);
@@ -48,14 +49,4 @@ class TechnicalCheckMapperTest extends IntegrationBase {
         assertEquals(representation.rent, model.getRent().getId());
         assertEquals(representation.damageType, ((TechnicalCheckImpl)model).getDamageType());
     }
-
-
-    private TechnicalCheckRepresentation createTechnicalCheckRepresentation(Integer id) {
-        TechnicalCheckRepresentation representation = new TechnicalCheckRepresentation();
-        representation.id = id;
-        representation.damageType = DamageType.Glasses;
-        representation.rent = 4000;
-        return representation;
-    }
-
 }

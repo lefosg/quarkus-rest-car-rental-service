@@ -3,18 +3,22 @@ package org.infastructure.rest.resource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import jakarta.ws.rs.core.Response;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.mockito.Mockito;
 import org.util.DamageType;
 import org.util.IntegrationBase;
+import org.util.Money;
+import org.util.RentState;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
+import static io.restassured.RestAssured.*;
 import static org.infastructure.rest.ApiPath.Root.CHECKS;
 import static org.infastructure.rest.ApiPath.Root.RENTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,8 +46,8 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
       assertEquals(2, technicalCheck.size());
  }
        @Test
-       public void listtechnicalChekIdValidIdInvalid() {
-           when().get("/technicalCheck/" + 3020) //id 3020 not existent
+       public void listTechnicalChekIdValidIdInvalid() {
+           when().get(CHECKS+"/" + 3020) //id 3020 not existent
                    .then()
                    .statusCode(404);
        }
@@ -66,16 +70,6 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
 
            assertEquals(0, technicalCheck.size());
       }
-
-//    @Test
-//    public void listTechnicalCheckRent() {
-//        TechnicalCheckRepresentation technicalCheck = when().get(CHECKS+"/" + technicalCheckId +"/rent")
-//                .then()
-//                .extract()
-//                .as(TechnicalCheckRepresentation.class);
-//
-//        assertEquals(4000, technicalCheck.rent);
-//    }
 
     //----PUT-----
 

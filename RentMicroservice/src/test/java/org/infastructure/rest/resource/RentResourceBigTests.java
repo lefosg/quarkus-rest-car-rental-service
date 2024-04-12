@@ -56,11 +56,11 @@ public class RentResourceBigTests extends IntegrationBase {
         int vehicleId = 3000;
         float miles = 100;
 
-        CustomerRepresentation customerRepresentation = createCustomerRepresentation(customerId);
+        CustomerRepresentation customerRepresentation = Fixture.createCustomerRepresentation(customerId);
 
         Mockito.when(userManagementService.customerById(customerId)).thenReturn(customerRepresentation);
 
-        VehicleRepresentation vehicleRepresentation = createAudiVehicleRepresentation(vehicleId);
+        VehicleRepresentation vehicleRepresentation = Fixture.createAudiVehicleRepresentation(vehicleId);
         vehicleRepresentation.vehicleState = VehicleState.Rented;
         Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(vehicleRepresentation);
 
@@ -87,8 +87,8 @@ public class RentResourceBigTests extends IntegrationBase {
     public void makeRent() {
         int customerId = 1001;
         int vehicleId = 3001;
-        Mockito.when(userManagementService.customerById(customerId)).thenReturn(createCustomerRepresentation(customerId));
-        VehicleRepresentation vehicleRepresentation = createRentedVehicleRepresentation(vehicleId);
+        Mockito.when(userManagementService.customerById(customerId)).thenReturn(Fixture.createCustomerRepresentation(customerId));
+        VehicleRepresentation vehicleRepresentation = Fixture.createRentedVehicleRepresentation(vehicleId);
         vehicleRepresentation.vehicleState = VehicleState.Available;
         Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(vehicleRepresentation);
 
@@ -113,50 +113,4 @@ public class RentResourceBigTests extends IntegrationBase {
     }
 
 
-    private CustomerRepresentation createCustomerRepresentation(Integer id) {
-        CustomerRepresentation representation = new CustomerRepresentation();
-        representation.id = id;
-        representation.name = "ΙΩΑΝΝΗΣ";
-        representation.email = "evangellou@gmail.com";
-        representation.password = "johnjohn";
-        representation.phone = "6941603677";
-        representation.street = "ΛΕΥΚΑΔΟΣ 22";
-        representation.city = "ΑΘΗΝΑ";
-        representation.zipcode = "35896";
-        representation.AFM = "166008282";
-        representation.surname = "ΕΥΑΓΓΕΛΟΥ";
-        representation.expirationDate = LocalDate.of(2027,11,26).toString();
-        representation.number = "7894665213797564";
-        representation.holderName = "ΙΩΑΝΝΗΣ ΕΥΑΓΓΕΛΟΥ";
-        return representation;
-    }
-
-    private VehicleRepresentation createAudiVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "AUDI";
-        representation.model = "A7";
-        representation.year = 2021;
-        representation.miles = 100000;
-        representation.plateNumber = "MMA-8745";
-        representation.vehicleType = VehicleType.Sedan;
-        representation.vehicleState = VehicleState.Available;
-        representation.fixedCharge = new Money(70);
-        representation.companyId = 2000;
-        return representation;
-    }
-    private VehicleRepresentation createRentedVehicleRepresentation(Integer id) {
-        VehicleRepresentation representation = new VehicleRepresentation();
-        representation.id = id;
-        representation.manufacturer = "TOYOTA";
-        representation.model = "YARIS";
-        representation.year = 2015;
-        representation.miles = 100000;
-        representation.plateNumber = "YMB-6325";
-        representation.vehicleType = VehicleType.Hatchback;
-        representation.vehicleState = VehicleState.Rented;
-        representation.fixedCharge = new Money(30);
-        representation.companyId = 2000;
-        return representation;
-    }
 }

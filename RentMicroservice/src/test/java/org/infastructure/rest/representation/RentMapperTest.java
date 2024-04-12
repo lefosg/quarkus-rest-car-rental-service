@@ -9,6 +9,7 @@ import org.domain.Rents.RentRepository;
 
 import org.junit.jupiter.api.Test;
 
+import org.util.Fixture;
 import org.util.IntegrationBase;
 import org.util.Money;
 import org.util.RentState;
@@ -27,17 +28,11 @@ class RentMapperTest extends IntegrationBase {
     @Inject
     RentRepository rentRepository;
 
-//    @Inject
-//    VehicleRepository vehicleRepository;
-//
-//    @Inject
-//    CustomerRepository customerRepository;
-
-
     @Test
     public void testToModel() {
 
-        RentRepresentation representation = createRentRepresentation(4000);
+        RentRepresentation representation = Fixture.createRentRepresentation(4000,1000,3000);
+        representation.technicalCheck = 5001;
         Rent model = rentMapper.toModel(representation);
 
         assertEquals(representation.miles, model.getMiles());
@@ -47,14 +42,7 @@ class RentMapperTest extends IntegrationBase {
         assertEquals(representation.vehicleId, model.getVehicleId());
         assertEquals(representation.technicalCheck, model.getTechnicalCheck().getId());
 
-//        Vehicle vehicle = vehicleRepository.findById(representation.rentedVehicle);
-//        assertNotNull(model.getRentedVehicle());
-//        assertEquals(vehicle.getId(), model.getRentedVehicle().getId());
-//        assertEquals(vehicle.getManufacturer(), model.getRentedVehicle().getManufacturer());
-//        assertEquals(vehicle.getPlateNumber(), model.getRentedVehicle().getPlateNumber());
-
         assertNotNull(model.getTechnicalCheck());
-       // assertNotNull(model.getCustomer());
     }
 
     @Transactional
@@ -62,8 +50,7 @@ class RentMapperTest extends IntegrationBase {
     public void testToRepresentation() {
         Rent model = rentRepository.findRentById(4000);
 
-//        assertNotNull(model.getCustomer());
-//        assertNotNull(model.getRentedVehicle());
+
         assertNotNull(model.getTechnicalCheck());
 
         RentRepresentation representation = rentMapper.toRepresentation(model);
@@ -74,32 +61,7 @@ class RentMapperTest extends IntegrationBase {
         assertEquals(model.getVehicleId(), representation.vehicleId);
         assertEquals(model.getTechnicalCheck().getId(), representation.technicalCheck);
 
-//        Customer customer = model.getCustomer();
-//        Customer c = customerRepository.findById(customer.getId());
-//        assertNotNull(customer);
-//        assertNotNull(c);
-//        assertEquals(c.getId(), customer.getId());
-//        assertEquals(c.getSurname(), customer.getSurname());
-//        assertEquals(c.getAFM(), customer.getAFM());
-//        assertEquals(c.getNumber(), customer.getNumber());
     }
 
 
-    private RentRepresentation createRentRepresentation(Integer id) {
-        RentRepresentation representation = new RentRepresentation();
-        representation.id = id;
-        representation.startDate = LocalDate.of(2024,10,10).toString();
-        representation.endDate = LocalDate.of(2024,10,20).toString();
-        representation.rentState = RentState.Finished;
-        representation.fixedCost = new Money(770);  //assume vehicle with id 3007 is rented
-        representation.miles = 130;  //company with id 2001 which owns the vehicles 3007, policy: .15 -> 100, .25 -> 200
-        representation.mileageCost = new Money(45.25);
-        representation.damageCost = new Money(0);  //assume no damage
-        representation.totalCost = new Money(representation.mileageCost.getAmount() +
-                representation.fixedCost.getAmount() + representation.damageCost.getAmount());
-        representation.vehicleId = 3007;
-        representation.customerId = 1000;
-        representation.technicalCheck = 5000;
-        return representation;
-    }
 }

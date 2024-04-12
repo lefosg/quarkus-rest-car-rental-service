@@ -112,7 +112,7 @@ public class Rent {
     }
 
     public void setStartDate(LocalDate startDate) {
-        if (startDate.isAfter(LocalDate.now())){
+        if (startDate.isBefore(LocalDate.now())){
             throw new RuntimeException("Έχετε δώσει προγενέστερη ημερομηνία έναρξης ενοικίασης");
         }
         this.startDate = startDate;
@@ -180,7 +180,6 @@ public class Rent {
 
     public void setMiles(float miles) {
         this.miles = miles;
-        //calculateMileageCost(miles);
     }
 
     public Integer getVehicleId() {
@@ -228,8 +227,6 @@ public class Rent {
                 && Objects.equals(getMileageCost(), rent.getMileageCost())
                 && Objects.equals(getDamageCost(), rent.getDamageCost())
                 && Objects.equals(getTotalCost(), rent.getTotalCost());
-                //&& Objects.equals(getRentedVehicle(), rent.getRentedVehicle())
-                //&& Objects.equals(getCustomer(), rent.getCustomer());
     }
 
     @Override

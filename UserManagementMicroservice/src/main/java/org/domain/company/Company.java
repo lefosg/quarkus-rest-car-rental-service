@@ -34,9 +34,6 @@ public class Company extends User {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ChargingPolicy policy;
 
-//    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy="company", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-//    private List<Vehicle> vehicles = new ArrayList<>();
-
 
     public Company() {
         income = new Money(0);

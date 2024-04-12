@@ -17,10 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class CompanyRepositoryImplTest extends IntegrationBase {
 
-    //todo? replace impl with interface (qualifier?)
-    //todo Edo doulevi me to Impl alla den doylevi me to kanoniko
     @Inject
-    CompanyRepositoryImpl companyRepository;
+    CompanyRepository companyRepository;
 
     @Test
     void findByCity() {
@@ -30,23 +28,23 @@ class CompanyRepositoryImplTest extends IntegrationBase {
 
     @Test
     void findNonExistingId() {
-        assertNull(companyRepository.findById(2022));
+        assertNull(companyRepository.findCompanyById(2022));
     }
 
     @Test
     @Transactional
     void deleteAllCompanies() {
         companyRepository.deleteAllCompanies();
-        assertEquals(0, companyRepository.listAll().size());
+        assertEquals(0, companyRepository.listAllCompanies().size());
     }
 
     @Test
     @Transactional
     void deleteOneCompanyValid() {
         companyRepository.deleteCompany(2000);
-        List<Company> companies = companyRepository.listAll();
+        List<Company> companies = companyRepository.listAllCompanies();
         assertEquals(1, companies.size());
-        assertNull(companyRepository.findById(2000));
+        assertNull(companyRepository.findCompanyById(2000));
     }
 
     @Test
@@ -61,4 +59,51 @@ class CompanyRepositoryImplTest extends IntegrationBase {
         });
     }
 
+    @Test
+    @Transactional
+    void findByEmailTest() {
+        assertEquals(companyRepository.findByEmail("speed@gmail.com").get(0).getId(),2001);
+    }
+
+    @Test
+    @Transactional
+    void findInvalidEmailTest() {
+        assertEquals(2,companyRepository.findByEmail(null).size());
+    }
+
+    @Test
+    @Transactional
+    void findByPhoneTest() {
+        assertEquals(companyRepository.findByPhone("2644125415").get(0).getId(),2001);
+    }
+
+    @Test
+    @Transactional
+    void findInvalidPhoneTest() {
+        assertEquals(2,companyRepository.findByPhone(null).size());
+    }
+
+    @Test
+    @Transactional
+    void findByAFMTest() {
+        assertEquals(companyRepository.findByAFM("999641227").get(0).getId(),2001);
+    }
+
+    @Test
+    @Transactional
+    void findInvalidAFMTest() {
+        assertEquals(2,companyRepository.findByAFM(null).size());
+    }
+
+    @Test
+    @Transactional
+    void findByNameTest() {
+        assertEquals(companyRepository.findByName("SPEED").get(0).getId(),2001);
+    }
+
+    @Test
+    @Transactional
+    void findInvalidNameTest() {
+        assertEquals(2,companyRepository.findByName(null).size());
+    }
 }

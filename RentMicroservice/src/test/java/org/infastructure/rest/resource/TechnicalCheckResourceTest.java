@@ -67,6 +67,16 @@ public class TechnicalCheckResourceTest extends IntegrationBase {
            assertEquals(0, technicalCheck.size());
       }
 
+//    @Test
+//    public void listTechnicalCheckRent() {
+//        TechnicalCheckRepresentation technicalCheck = when().get(CHECKS+"/" + technicalCheckId +"/rent")
+//                .then()
+//                .extract()
+//                .as(TechnicalCheckRepresentation.class);
+//
+//        assertEquals(4000, technicalCheck.rent);
+//    }
+
     //----PUT-----
 
     @Test

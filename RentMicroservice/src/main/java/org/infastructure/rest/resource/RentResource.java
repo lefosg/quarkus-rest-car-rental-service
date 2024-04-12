@@ -221,8 +221,8 @@ public class RentResource {
         //2 Update Rent: state = Finished
         rent.setRentState(RentState.Finished);
         //3 Update Vehicle: setVehicleState = available AND setVehicle Miles
-        //todo vaggelh kane thn super synarthsh poy ta kanei ola se ena gia ayto
-
+        System.out.println(totalCosts.getAmount());
+        System.out.println(damageCosts.getAmount());
         //4 payment
         boolean isPayed = rentService.pay(customerId,vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
         if(!isPayed){

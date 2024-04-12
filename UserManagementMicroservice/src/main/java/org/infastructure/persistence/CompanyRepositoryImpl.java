@@ -79,7 +79,7 @@ public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Int
         if (name == null || name.equals(""))
             return listAll();
 
-        return find("select name from Company company where company.name = :name",
+        return find("select company from Company company where company.name = :name",
                 Parameters.with("name", name).map()).list();
     }
 
@@ -88,7 +88,7 @@ public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Int
         if (phone == null || phone.equals(""))
             return listAll();
 
-        return find("select phone from Company company where company.phone = :phone",
+        return find("select company from Company company where company.phone = :phone",
                 Parameters.with("phone", phone).map()).list();
     }
 
@@ -97,7 +97,7 @@ public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Int
         if (email == null || email.equals(""))
             return listAll();
 
-        return find("select email from Company company where company.email = :email",
+        return find("select company from Company company where company.email = :email",
                 Parameters.with("email", email).map()).list();
     }
 
@@ -106,7 +106,7 @@ public class CompanyRepositoryImpl implements PanacheRepositoryBase<Company, Int
         if (AFM == null || AFM.equals(""))
             return listAll();
 
-        return find("select AFM from Company company where company.AFM = :AFM",
+        return find("select company from Company company where company.AFM = :AFM",
                 Parameters.with("AFM", AFM).map()).list();
     }
 }

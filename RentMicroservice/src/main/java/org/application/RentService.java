@@ -74,10 +74,6 @@ public class RentService {
 
     private HashMap<String, Float> calculateAllCosts(float miles, DamageType damageType, Integer vehicleId){
         Integer companyId = fleetService.vehicleById(vehicleId).companyId;
-        //todo lefteri edo nomizo de xreiazetai prepei na figeu aytos o elegxos
-        //todo den pernaei apo edo pote
-        if (companyId == null)
-            return null;
         return userManagementService.getAllCosts(miles, damageType, companyId);
     }
 

@@ -8,6 +8,13 @@ import static org.infastructure.rest.ApiPath.Root.CHARGING_POLICY;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.restassured.http.ContentType;
+import jakarta.inject.Inject;
+import org.domain.company.ChargingPolicy;
+import org.domain.company.ChargingPolicyRepository;
+import org.domain.company.Company;
+import org.domain.company.CompanyRepository;
+import org.infastructure.rest.representation.ChargingPolicyMapper;
+import org.infastructure.rest.representation.CompanyRepresentation;
 import org.junit.jupiter.api.Test;
 import org.infastructure.rest.representation.ChargingPolicyRepresentation;
 import org.util.Constants;
@@ -22,6 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 public class ChargingPolicyResourceTest extends IntegrationBase {
+
+    @Inject
+    ChargingPolicyRepository chargingPolicyRepository;
+    @Inject
+    CompanyRepository companyRepository;
+    @Inject
+    ChargingPolicyMapper chargingPolicyMapper;
 
     Integer polId = 1500;
 
@@ -56,13 +70,17 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
 
     //@Test
     public void createPolicyValid() {
-        ChargingPolicyRepresentation representation = createChargingPolicyRepresentation(1502);
+        ChargingPolicyRepresentation chargingPolicy = createChargingPolicyRepresentation(1502);
+        Company company = companyRepository.findCompanyById(2000);
+        company.setPolicy(chargingPolicyMapper.toModel(chargingPolicy));
+        ChargingPolicyRepresentation chargingPolicyRepresentation = chargingPolicyMapper.toRepresentation(chargingPolicyMapper.toModel(chargingPolicy));
 
         ChargingPolicyRepresentation created = given()
                 .contentType(ContentType.JSON)
-                .body(representation)
-                .when().put("/policy")
-                .then().statusCode(201).header("Location", Constants.API_ROOT+"/policy/"+representation.id)
+                .body(chargingPolicyRepresentation)
+                .when().put(CHARGING_POLICY+"/createPolicy/2000")
+                .then().statusCode(201)
+                .header("Location", Constants.API_ROOT + CHARGING_POLICY + "/" +chargingPolicy.id)
                 .extract().as(ChargingPolicyRepresentation.class);
 
         assertEquals(1502, created.id);
@@ -75,7 +93,7 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/policy/")
+                .when().put(CHARGING_POLICY+"/createPolicy")
                 .then().statusCode(404);
 
         representation = createChargingPolicyRepresentation(null);  //null value invalid
@@ -83,7 +101,7 @@ public class ChargingPolicyResourceTest extends IntegrationBase {
         given()
                 .contentType(ContentType.JSON)
                 .body(representation)
-                .when().put("/policy/")
+                .when().put(CHARGING_POLICY)
                 .then().statusCode(404);
     }
 

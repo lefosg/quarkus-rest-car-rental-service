@@ -54,6 +54,7 @@ public class RentServiceTest {
         changedVehicle.vehicleState = VehicleState.Rented;
         when(fleetService.vehicleById(existingVehicleId)).thenReturn(vehicle);
 
+
         when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
         when(fleetService.changeVehicleState(existingVehicle,VehicleState.Rented)).thenReturn(true);
 
@@ -92,6 +93,9 @@ public class RentServiceTest {
     //test pay
     @Test
     public void payTestValidVehicle() {
+        VehicleRepresentation vehicle2 = createVehicleRepresentation(existingVehicle);
+        when(fleetService.vehicleById(existingVehicle)).thenReturn(vehicle2);
+        when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
         assertTrue(rentService.pay(existingCustomer,existingVehicle,1000,1000));
     }
     @Test

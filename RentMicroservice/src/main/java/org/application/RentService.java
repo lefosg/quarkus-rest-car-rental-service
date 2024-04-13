@@ -93,6 +93,8 @@ public class RentService {
             return false;
         }
         companyId = vehicleRepresentation.companyId;
+        System.out.println(amount_damages);
+        System.out.println(amount_money);
         return userManagementService.pay(customerId, companyId, amount_money, amount_damages);
     }
 }

@@ -11,6 +11,8 @@ import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
 import org.domain.TechnicalCheck.TechnicalCheck;
 import org.domain.TechnicalCheck.TechnicalCheckRepository;
+import org.glassfish.jaxb.runtime.v2.runtime.reflect.opt.Const;
+import org.h2.schema.Constant;
 import org.infastructure.rest.representation.RentMapper;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckMapper;
@@ -189,20 +191,21 @@ public class RentResource {
         if (vehicle.vehicleState == VehicleState.Available) {
             return Response.status(Response.Status.BAD_REQUEST).entity("This vehicle cannot be returned").build();
         }
-        System.out.println("Here");
         Rent rent = rentService.findRent(customerId, vehicleId);
         //1 costs calculation
         HashMap<String, Float> costs = rentService.calculateCosts(customerId, vehicleId, miles);
         double fixedCost = vehicle.fixedCharge.getAmount() * rent.getDurationInDays();
         costs.put(Constants.fixedCost, (float)fixedCost);
+        System.out.println("okdsfgokdfpg");
+        System.out.println(costs.get(Constants.damageCost));
+        System.out.println(costs.get(Constants.mileageCost));
+        System.out.println(costs.get(Constants.fixedCost));
         Money totalCosts = new Money(costs.get(Constants.damageCost) + costs.get(Constants.mileageCost) + fixedCost);
         Money damageCosts = new Money(costs.get(Constants.damageCost));
 
         //2 Update Rent: state = Finished
         rent.setRentState(RentState.Finished);
         //3 Update Vehicle: setVehicleState = available AND setVehicle Miles
-        System.out.println(totalCosts.getAmount());
-        System.out.println(damageCosts.getAmount());
         //4 payment
         boolean isPayed = rentService.pay(customerId,vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
         if(!isPayed){

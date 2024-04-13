@@ -19,6 +19,7 @@ import org.application.UserManagementService;
 import org.common.BusinessRuleException;
 import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
+import org.glassfish.jaxb.runtime.v2.runtime.reflect.opt.Const;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,20 +64,24 @@ public class RentResourceBigTests extends IntegrationBase {
 
         Mockito.when(userManagementService.customerById(customerId)).thenReturn(customerRepresentation);
 
-        VehicleRepresentation vehicleRepresentation = Fixture.createAudiVehicleRepresentation(vehicleId);
+        VehicleRepresentation vehicleRepresentation = Fixture.createVehicleRepresentation(vehicleId);
         vehicleRepresentation.vehicleState = VehicleState.Rented;
         vehicleRepresentation.countOfRents = 1;
         Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(vehicleRepresentation);
 
         Rent rent = rentService.findRent(customerId, vehicleId);
 
-        HashMap<String, Float> costs = new HashMap<>();
+        HashMap<String, Float> costs = new HashMap<String,Float>();
         costs.put(Constants.damageCost, 50f);
         costs.put(Constants.mileageCost, 20f);
-        costs.put(Constants.fixedCost, 200f);
-        Mockito.when(userManagementService.getAllCosts(miles,DamageType.NoDamage, vehicleRepresentation.companyId)).thenReturn(costs);
-
-        Mockito.when(userManagementService.pay(customerId, vehicleRepresentation.companyId, 490, 50f)).thenReturn(true);
+        Mockito.when(rentService.calculateCosts(customerId, vehicleId, miles)).thenReturn(costs);
+        costs.put(Constants.fixedCost, 180f);
+        float sum = costs.get(Constants.damageCost)+costs.get(Constants.mileageCost)+costs.get(Constants.fixedCost);
+        System.out.println(costs.get(Constants.damageCost));
+        System.out.println(costs.get(Constants.mileageCost));
+        System.out.println(costs.get(Constants.fixedCost));
+        System.out.println(sum);
+        Mockito.when(userManagementService.pay(customerId, vehicleRepresentation.companyId, sum, costs.get(Constants.damageCost))).thenReturn(true);
 
         Response response = given().contentType(ContentType.JSON)
                 .queryParam("miles", miles)

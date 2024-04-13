@@ -14,7 +14,7 @@ import org.util.DamageType;
 public abstract class TechnicalCheck {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     protected Integer id;
 

@@ -116,26 +116,6 @@ public class RentResource {
 
     // ---------- POST ----------
 
-//    @PUT
-//    @Transactional
-    public Response create(RentRepresentation representation) {
-        if (!rentService.rentedVehicleExist(representation.vehicleId)) {
-            System.out.println("Vehicle does not exist");
-            throw new NotFoundException("[!] PUT /rent\n\tCould not create rent, invalid Vehicle id");
-        }
-        if (!rentService.customerExist(representation.customerId)) {
-            System.out.println("Customer does not exist");
-            throw new NotFoundException("[!] PUT /rent\n\tCould not create rent, invalid Customer id");
-        }
-        if (representation.id == null || rentRepository.findRentByIdOptional(representation.id).isPresent()) {  //if id is null or already exists
-            throw new NotFoundException("[!] PUT /policy\n\tCould not create rent, invalid id");
-        }
-        Rent rent = rentMapper.toModel(representation);
-        rentRepository.persistRent(rent);
-        URI uri = UriBuilder.fromResource(RentResource.class).path(String.valueOf(rent.getId())).build();
-        return Response.created(uri).entity(rentMapper.toRepresentation(rent)).build();
-    }
-
     @POST
     @Transactional
     @Path("/newRent/{customerId:[0-9]+}")

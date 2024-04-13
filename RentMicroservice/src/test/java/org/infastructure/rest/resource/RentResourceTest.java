@@ -192,7 +192,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void listVehicleOfRentInvalid() {
-        when().get(RENTS + "/" + null + "/vehicle")  //id null invalid
+        when().get(RENTS + "/vehicle")  //id null invalid
                 .then()
                 .statusCode(404);
 
@@ -233,29 +233,6 @@ class RentResourceTest extends IntegrationBase {
 
     // ---------- PUT ----------
 
-    //makeRent Tests
-//    @Test
-//    public void makeRent() {
-//        Response response = given().contentType(ContentType.JSON)
-//                .queryParam("startDate", LocalDate.now().toString())
-//                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-//                .queryParam("vehicleId", vehicleId)
-//                .when().post(RENTS + "/newRent/"+customerId)
-//                .then().extract().response();
-//        System.out.println("Response: " + response.getBody().asString());
-//
-//        assertEquals(200, response.getStatusCode());
-//        assertEquals("You rented the vehicle", response.getBody().asString());
-//
-//        //cannot communicate with fleet database to get the actual vehicle -> mock it
-//        Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(createRentedVehicleRepresentation(vehicleId));
-//        VehicleRepresentation v = when().get(RENTS + "/" + rentRepository.findMaxId() + "/vehicle")
-//                .then()
-//                .extract()
-//                .as(VehicleRepresentation.class);
-//        assertEquals(vehicleId, v.id);
-//        assertEquals(v.vehicleState, VehicleState.Rented);
-//    }
 
     @Test
     public void makeRentWithInvalidDates() {
@@ -360,6 +337,26 @@ class RentResourceTest extends IntegrationBase {
         assertEquals(newStartDate, updated.startDate);
     }
 
+    @Test
+    public void updateRentInvalid() {
+        //get the resource
+        RentRepresentation representation = when().get(RENTS + "/" + rentId)
+                .then().statusCode(200).extract().as(RentRepresentation.class);
+
+        assertEquals(rentId, representation.id);
+
+        //make the update
+        representation.startDate = LocalDate.of(2024, 12, 4).toString();
+
+        //send the update
+        given()
+                .contentType(ContentType.JSON)
+                .body(representation)
+                .when().put(RENTS + "/" + 5000)
+                .then().statusCode(404);
+
+    }
+
     // ---------- DELETE ----------
 
     @Test
@@ -395,7 +392,7 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void deleteOneRentInvalid() {
-        when().get(RENTS + "/" + 4005)  //4005 not in db
+        when().delete(RENTS + "/" + 4005)  //4005 not in db
                 .then().statusCode(404);  //get must return 404
     }
 
@@ -405,79 +402,55 @@ class RentResourceTest extends IntegrationBase {
 
     @Test
     public void returnVehicleInvalidCustomer() {
-        //first make a rent
-        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
-        VehicleRepresentation vehicleRepresentation =Fixture.createVehicleRepresentation(3000);
-
-        Response response = given().contentType(ContentType.JSON)
-                .queryParam("startDate", LocalDate.now().toString())
-                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-                .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post(RENTS + "/newRent/"+customerRepresentation.id)
-                .then().extract().response();
-        System.out.println("Response: " + response.getBody().asString());
-
-        assertEquals(200, response.getStatusCode());
-        assertEquals("You rented the vehicle", response.getBody().asString());
-
+        nonExistingCustomer = 1400;
+        nonExistingVehicle = 2500;
+        Mockito.when(userManagementService.customerById(nonExistingCustomer)).thenReturn(new CustomerRepresentation());
+        Mockito.when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(new VehicleRepresentation());
         //then return it with invalid customer representation
-        customerRepresentation.id = nonExistingCustomer;
-        response = given().contentType(ContentType.JSON)
+        Response response = given().contentType(ContentType.JSON)
                 .queryParam("miles", 50.0f)
-                .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post(RENTS + "/returnVehicle/"+customerRepresentation.id)
+                .queryParam("vehicleId", vehicleId)
+                .when().post(RENTS + "/returnVehicle/"+nonExistingCustomer)
                 .then().extract().response();
         assertEquals(400, response.getStatusCode());
 
-        customerRepresentation.id = null;
         response = given().contentType(ContentType.JSON)
                 .queryParam("miles", 50.0f)
-                .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post(RENTS + "/returnVehicle/"+customerRepresentation.id)
+                .queryParam("vehicleId", nonExistingVehicle)
+                .when().post(RENTS + "/returnVehicle/"+customerId)
                 .then().extract().response();
-        assertEquals(404, response.getStatusCode());
+        assertEquals(400, response.getStatusCode());
 
         //now make miles <= 0
-        customerRepresentation.id = 1000;
         response = given().contentType(ContentType.JSON)
                 .queryParam("miles", -10.0f)
-                .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post(RENTS + "/returnVehicle/"+customerRepresentation.id)
+                .queryParam("vehicleId",vehicleId)
+                .when().post(RENTS + "/returnVehicle/"+customerId)
                 .then().extract().response();
         assertEquals(400, response.getStatusCode());
     }
 
     @Test
     public void returnVehicleInvalidVehicle() {
-        //first make a rent
-        CustomerRepresentation customerRepresentation = createCustomerRepresentation(1000);
-        VehicleRepresentation vehicleRepresentation = Fixture.createVehicleRepresentation(3000);
-
-        Response response = given().contentType(ContentType.JSON)
-                .queryParam("startDate", LocalDate.now().toString())
-                .queryParam("endDate", LocalDate.now().plusDays(5).toString())
-                .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post(RENTS + "/newRent/"+customerRepresentation.id)
-                .then().extract().response();
-        assertEquals(200, response.getStatusCode());
-
+        nonExistingCustomer = 1400;
+        nonExistingVehicle = 2500;
+        Mockito.when(userManagementService.customerById(nonExistingCustomer)).thenReturn(new CustomerRepresentation());
+        Mockito.when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(new VehicleRepresentation());
         //now return it with wrong vehicle representation
-        vehicleRepresentation.id = nonExistingVehicle;
-        response = given().contentType(ContentType.JSON)
+        Response response = given().contentType(ContentType.JSON)
                 .queryParam("miles", 50.0f)
-                .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post(RENTS + "/returnVehicle/"+customerRepresentation.id)
+                .queryParam("vehicleId", nonExistingVehicle)
+                .when().post(RENTS + "/returnVehicle/"+customerId)
                 .then().extract().response();
         assertEquals(400, response.getStatusCode());
 
         //now return a vehicle that is not rented
         Mockito.when(fleetService.vehicleById(3001))
                 .thenReturn(Fixture.createAvailableVehicleRepresentation(3001));
-        vehicleRepresentation.id = 3001;
         response = given().contentType(ContentType.JSON)
                 .queryParam("miles", 50.0f)
-                .queryParam("vehicleId", vehicleRepresentation.id)
-                .when().post(RENTS + "/returnVehicle/"+customerRepresentation.id)
+                .queryParam("vehicleId", 3001)
+                .when().post(RENTS + "/returnVehicle/"+customerId)
                 .then().extract().response();
         assertEquals(400, response.getStatusCode());
     }

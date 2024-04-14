@@ -9,10 +9,7 @@ import org.application.RentService;
 import org.common.BusinessRuleException;
 import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
-import org.domain.TechnicalCheck.TechnicalCheck;
 import org.domain.TechnicalCheck.TechnicalCheckRepository;
-import org.glassfish.jaxb.runtime.v2.runtime.reflect.opt.Const;
-import org.h2.schema.Constant;
 import org.infastructure.rest.representation.RentMapper;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckMapper;
@@ -21,9 +18,7 @@ import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.util.*;
 
-import java.net.URI;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -150,8 +145,9 @@ public class RentResource {
         } catch (Exception e){
             return Response.status(Response.Status.BAD_REQUEST).entity("Customer does not exist").build();
         }
+        VehicleRepresentation vehicle;
         try {
-            VehicleRepresentation vehicle = rentService.returnVehicleWithId(vehicleId);
+            vehicle = rentService.returnVehicleWithId(vehicleId);
             if (vehicle.vehicleState != VehicleState.Available) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Vehicle not available until " + end).build();
             }
@@ -160,8 +156,8 @@ public class RentResource {
         }
 
         Rent rent = new Rent(rentRepository.findMaxId()+1,startDate, endDate,vehicleId,customerId);
-
-        rentService.changeVehicleState(vehicleId,VehicleState.Rented);
+        vehicle.vehicleState = VehicleState.Rented;
+        rentService.updateVehicle(vehicleId, vehicle);
         rentRepository.persistRent(rent);
         return Response.status(Response.Status.OK).entity("You rented the vehicle").build();
     }
@@ -205,13 +201,20 @@ public class RentResource {
 
         //2 Update Rent: state = Finished
         rent.setRentState(RentState.Finished);
-        //3 Update Vehicle: setVehicleState = available AND setVehicle Miles
-        //4 payment
+        //3 payment
         boolean isPayed = rentService.pay(customerId,vehicleId, totalCosts.getAmount(), damageCosts.getAmount());
         if(!isPayed){
             throw new BusinessRuleException("Something went wrong with payment");
         }
-        rentService.changeVehicleState(vehicleId,VehicleState.Available);
+        //4 Update Vehicle: setVehicleState = available AND setVehicle Miles
+        vehicle.countOfRents += 1;
+        if (costs.get(Constants.damageCost) != 0) {
+            vehicle.countDamages += 1;
+        }
+        vehicle.vehicleState = VehicleState.Available;
+        vehicle.miles += miles;
+        rentService.updateVehicle(vehicleId, vehicle);
+        rent.setMiles(miles);
         rentRepository.getEntityManagerRent().merge(rent);
         return Response.status(Response.Status.OK).entity("Vehicle returned").build();
     }

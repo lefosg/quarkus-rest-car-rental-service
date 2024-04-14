@@ -6,13 +6,11 @@ import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.util.Fixture;
-import org.util.Money;
 import org.util.VehicleState;
-import org.util.VehicleType;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.util.Fixture.createVehicleRepresentation;
+import static org.util.Fixture.createVehicleRepresentationRented;
 
 @QuarkusTest
 class FleetServiceTest {
@@ -31,8 +29,8 @@ class FleetServiceTest {
         Mockito.when(fleetService.vehicleById(existingVehId)).thenReturn(createVehicleRepresentation(existingVehId));
         Mockito.when(fleetService.vehicleById(nonExistingVehId)).thenReturn(new VehicleRepresentation());
         Mockito.when(fleetService.vehicleById(null)).thenReturn(new VehicleRepresentation());
-        Mockito.when(fleetService.changeVehicleState(existingVehId,VehicleState.Rented)).thenReturn(true);
-        Mockito.when(fleetService.changeVehicleState(nonExistingVehId,VehicleState.Available)).thenReturn(false);
+        Mockito.when(fleetService.changeVehicleInfo(existingVehId,vehicleRepresentation)).thenReturn(true);
+        Mockito.when(fleetService.changeVehicleInfo(nonExistingVehId,vehicleRepresentation)).thenReturn(false);
 
     }
 
@@ -63,12 +61,12 @@ class FleetServiceTest {
 
     @Test
     void makeExistingVehicleRented() {
-        assertTrue(fleetService.changeVehicleState(existingVehId,VehicleState.Rented));
+        assertTrue(fleetService.changeVehicleInfo(existingVehId,vehicleRepresentation));
     }
 
     @Test
     void makeNonExistingVehicleRented() {
-        assertFalse(fleetService.changeVehicleState(nonExistingVehId,VehicleState.Available));
+        assertFalse(fleetService.changeVehicleInfo(nonExistingVehId,vehicleRepresentation));
     }
 
 }

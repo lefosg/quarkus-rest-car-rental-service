@@ -9,7 +9,6 @@ import jakarta.inject.Inject;
 import org.application.FleetService;
 import org.application.RentService;
 import org.application.UserManagementService;
-import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckRepresentation;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.util.*;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +27,7 @@ import static org.infastructure.rest.ApiPath.Root.CHECKS;
 import static org.infastructure.rest.ApiPath.Root.RENTS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.util.Fixture.createCustomerRepresentation;
-import static org.util.Fixture.createRentedVehicleRepresentation;
+import static org.util.Fixture.*;
 
 import org.mockito.Mockito;
 
@@ -43,9 +40,6 @@ class RentResourceTest extends IntegrationBase {
     Integer customerId, nonExistingCustomer;
     Integer vehicleId, audiId, nonExistingVehicle;
     Integer amount_money,amount_damages;
-
-    @Inject
-    RentRepository rentRepository;
 
     @InjectMock
     UserManagementService userManagementService;
@@ -88,8 +82,8 @@ class RentResourceTest extends IntegrationBase {
         Mockito.when(rentService.pay(customerId,vehicleId,amount_money,amount_damages)).thenReturn(true);
         Mockito.when(rentService.pay(customerId,nonExistingVehicle,amount_money,amount_damages)).thenReturn(false);
 
-        Mockito.when(fleetService.changeVehicleState(vehicleId,VehicleState.Rented)).thenReturn(true);
-        Mockito.when(fleetService.changeVehicleState(nonExistingVehicle,VehicleState.Available)).thenReturn(true);
+        Mockito.when(fleetService.changeVehicleInfo(vehicleId,createVehicleRepresentationRented((nonExistingVehicle)))).thenReturn(true);
+        Mockito.when(fleetService.changeVehicleInfo(nonExistingVehicle,createVehicleRepresentation(nonExistingVehicle))).thenReturn(true);
     }
 
     // ---------- GET ----------

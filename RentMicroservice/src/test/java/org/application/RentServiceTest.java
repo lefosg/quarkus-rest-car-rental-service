@@ -56,7 +56,7 @@ public class RentServiceTest {
 
 
         when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(null);
-        when(fleetService.changeVehicleState(existingVehicle,VehicleState.Rented)).thenReturn(true);
+        when(fleetService.changeVehicleInfo(existingVehicle,changedVehicle)).thenReturn(true);
 
         when(userManagementService.pay(existingCustomer, existingCompany, 1000,1000)).thenReturn(true);
         when(userManagementService.pay(nonExistingCustomer, nonExistingCompany, 1000,1000)).thenReturn(false);
@@ -71,8 +71,8 @@ public class RentServiceTest {
 
     @Test
     public void changeVehicleStateTest(){
-        rentService.changeVehicleState(existingVehicleId,VehicleState.Rented);
-        rentService.changeVehicleState(nonExistingVehicle,VehicleState.Available);
+        rentService.updateVehicle(existingVehicleId,changedVehicle);
+        rentService.updateVehicle(nonExistingVehicle,vehicle);
         assertEquals(changedVehicle,rentService.returnVehicleWithId(existingVehicleId));
         assertEquals(VehicleState.Rented,changedVehicle.vehicleState);
     }

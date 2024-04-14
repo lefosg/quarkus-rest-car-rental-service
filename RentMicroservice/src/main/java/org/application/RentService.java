@@ -3,16 +3,12 @@ package org.application;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.core.Response;
 import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
 import org.infastructure.rest.representation.RentMapper;
-import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.service.fleet.representation.VehicleRepresentation;
 import org.infastructure.service.userManagement.representation.CustomerRepresentation;
 import org.util.DamageType;
-import org.util.VehicleState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +47,9 @@ public class RentService {
     }
 
     @Transactional
-    public void changeVehicleState(Integer id, VehicleState vehicleState){fleetService.changeVehicleState(id,vehicleState);}
+    public void updateVehicle(Integer id, VehicleRepresentation vehicle){
+        fleetService.changeVehicleInfo(id,vehicle);
+    }
 
     @Transactional
     public HashMap<String, Float> calculateCosts(Integer customerId, Integer vehicleId, float miles){

@@ -72,6 +72,23 @@ public class Fixture {
         return representation;
     }
 
+    public static VehicleRepresentation createVehicleRepresentationRented(Integer id) {
+        VehicleRepresentation representation = new VehicleRepresentation();
+        representation.id = id;
+        representation.manufacturer = "TOYOTA";
+        representation.model = "YARIS";
+        representation.year = 2015;
+        representation.miles = 100000;
+        representation.plateNumber = "YMB-6325";
+        representation.vehicleType = VehicleType.Hatchback;
+        representation.vehicleState = VehicleState.Rented;
+        representation.fixedCharge = new Money(30);
+        representation.countDamages=0;
+        representation.countOfRents=0;
+        representation.companyId = 2000;
+        return representation;
+    }
+
     public static RentRepresentation createRentRepresentation(Integer id, Integer customerId, Integer vehicleId) {
         RentRepresentation representation = new RentRepresentation();
         representation.id = id;

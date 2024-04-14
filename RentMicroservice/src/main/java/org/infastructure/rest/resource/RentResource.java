@@ -206,7 +206,7 @@ public class RentResource {
         if(!isPayed){
             throw new BusinessRuleException("Something went wrong with payment");
         }
-        //4 Update Vehicle: setVehicleState = available AND setVehicle Miles
+        //4 Update Vehicle
         vehicle.countOfRents += 1;
         if (costs.get(Constants.damageCost) != 0) {
             vehicle.countDamages += 1;

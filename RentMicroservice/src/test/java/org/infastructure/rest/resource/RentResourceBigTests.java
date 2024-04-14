@@ -15,6 +15,7 @@ import io.restassured.response.Response;
 import jakarta.inject.Inject;
 import org.application.FleetService;
 import org.application.RentService;
+import org.application.TechnicalCheckService;
 import org.application.UserManagementService;
 import org.common.BusinessRuleException;
 import org.domain.Rents.Rent;
@@ -49,6 +50,9 @@ public class RentResourceBigTests extends IntegrationBase {
     @InjectMock
     private FleetService fleetService;
 
+    @InjectMock
+    private TechnicalCheckService technicalCheckService;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -70,11 +74,12 @@ public class RentResourceBigTests extends IntegrationBase {
         Mockito.when(fleetService.vehicleById(vehicleId)).thenReturn(vehicleRepresentation);
 
         Rent rent = rentService.findRent(customerId, vehicleId);
-
+        DamageType damageType = DamageType.Interior;
+        Mockito.when(technicalCheckService.doTechnicalCheck(vehicleId, rent.getTechnicalCheck().getId())).thenReturn(damageType);
         HashMap<String, Float> costs = new HashMap<String,Float>();
         costs.put(Constants.damageCost, 50f);
         costs.put(Constants.mileageCost, 20f);
-        Mockito.when(rentService.calculateCosts(customerId, vehicleId, miles)).thenReturn(costs);
+        Mockito.when(userManagementService.getAllCosts(miles, damageType, vehicleRepresentation.companyId)).thenReturn(costs);
         costs.put(Constants.fixedCost, 180f);
         float sum = costs.get(Constants.damageCost)+costs.get(Constants.mileageCost)+costs.get(Constants.fixedCost);
         System.out.println(costs.get(Constants.damageCost));

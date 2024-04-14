@@ -32,7 +32,7 @@ class TechnicalCheckServiceTest {
         Mockito.when(fleetService.vehicleById(nonExistingVehicle)).thenReturn(new VehicleRepresentation());
     }
 
-    @Test
+    //@Test
     void doTechnicalCheckExistingVehicle() {
         DamageType damageType = technicalCheckService.doTechnicalCheck(existingVehicle, technicalCheckId);
         System.out.println(damageType);

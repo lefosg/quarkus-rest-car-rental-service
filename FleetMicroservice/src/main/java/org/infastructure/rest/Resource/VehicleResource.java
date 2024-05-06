@@ -38,16 +38,7 @@ public class VehicleResource {
 
     @GET
     @Transactional
-    public List<VehicleRepresentation> listAllVehicles(
-            //@DefaultValue("") @QueryParam("manufacturer") String manufacturer,
-            //@DefaultValue("") @QueryParam("vehicleState") VehicleState vehicleState
-    ) {
-        //if query parameters are empty strings, return all vehicles
-        //if (manufacturer.equals("") && vehicleState.equals("")) {
-            return vehicleMapper.toRepresentationList(vehicleRepository.listAllVehicles());
-        //}
-        //return vehicleMapper.toRepresentationList(vehicleRepository.findByManufacturerAndState(manufacturer, vehicleState));
-    }
+    public List<VehicleRepresentation> listAllVehicles() {return vehicleMapper.toRepresentationList(vehicleRepository.listAllVehicles());}
 
     @GET
     @Path("{vehicleId: [0-9]+}")

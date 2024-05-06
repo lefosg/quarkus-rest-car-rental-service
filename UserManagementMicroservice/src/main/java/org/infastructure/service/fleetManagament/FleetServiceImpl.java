@@ -6,7 +6,6 @@ import org.application.FleetService;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -21,7 +20,7 @@ public class FleetServiceImpl implements FleetService {
         try {
             return fleetAPI.getVehicles(companyId);
         } catch (Exception e) {
-            return new ArrayList<>();
+            return null;
         }
     }
 }

@@ -5,21 +5,21 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-//import org.application.UserService;
 import org.application.UserService;
 import org.domain.company.ChargingPolicy;
 import org.domain.company.ChargingPolicyRepository;
 import org.domain.company.Company;
 import org.domain.company.CompanyRepository;
-import org.infastructure.persistence.CompanyRepositoryImpl;
-import org.infastructure.rest.ApiPath;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.infastructure.rest.representation.*;
 import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
+
 import org.util.Constants;
 import org.util.DamageType;
-import org.util.Money;
 
-import java.lang.annotation.Repeatable;
+
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -69,12 +69,15 @@ public class CompanyResource {
 
    // todo na grapso testakia
     @GET
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 4)
     @Path("/{companyId: [0-9]+}/vehicles")
     @Transactional
     public List<VehicleRepresentation> listCompanyVehicles(@PathParam("companyId") Integer companyId) {
-        Company company = companyRepository.findByCompanyIdOptional(companyId)
+            Company company = companyRepository.findByCompanyIdOptional(companyId)
                 .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
-        return userService.getFleet(companyId);
+            return userService.getFleet(companyId);
     }
 
     @GET

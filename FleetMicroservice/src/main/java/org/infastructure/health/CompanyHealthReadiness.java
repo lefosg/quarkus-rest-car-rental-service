@@ -1,4 +1,4 @@
-package org.infastructure.rest.Resource;
+package org.infastructure.health;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

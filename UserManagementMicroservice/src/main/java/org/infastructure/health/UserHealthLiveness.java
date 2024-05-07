@@ -1,4 +1,4 @@
-package org.infastructure.rest.resource;
+package org.infastructure.health;
 
 import jakarta.inject.Inject;
 import org.application.FleetService;

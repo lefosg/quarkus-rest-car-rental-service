@@ -11,6 +11,10 @@ import org.domain.company.Company;
 import org.domain.company.CompanyRepository;
 import org.domain.customer.Customer;
 import org.domain.customer.CustomerRepository;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.infastructure.rest.representation.CustomerMapper;
 import org.infastructure.rest.representation.CustomerRepresentation;
 import org.util.Money;
@@ -37,13 +41,19 @@ public class CustomerResource {
 
     @GET
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 5)
     public List<CustomerRepresentation> listAllCustomers() {
         return customerMapper.toRepresentationList(customerRepository.listAllCustomers());
     }
 
     @GET
-    @Path("/{customerId: [0-9]+}")
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 5)
+    @Path("/{customerId: [0-9]+}")
     public CustomerRepresentation listCustomerById(@PathParam("customerId") Integer customerId) {
         Customer customer = customerRepository.findByCustomerIdOptional(customerId)
                 .orElseThrow(() -> new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId));
@@ -53,6 +63,9 @@ public class CustomerResource {
     // ---------- PUT ----------
     @PUT
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 5)
     public Response create(CustomerRepresentation representation) {
         if (representation.id == null || customerRepository.findByCustomerIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /customer\n\tCould not create customer, invalid id");
@@ -65,6 +78,9 @@ public class CustomerResource {
 
     @PUT
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 5)
     @Path("/{customerId:[0-9]+}")
     public Response update(@PathParam("customerId") Integer customerId, CustomerRepresentation representation) {
         if (! customerId.equals(representation.id)) {
@@ -80,6 +96,7 @@ public class CustomerResource {
 
      @POST
      @Transactional
+     @CircuitBreaker(requestVolumeThreshold = 10, delay = 10000, successThreshold = 5)
      @Path("/pay/{customerId: [0-9]+}/")
      public Response pay(@PathParam("customerId") Integer customerId,
                          @QueryParam("companyId") Integer companyId,
@@ -98,16 +115,24 @@ public class CustomerResource {
              throw new NullPointerException();
          }
          return Response.status(200).build();
-    }// ---------- DELETE ----------
+    }
+
+    // ---------- DELETE ----------
 
     @DELETE
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 5)
     public Response deleteAllCustomers() {
         customerRepository.deleteAllCustomers();
         return Response.status(200).build();}
 
     @DELETE
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 5)
     @Path("{customerId: [0-9]+}")
     public Response deleteCustomer(@PathParam("customerId") Integer customerId) {
         if (customerId == null || customerRepository.findByCustomerIdOptional(customerId).isEmpty()) {

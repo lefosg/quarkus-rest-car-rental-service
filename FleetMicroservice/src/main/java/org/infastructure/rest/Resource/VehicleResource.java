@@ -8,12 +8,18 @@ import jakarta.ws.rs.core.*;
 import org.application.VehicleService;
 import org.domain.Vehicle.Vehicle;
 import org.domain.Vehicle.VehicleRepository;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleMapper;
 import org.infastructure.rest.Representation.VehicleRepresentation;
 import org.infastructure.service.user_management.representation.CompanyRepresentation;
+import org.util.Fixture;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path(ApiPath.Root.VEHICLE)
@@ -37,8 +43,11 @@ public class VehicleResource {
     // ---------- GET ----------
 
     @GET
+    @Fallback(fallbackMethod = "defaultVehicleList")
     @Transactional
     public List<VehicleRepresentation> listAllVehicles() {return vehicleMapper.toRepresentationList(vehicleRepository.listAllVehicles());}
+
+    public List<VehicleRepresentation> defaultVehicleList(){return vehicleMapper.toRepresentationList(List.of(Fixture.vehicle7,Fixture.vehicle8,Fixture.vehicle9,Fixture.vehicle10));}
 
     @GET
     @Path("{vehicleId: [0-9]+}")
@@ -60,6 +69,9 @@ public class VehicleResource {
     }
 
     @GET
+    @Timeout(5000)
+    @Retry(maxRetries = 4)
+    @Bulkhead(value = 2)
     @Path("{vehicleId: [0-9]+}/company")
     @Transactional
     public CompanyRepresentation listCompanyOfVehicle(@PathParam("vehicleId") String vehicleId) {
@@ -70,7 +82,6 @@ public class VehicleResource {
         try {
             return vehicleService.getCompany(vehicle.getCompanyId());
         } catch (Exception e ) {
-            //e.printStackTrace();
             return new CompanyRepresentation();
         }
     }
@@ -78,6 +89,9 @@ public class VehicleResource {
     // ---------- PUT ----------
 
     @PUT
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 4)
     @Transactional
     public Response create(VehicleRepresentation representation) {
         //first check if company id exists
@@ -95,6 +109,9 @@ public class VehicleResource {
     }
 
     @PUT
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
+    @Bulkhead(value = 4)
     @Path("{vehicleId:[0-9]+}")
     @Transactional
     public Response update(@PathParam("vehicleId") Integer vehicleId, VehicleRepresentation representation) {

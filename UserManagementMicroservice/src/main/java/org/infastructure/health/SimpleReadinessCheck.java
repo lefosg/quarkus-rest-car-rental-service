@@ -2,7 +2,7 @@ package org.infastructure.health;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.domain.Vehicle.VehicleRepository;
+import org.application.FleetService;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
@@ -12,7 +12,7 @@ import org.eclipse.microprofile.health.Readiness;
 public class SimpleReadinessCheck implements HealthCheck {
 
     @Inject
-    VehicleRepository vehicleRepository;
+    FleetService fleetService;
 
     @Override
     public HealthCheckResponse call() {
@@ -23,8 +23,6 @@ public class SimpleReadinessCheck implements HealthCheck {
     }
 
     private boolean isReady() {
-        if (vehicleRepository.listAllVehicles().isEmpty())
-            return false;
-        return true;
+        return !fleetService.getFleet(2000).isEmpty();
     }
 }

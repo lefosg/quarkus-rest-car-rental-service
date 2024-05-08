@@ -43,11 +43,8 @@ public class VehicleResource {
     // ---------- GET ----------
 
     @GET
-    @Fallback(fallbackMethod = "defaultVehicleList")
     @Transactional
     public List<VehicleRepresentation> listAllVehicles() {return vehicleMapper.toRepresentationList(vehicleRepository.listAllVehicles());}
-
-    public List<VehicleRepresentation> defaultVehicleList(){return vehicleMapper.toRepresentationList(List.of(Fixture.vehicle7,Fixture.vehicle8,Fixture.vehicle9,Fixture.vehicle10));}
 
     @GET
     @Path("{vehicleId: [0-9]+}")

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rent-service
+  labels:
+    tier: backend
+    app: rent-service
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084
+      # Optional field,
+      nodePort: 30084
+  selector:
+    api: rent-service

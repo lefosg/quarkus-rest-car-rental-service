@@ -107,7 +107,6 @@ public class CustomerResource {
                          @QueryParam("companyId") Integer companyId,
                          @QueryParam("amount_money") double amount_money,
                          @QueryParam("amount_damages") double amount_damages){
-         Debug.delay();
 
          Customer customer = customerRepository.findByCustomerIdOptional(customerId)
                  .orElseThrow(() -> new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId));

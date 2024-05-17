@@ -10,6 +10,10 @@ import org.common.BusinessRuleException;
 import org.domain.Rents.Rent;
 import org.domain.Rents.RentRepository;
 import org.domain.TechnicalCheck.TechnicalCheckRepository;
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.infastructure.rest.representation.RentMapper;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckMapper;
@@ -68,14 +72,15 @@ public class RentResource {
 
         return rentMapper.toRepresentation(rent);
     }
-    //todo: add /rent/rentid/policy
-
-// todo all these fpr USer fleet
 
     @GET
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
     @Path("{rentId: [0-9]+}/customer")
     public CustomerRepresentation listCustomerOfRent(@PathParam("rentId") Integer rentId) {
+        Debug.delay();
+
         if (rentId == null) {
             throw new NotFoundException("[!] GET /rent/null/customer"+"\n\tCould not find rent with id null");
         }
@@ -87,8 +92,12 @@ public class RentResource {
 
     @GET
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
     @Path("{rentId: [0-9]+}/vehicle")
     public VehicleRepresentation listVehicleOfRent(@PathParam("rentId") Integer rentId) {
+        Debug.delay();
+
         if (rentId == null) {
             throw new NotFoundException("[!] GET /rent/null/vehicle"+"\n\tCould not find rent with id null");
         }
@@ -100,8 +109,12 @@ public class RentResource {
 
     @GET
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
     @Path("{rentId: [0-9]+}/technicalCheck")
     public TechnicalCheckRepresentation listTechnicalCheckOfRent(@PathParam("rentId") Integer rentId) {
+        Debug.delay();
+
         if (rentId == null) {
             throw new NotFoundException("[!] GET /rent/null/technicalCheck"+"\n\tCould not find rent with id null");
         }
@@ -115,6 +128,7 @@ public class RentResource {
 
     @POST
     @Transactional
+    @CircuitBreaker(requestVolumeThreshold = 10, delay = 10000, successThreshold = 5)
     @Path("/newRent/{customerId:[0-9]+}")
     public Response makeRent(
             @QueryParam("startDate") String start,
@@ -164,6 +178,7 @@ public class RentResource {
 
     @POST
     @Transactional
+    @CircuitBreaker(requestVolumeThreshold = 10, delay = 10000, successThreshold = 5)
     @Path("/returnVehicle/{customerId:[0-9]+}")
     public Response returnVehicle(
             @PathParam("customerId") Integer customerId,
@@ -223,8 +238,12 @@ public class RentResource {
 
     @PUT
     @Transactional
+    @Timeout(4000)
+    @Retry(maxRetries = 2)
     @Path("{rentId: [0-9]+}")
     public Response update(@PathParam("rentId") Integer rentId, RentRepresentation representation) {
+        Debug.delay();
+
         if (rentId == null || !(rentId).equals(representation.id)) {
             throw new NotFoundException("[!] PUT /rent\n\tCould not update rent, id mismatching");
         }

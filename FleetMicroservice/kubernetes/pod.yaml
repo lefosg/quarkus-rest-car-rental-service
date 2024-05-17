@@ -13,6 +13,3 @@ spec:
         - containerPort: 8083
           name: http
           protocol: TCP
-      env:
-        - name: JAEGER_ENDPOINT
-          value: http://jaeger-collector.observability:14268/api/traces

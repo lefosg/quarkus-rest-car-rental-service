@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+  labels:
+    tier: backend
+    app: jaeger
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 4317
+      targetPort: 4317
+      nodePort: 30085
+      name: grpc-port
+    - protocol: TCP
+      port: 16686
+      targetPort: 16686
+      nodePort: 30086
+      name: http-query-port
+  selector:
+    api: jaeger

@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: users
-      image: quarkus/users:1.0
+      image: quarkus/user:1.0
       ports:
         - containerPort: 8083
           name: http

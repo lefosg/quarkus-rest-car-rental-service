@@ -16,11 +16,14 @@ import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleMapper;
 import org.infastructure.rest.Representation.VehicleRepresentation;
 import org.infastructure.service.user_management.representation.CompanyRepresentation;
+import org.util.Debug;
 import org.util.Fixture;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 @Path(ApiPath.Root.VEHICLE)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -61,7 +64,7 @@ public class VehicleResource {
     @Transactional
     public List<VehicleRepresentation> listVehiclesByCompanyId(@PathParam("companyId") Integer companyId) {
         List<Vehicle> vehicles = vehicleRepository.findVehiclesByCompanyId(companyId);
-                //.orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
+        //.orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
         return vehicleMapper.toRepresentationList(vehicles);
     }
 
@@ -72,6 +75,16 @@ public class VehicleResource {
     @Path("{vehicleId: [0-9]+}/company")
     @Transactional
     public CompanyRepresentation listCompanyOfVehicle(@PathParam("vehicleId") String vehicleId) {
+
+        //0. sleep or not
+        if (Debug.debug && Debug.delay > 0) {
+            try {
+                Thread.sleep(Debug.delay);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
         //1. find the vehicle
         Vehicle vehicle = vehicleRepository.findVehicleByIdOptional(Integer.parseInt(vehicleId))
                 .orElseThrow(() -> new NotFoundException("[!] GET /vehicle/"+vehicleId+"\n\tCould not find vehicle with id " + vehicleId));
@@ -90,7 +103,15 @@ public class VehicleResource {
     @Retry(maxRetries = 2)
     @Bulkhead(value = 4)
     @Transactional
-    public Response create(VehicleRepresentation representation) {
+    public Response create(VehicleRepresentation representation, @DefaultValue("0") @QueryParam("sleep") int delay) {
+        //0. sleep or not
+        if (Debug.debug && Debug.delay > 0) {
+            try {
+                Thread.sleep(Debug.delay);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
         //first check if company id exists
         if (!vehicleService.companyExists(representation.companyId)) {
             System.out.println("company does not exist");
@@ -111,7 +132,15 @@ public class VehicleResource {
     @Bulkhead(value = 4)
     @Path("{vehicleId:[0-9]+}")
     @Transactional
-    public Response update(@PathParam("vehicleId") Integer vehicleId, VehicleRepresentation representation) {
+    public Response update(@PathParam("vehicleId") Integer vehicleId, VehicleRepresentation representation,@DefaultValue("0") @QueryParam("sleep") int delay) {
+        //0. sleep or not
+        if (Debug.debug && Debug.delay > 0) {
+            try {
+                Thread.sleep(Debug.delay);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
         //first check if company id exists
         if (!vehicleService.companyExists(representation.companyId)) {
             System.out.println("company does not exist");

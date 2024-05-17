@@ -17,6 +17,7 @@ import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.infastructure.rest.representation.CustomerMapper;
 import org.infastructure.rest.representation.CustomerRepresentation;
+import org.util.Debug;
 import org.util.Money;
 import java.net.URI;
 import java.util.List;
@@ -67,6 +68,8 @@ public class CustomerResource {
     @Retry(maxRetries = 2)
     @Bulkhead(value = 5)
     public Response create(CustomerRepresentation representation) {
+        Debug.delay();
+
         if (representation.id == null || customerRepository.findByCustomerIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /customer\n\tCould not create customer, invalid id");
         }
@@ -83,6 +86,8 @@ public class CustomerResource {
     @Bulkhead(value = 5)
     @Path("/{customerId:[0-9]+}")
     public Response update(@PathParam("customerId") Integer customerId, CustomerRepresentation representation) {
+        Debug.delay();
+
         if (! customerId.equals(representation.id)) {
             throw new RuntimeException("[!] PUT /customer " + customerId + "\n\tCould not update customer, id mismatching");
         }
@@ -102,13 +107,14 @@ public class CustomerResource {
                          @QueryParam("companyId") Integer companyId,
                          @QueryParam("amount_money") double amount_money,
                          @QueryParam("amount_damages") double amount_damages){
+         Debug.delay();
+
          Customer customer = customerRepository.findByCustomerIdOptional(customerId)
                  .orElseThrow(() -> new NotFoundException("[!] GET /customer/"+customerId+"\n\tCould not find customer with id " + customerId));
 
          Company company = companyRepository.findByCompanyIdOptional(companyId)
                  .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
 
-//todo nomizo edo prepei na vgei to exception giati elegxetai sth pay mesa
          try{
              customer.pay(new Money(amount_money),new Money(amount_damages),company);
          }catch (Exception e){

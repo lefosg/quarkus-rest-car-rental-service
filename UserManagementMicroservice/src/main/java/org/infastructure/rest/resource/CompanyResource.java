@@ -19,6 +19,7 @@ import org.infastructure.service.fleetManagament.representation.VehicleRepresent
 
 import org.util.Constants;
 import org.util.DamageType;
+import org.util.Debug;
 
 
 import java.net.URI;
@@ -71,7 +72,6 @@ public class CompanyResource {
         return companyMapper.toRepresentation(company);
     }
 
-   // todo na grapso testakia
     @GET
     @Timeout(4000)
     @Retry(maxRetries = 2)
@@ -91,8 +91,6 @@ public class CompanyResource {
     @Bulkhead(value = 4)
     @Path("{companyId: [0-9]+}/policy")
     public ChargingPolicyRepresentation listCompanyPolicy(@PathParam("companyId") Integer companyId) {
-//        Company company = companyRepository.findByIdOptional(companyId)
-//                .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company"));
         Company company = companyRepository.findCompanyById(companyId);
 
         if (company ==  null) {
@@ -108,6 +106,8 @@ public class CompanyResource {
     @Retry(maxRetries = 2)
     @Bulkhead(value = 5)
     public Response create(CompanyRepresentation representation) {
+        Debug.delay();
+
         if (representation.id == null || companyRepository.findByCompanyIdOptional(representation.id).isPresent()) {  //if id is null or already exists
             throw new NotFoundException("[!] PUT /company\n\tCould not create company, invalid id");
         }
@@ -124,6 +124,8 @@ public class CompanyResource {
     @Bulkhead(value = 5)
     @Path("/{companyId:[0-9]+}")
     public Response update(@PathParam("companyId") Integer companyId, CompanyRepresentation representation) {
+        Debug.delay();
+
         if (! companyId.equals(representation.id)) {
             throw new RuntimeException("[!] PUT /company\n\tCould not update company, id mismatching");
             //return Response.status(400).build();
@@ -144,6 +146,7 @@ public class CompanyResource {
             @PathParam("companyId") Integer companyId,
             @QueryParam("miles") float miles,
             @QueryParam("damageType") DamageType damageType ) {
+        Debug.delay();
 
         if (miles <= 0) {
             throw new RuntimeException("[!] Company.getAllCosts: miles was <= 0");}

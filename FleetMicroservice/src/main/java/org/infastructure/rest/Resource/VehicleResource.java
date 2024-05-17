@@ -77,13 +77,7 @@ public class VehicleResource {
     public CompanyRepresentation listCompanyOfVehicle(@PathParam("vehicleId") String vehicleId) {
 
         //0. sleep or not
-        if (Debug.debug && Debug.delay > 0) {
-            try {
-                Thread.sleep(Debug.delay);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+        Debug.delay();
 
         //1. find the vehicle
         Vehicle vehicle = vehicleRepository.findVehicleByIdOptional(Integer.parseInt(vehicleId))
@@ -105,13 +99,8 @@ public class VehicleResource {
     @Transactional
     public Response create(VehicleRepresentation representation, @DefaultValue("0") @QueryParam("sleep") int delay) {
         //0. sleep or not
-        if (Debug.debug && Debug.delay > 0) {
-            try {
-                Thread.sleep(Debug.delay);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+        Debug.delay();
+
         //first check if company id exists
         if (!vehicleService.companyExists(representation.companyId)) {
             System.out.println("company does not exist");
@@ -134,13 +123,8 @@ public class VehicleResource {
     @Transactional
     public Response update(@PathParam("vehicleId") Integer vehicleId, VehicleRepresentation representation,@DefaultValue("0") @QueryParam("sleep") int delay) {
         //0. sleep or not
-        if (Debug.debug && Debug.delay > 0) {
-            try {
-                Thread.sleep(Debug.delay);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+        Debug.delay();
+
         //first check if company id exists
         if (!vehicleService.companyExists(representation.companyId)) {
             System.out.println("company does not exist");

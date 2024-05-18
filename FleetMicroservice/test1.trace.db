@@ -22810,3 +22810,11 @@ Caused by: java.lang.AssertionError: 90112 != 86016
 	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
 	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
 	... 6 more
+2024-05-17 18:55:27.741133+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-05-17 18:55:27.743060+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-05-17 19:00:56.569606+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-05-17 19:00:56.575362+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]

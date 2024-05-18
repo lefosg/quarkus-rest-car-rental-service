@@ -12,6 +12,9 @@ import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.infastructure.rest.ApiPath;
 import org.infastructure.rest.Representation.VehicleMapper;
 import org.infastructure.rest.Representation.VehicleRepresentation;
@@ -47,6 +50,9 @@ public class VehicleResource {
 
     @GET
     @Transactional
+    @Counted(name = "countListAllVehicles", description = "Count how many times listAllVehicles has been called")
+    @Timed(name = "timeListAllVehicles", description = "How long it takes to invoke listAllVehicles")
+    @Metered(name = "meteredListAllVehicles", description = "Measures throughput of listAllVehicles method")
     public List<VehicleRepresentation> listAllVehicles() {return vehicleMapper.toRepresentationList(vehicleRepository.listAllVehicles());}
 
     @GET
@@ -72,6 +78,9 @@ public class VehicleResource {
     @Timeout(5000)
     @Retry(maxRetries = 4)
     @Bulkhead(value = 2)
+    @Counted(name = "countListCompanyOfVehicle", description = "Count how many times listCompanyOfVehicle has been called")
+    @Timed(name = "timeListCompanyOfVehicle", description = "How long it takes to invoke listCompanyOfVehicle")
+    @Metered(name = "meteredListCompanyOfVehicle", description = "Measures throughput of listCompanyOfVehicle method")
     @Path("{vehicleId: [0-9]+}/company")
     @Transactional
     public CompanyRepresentation listCompanyOfVehicle(@PathParam("vehicleId") String vehicleId) {
@@ -96,6 +105,8 @@ public class VehicleResource {
     @Timeout(4000)
     @Retry(maxRetries = 2)
     @Bulkhead(value = 4)
+    @Timed(name = "timeCreateVehicle", description = "How long it takes to invoke createVehicle")
+    @Metered(name = "meteredCreateVehicle", description = "Measures throughput of createVehicle method")
     @Transactional
     public Response create(VehicleRepresentation representation, @DefaultValue("0") @QueryParam("sleep") int delay) {
         //0. sleep or not
@@ -119,6 +130,9 @@ public class VehicleResource {
     @Timeout(4000)
     @Retry(maxRetries = 2)
     @Bulkhead(value = 4)
+    @Counted(name = "countUpdateVehicle", description = "Count how many times updateVehicle has been called")
+    @Timed(name = "timeUpdateVehicle", description = "How long it takes to invoke updateVehicle")
+    @Metered(name = "meteredUpdateVehicle", description = "Measures throughput of updateVehicle method")
     @Path("{vehicleId:[0-9]+}")
     @Transactional
     public Response update(@PathParam("vehicleId") Integer vehicleId, VehicleRepresentation representation,@DefaultValue("0") @QueryParam("sleep") int delay) {

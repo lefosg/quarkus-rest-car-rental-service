@@ -14,6 +14,11 @@ import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.infastructure.rest.representation.*;
 import org.infastructure.service.fleetManagament.representation.VehicleRepresentation;
 
@@ -58,6 +63,8 @@ public class CompanyResource {
     @Timeout(4000)
     @Retry(maxRetries = 2)
     @Bulkhead(value = 10)
+    @Counted(name = "countListAllCompanies", description = "Count how many times listAllCompanies has been called")
+    @Timed(name = "timeListAllCompanies", description = "How long it takes to invoke listAllCompanies")
     public List<CompanyRepresentation> listAllCompanies(@DefaultValue("") @QueryParam("city") String city) {
         return companyMapper.toRepresentationList(companyRepository.findByCity(city));  //find by city will check for empty strings etc
     }
@@ -76,12 +83,16 @@ public class CompanyResource {
     @Timeout(4000)
     @Retry(maxRetries = 2)
     @Bulkhead(value = 4)
+    @Counted(name = "countListCompanyVehicles", description = "Count how many times listCompanyVehicles has been called")
+    @Timed(name = "timeListCompanyVehicles", description = "How long it takes to invoke listCompanyVehicles")
     @Path("/{companyId: [0-9]+}/vehicles")
     @Transactional
     public List<VehicleRepresentation> listCompanyVehicles(@PathParam("companyId") Integer companyId) {
-            Company company = companyRepository.findByCompanyIdOptional(companyId)
-                .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
-            return userService.getFleet(companyId);
+        Debug.delay();
+
+        Company company = companyRepository.findByCompanyIdOptional(companyId)
+            .orElseThrow(() -> new NotFoundException("[!] GET /company/"+companyId+"\n\tCould not find company with id " + companyId));
+        return userService.getFleet(companyId);
     }
 
     @GET
@@ -91,6 +102,8 @@ public class CompanyResource {
     @Bulkhead(value = 4)
     @Path("{companyId: [0-9]+}/policy")
     public ChargingPolicyRepresentation listCompanyPolicy(@PathParam("companyId") Integer companyId) {
+        Debug.delay();
+
         Company company = companyRepository.findCompanyById(companyId);
 
         if (company ==  null) {
@@ -105,6 +118,7 @@ public class CompanyResource {
     @Timeout(4000)
     @Retry(maxRetries = 2)
     @Bulkhead(value = 5)
+    @Timed(name = "timeCreateCompany", description = "How long it takes to invoke createCompany")
     public Response create(CompanyRepresentation representation) {
         Debug.delay();
 
@@ -122,6 +136,8 @@ public class CompanyResource {
     @Timeout(4000)
     @Retry(maxRetries = 2)
     @Bulkhead(value = 5)
+    @Counted(name = "countUpdateCompany", description = "Count how many times updateCompany has been called")
+    @Timed(name = "timeUpdateCompany", description = "How long it takes to invoke updateCompany")
     @Path("/{companyId:[0-9]+}")
     public Response update(@PathParam("companyId") Integer companyId, CompanyRepresentation representation) {
         Debug.delay();
@@ -141,12 +157,15 @@ public class CompanyResource {
     @POST
     @Transactional
     @CircuitBreaker(requestVolumeThreshold = 10, delay = 10000, successThreshold = 5)
+    @Counted(name = "countGetAllCosts", description = "Count how many times getAllCosts has been called")
+    @Timed(name = "timeGetAllCosts", description = "How long it takes to invoke getAllCosts")
+    @Metered(name = "meteredGetAllCosts", description = "Measures throughput of getAllCosts method")
+    //@Gauge(name = "gaugeGetAllCosts", description = "Time of getAllCosts method", unit = MetricUnits.NONE)
     @Path("/calculateCosts/{companyId: [0-9]+}")
     public HashMap<String, Float> getAllCosts(
             @PathParam("companyId") Integer companyId,
             @QueryParam("miles") float miles,
             @QueryParam("damageType") DamageType damageType ) {
-        Debug.delay();
 
         if (miles <= 0) {
             throw new RuntimeException("[!] Company.getAllCosts: miles was <= 0");}

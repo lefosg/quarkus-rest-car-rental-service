@@ -2,7 +2,7 @@ package org.util;
 
 public class Debug {
 
-    public static boolean debug = true;
+    public static boolean debug = false;
     public static int delay = 30000;
 
     public static void delay() {

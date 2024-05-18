@@ -14,6 +14,9 @@ import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.infastructure.rest.representation.RentMapper;
 import org.infastructure.rest.representation.RentRepresentation;
 import org.infastructure.rest.representation.TechnicalCheckMapper;
@@ -57,6 +60,8 @@ public class RentResource {
 
     @GET
     @Transactional
+    @Counted(name = "countListAllRents", description = "Count how many times listAllRents has been called")
+    @Timed(name = "timeListAllRents", description = "How long it takes to invoke listAllRents")
     public List<RentRepresentation> listAllRents(@DefaultValue("0") @QueryParam("month") Integer month) {
         return rentMapper.toRepresentationList(rentRepository.findByMonth(month));
     }
@@ -77,6 +82,8 @@ public class RentResource {
     @Transactional
     @Timeout(4000)
     @Retry(maxRetries = 2)
+    @Counted(name = "countListCustomerOfRent", description = "Count how many times listCustomerOfRent has been called")
+    @Timed(name = "timeListCustomerOfRent", description = "How long it takes to invoke listCustomerOfRent")
     @Path("{rentId: [0-9]+}/customer")
     public CustomerRepresentation listCustomerOfRent(@PathParam("rentId") Integer rentId) {
         Debug.delay();
@@ -94,6 +101,8 @@ public class RentResource {
     @Transactional
     @Timeout(4000)
     @Retry(maxRetries = 2)
+    @Counted(name = "countListVehicleOfRent", description = "Count how many times listVehicleOfRent has been called")
+    @Timed(name = "timeListVehicleOfRent", description = "How long it takes to invoke listVehicleOfRent")
     @Path("{rentId: [0-9]+}/vehicle")
     public VehicleRepresentation listVehicleOfRent(@PathParam("rentId") Integer rentId) {
         Debug.delay();
@@ -129,6 +138,8 @@ public class RentResource {
     @POST
     @Transactional
     @CircuitBreaker(requestVolumeThreshold = 10, delay = 10000, successThreshold = 5)
+    @Timed(name = "timeMakeRent", description = "How long it takes to invoke makeRent")
+    @Metered(name = "meteredMakeRent", description = "Measures throughput of makeRent method")
     @Path("/newRent/{customerId:[0-9]+}")
     public Response makeRent(
             @QueryParam("startDate") String start,
@@ -179,6 +190,9 @@ public class RentResource {
     @POST
     @Transactional
     @CircuitBreaker(requestVolumeThreshold = 10, delay = 10000, successThreshold = 5)
+    @Counted(name = "countReturnVehicle", description = "Count how many times returnVehicle has been called")
+    @Timed(name = "timeReturnVehicle", description = "How long it takes to invoke returnVehicle")
+    @Metered(name = "meteredReturnVehicle", description = "Measures throughput of returnVehicle method")
     @Path("/returnVehicle/{customerId:[0-9]+}")
     public Response returnVehicle(
             @PathParam("customerId") Integer customerId,

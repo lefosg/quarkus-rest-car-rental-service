@@ -1,4 +1,4 @@
-name: Build Fleet
+name: Build User Management
 
 on:
   push:
@@ -6,15 +6,15 @@ on:
 
 defaults:
   run:
-    working-directory: ./FleetMicroservice
+    working-directory: ./UserManagementMicroservice
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/fleet
+  IMAGE_NAME: ${{ github.repository }}/user
 
 jobs:
 
-  build-fleet:
+  build-user:
 
     runs-on: ubuntu-latest
     permissions:

@@ -1,4 +1,4 @@
-name: Build Fleet
+name: Build Rent
 
 on:
   push:
@@ -6,15 +6,15 @@ on:
 
 defaults:
   run:
-    working-directory: ./FleetMicroservice
+    working-directory: ./RentMicroservice
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/fleet
+  IMAGE_NAME: ${{ github.repository }}/rent
 
 jobs:
 
-  build-fleet:
+  build-rent:
 
     runs-on: ubuntu-latest
     permissions:

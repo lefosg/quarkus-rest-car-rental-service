@@ -100,7 +100,7 @@ jobs:
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
-        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST} --cert-subject ${{github.actor}}
+        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
       - name: Verify image
         run: cosign verify --certificate-identity=${{github.workflow_ref}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}${DIGEST} | jq .

@@ -9,6 +9,9 @@ on:
   push:
     branches: [ "microservices" ]
 
+defaults:
+  run:
+    working-directory: ./FleetMicroservice
 
 env:
   # Use docker.io for Docker Hub if empty

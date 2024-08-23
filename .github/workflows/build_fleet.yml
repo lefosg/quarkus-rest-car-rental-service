@@ -103,4 +103,4 @@ jobs:
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST} --cert-subject ${{github.actor}}
 
       - name: Verify image
-        run: cosign verify --certificate-identity=${{github.actor}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}${DIGEST}
+        run: cosign verify --certificate-identity=${{github.workflow_ref}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}${DIGEST} | jq .

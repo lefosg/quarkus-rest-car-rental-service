@@ -21,7 +21,7 @@ env:
 
 
 jobs:
-  build:
+  build-fleet:
 
     runs-on: ubuntu-latest
     permissions:
@@ -42,7 +42,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Maven Package
-        run: mvn package --file ./pom.xml
+        run: mvn clean package --file ./pom.xml
 
       # Install the cosign tool
       # https://github.com/sigstore/cosign-installer

@@ -42,14 +42,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-            ${{ runner.os }}-m2-
+      #- name: Cache Maven packages
+      #  uses: actions/cache@v2
+      #  with:
+      #    path: ~/.m2
+      #    key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      #      ${{ runner.os }}-m2-
 
       - name: Maven Package
         run: mvn clean package --file ./pom.xml
@@ -135,7 +135,7 @@ jobs:
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:microservices
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           sbom-path: ${{env.SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true

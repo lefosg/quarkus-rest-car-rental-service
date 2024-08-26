@@ -94,14 +94,21 @@ jobs:
       # repository is public to avoid leaking data.  If you would like to publish
       # transparency data even for private images, pass --force to cosign below.
       # https://github.com/sigstore/cosign
-      - name: Sign the published Docker image
-        env:
-          # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          TAGS: ${{ steps.meta.outputs.tags }}
-          DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+      #- name: Sign the published Docker image
+      #  env:
+      #    # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
+      #    TAGS: ${{ steps.meta.outputs.tags }}
+      #    DIGEST: ${{ steps.build-and-push.outputs.digest }}
+      #  # This step uses the identity token to provision an ephemeral certificate
+      #  # against the sigstore community Fulcio instance.
+      #  run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
 
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
@@ -114,6 +121,7 @@ jobs:
         run: |
           pwd
           ls
+          ls ../
 
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
@@ -123,5 +131,5 @@ jobs:
           sbom-path: ${{env.SBOM_FILENAME}}
           push-to-registry: true
 
-      - name: Verify image
-        run: cosign verify --certificate-identity=${{github.workflow_ref}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}${DIGEST} | jq .
+      #- name: Verify image
+      #  run: cosign verify --certificate-identity=${{github.workflow_ref}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}${DIGEST} | jq .

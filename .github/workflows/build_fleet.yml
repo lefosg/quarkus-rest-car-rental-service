@@ -18,6 +18,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}/fleet
+  SBOM_FILENAME: ${{env.IMAGE_NAME}}.sbom.json
 
 
 jobs:
@@ -30,6 +31,7 @@ jobs:
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
       id-token: write
+      attestations: write
 
     steps:
       - name: Checkout repository
@@ -101,6 +103,21 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}:${DIGEST}
+          output-file: ${{env.SBOM_FILENAME}}
+          format: 'cyclonedx-json'
+
+      - name: Attest SBOM
+        uses: actions/attest-sbom@v1
+        with:
+          sbom-path: ./${{env.SBOM_FILENAME}}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
 
       - name: Verify image
         run: cosign verify --certificate-identity=${{github.workflow_ref}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}${DIGEST} | jq .

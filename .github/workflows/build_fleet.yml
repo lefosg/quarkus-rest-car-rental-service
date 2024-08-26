@@ -18,7 +18,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}/fleet
-  SBOM_FILENAME: ${{env.IMAGE_NAME}}.sbom.json
+  SBOM_FILENAME: ${{github.repository}}.sbom.json
 
 
 jobs:

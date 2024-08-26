@@ -110,12 +110,17 @@ jobs:
           output-file: ${{env.SBOM_FILENAME}}
           format: 'cyclonedx-json'
 
+      - name: a
+        run: |
+          pwd
+          ls
+
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          sbom-path: ./${{env.SBOM_FILENAME}}
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:microservices
           subject-digest: ${{ steps.push.outputs.digest }}
+          sbom-path: ${{env.SBOM_FILENAME}}
           push-to-registry: true
 
       - name: Verify image

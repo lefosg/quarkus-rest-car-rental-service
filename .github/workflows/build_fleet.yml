@@ -106,7 +106,7 @@ jobs:
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}:${DIGEST}
+          image: ${{ env.REGISTRY }}/${{github.actor}}/${{env.IMAGE_NAME}}:microservices
           output-file: ${{env.SBOM_FILENAME}}
           format: 'cyclonedx-json'
 

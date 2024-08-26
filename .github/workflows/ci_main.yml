@@ -1,4 +1,4 @@
-name: Build Fleet
+name: Build Images
 
 on:
   push:
@@ -96,6 +96,12 @@ jobs:
           format: 'cyclonedx-json'
           upload-artifact: true
 
+      - uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: ${{env.FLEET_SBOM_FILENAME}}
+          path: ${{env.FLEET_MSVC}}
+
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
@@ -181,6 +187,12 @@ jobs:
           format: 'cyclonedx-json'
           upload-artifact: true
 
+      - uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: ${{env.USER_SBOM_FILENAME}}
+          path: ${{env.USER_MSVC}}
+
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
@@ -262,6 +274,12 @@ jobs:
           output-file: ${{env.RENT_SBOM_FILENAME}}
           format: 'cyclonedx-json'
           upload-artifact: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          overwrite: true
+          name: ${{env.RENT_SBOM_FILENAME}}
+          path: ${{env.RENT_MSVC}}
 
       - name: Attest SBOM
         uses: actions/attest-sbom@v1

@@ -9,9 +9,9 @@ on:
   push:
     branches: [ "microservices" ]
 
-defaults:
-  run:
-    working-directory: ./FleetMicroservice
+#defaults:
+#  run:
+#    working-directory: ./FleetMicroservice
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -42,17 +42,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      #- name: Cache Maven packages
-      #  uses: actions/cache@v2
-      #  with:
-      #    path: ~/.m2
-      #    key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-      #    restore-keys: |
-      #      ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-      #      ${{ runner.os }}-m2-
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+            ${{ runner.os }}-m2-
 
       - name: Maven Package
-        run: mvn clean package --file ./pom.xml
+        run: mvn clean package --file ./FleetMicroservice/pom.xml
 
       # Install the cosign tool
       # https://github.com/sigstore/cosign-installer

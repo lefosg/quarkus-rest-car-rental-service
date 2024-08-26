@@ -107,7 +107,6 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
       - name: Generate SBOM
@@ -127,7 +126,6 @@ jobs:
         uses: actions/attest-sbom@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:microservices
-          subject-digest: ${{ steps.push.outputs.digest }}
           sbom-path: ${{env.SBOM_FILENAME}}
           push-to-registry: true
 

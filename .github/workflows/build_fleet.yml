@@ -25,7 +25,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
@@ -98,20 +98,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Sign the resulting Docker image digest
-      # This will only write to the public Rekor transparency log when the Docker
-      # repository is public to avoid leaking data.  If you would like to publish
-      # transparency data even for private images, pass --force to cosign below.
-      # https://github.com/sigstore/cosign
-      #- name: Sign the published Docker image
-      #  env:
-      #    # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-      #    TAGS: ${{ steps.meta.outputs.tags }}
-      #    DIGEST: ${{ steps.build-and-push.outputs.digest }}
-      #  # This step uses the identity token to provision an ephemeral certificate
-      #  # against the sigstore community Fulcio instance.
-      #  run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
         with:
@@ -125,6 +111,7 @@ jobs:
           image: ${{ env.REGISTRY }}/${{env.IMAGE_NAME}}:microservices
           output-file: ${{env.SBOM_FILENAME}}
           format: 'cyclonedx-json'
+          upload-artifact: true
 
       - name: a
         run: |

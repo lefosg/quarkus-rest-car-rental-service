@@ -137,6 +137,7 @@ jobs:
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:microservices
           sbom-path: ${{env.SBOM_FILENAME}}
+          subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 
       #- name: Verify image

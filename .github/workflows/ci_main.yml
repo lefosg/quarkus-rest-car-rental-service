@@ -11,15 +11,20 @@ env:
   FLEET_MSVC: FleetMicroservice
   FLEET_IMAGE_NAME: ${{ github.repository }}/fleet # github.repository as <account>/<repo>
   FLEET_SBOM_FILENAME: fleet.sbom.json
+  FLEET_DEPLOYMENT_MANIFEST_PATH: ./k8s/fleet-msvc.yaml
 
   USER_MSVC: UserManagementMicroservice
   USER_IMAGE_NAME: ${{ github.repository }}/user
   USER_SBOM_FILENAME: user.sbom.json
+  USER_DEPLOYMENT_MANIFEST_PATH: ./k8s/user_management-msvc.yaml
 
   RENT_MSVC: RentMicroservice
   RENT_IMAGE_NAME: ${{ github.repository }}/rent
   RENT_SBOM_FILENAME: rent.sbom.json
+  RENT_DEPLOYMENT_MANIFEST_PATH: ./k8s/rent-msvc.yaml
 
+  RESOURCE_GROUP: "quarkus-car-rental-service-rg"
+  CLUSTER_NAME: "car-rental-service"
 
 jobs:
   build-fleet:
@@ -106,6 +111,46 @@ jobs:
 
       #- name: Verify image
       #  run: cosign verify --certificate-identity=${{github.workflow_ref}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.FLEET_IMAGE_NAME}}${DIGEST} | jq .
+
+  deploy-fleet:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: [ buildImage ]
+    steps:
+
+      # Logs in with your Azure credentials
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Use kubelogin to configure your kubeconfig for Azure auth
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.25'
+
+      # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          admin: 'false'
+          use-kubelogin: 'true'
+
+      # Deploys application based on given manifest file
+      - name: Deploys application
+        uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          manifests: ${{ env.FLEET_DEPLOYMENT_MANIFEST_PATH }}
+          images: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}:microservices
 
   build-user:
 

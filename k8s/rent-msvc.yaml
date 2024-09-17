@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rent-deployment
+  labels:
+    app: rent-msvc
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rent-msvc # name of pod to match
+      api: rent-msvc
+  template:
+    metadata:
+      labels:
+        app: rent-msvc
+        api: rent-msvc
+    spec:
+      containers:
+        - name: rent-msvc
+          image: ghcr.io/lefosg/quarkus-rest-car-rental-service/rent:microservices
+          # resources: 
+          #   requests:
+          #     memory: "64Mi"  # 64 MiB
+          #     cpu: "250m" # 1/4 of cpu
+          #   limits:
+          #     memory: "128Mi"  # 128 MiB
+          #     cpu: "500m"  # half of cpu
+          env:
+            - name: JAEGER_ENDPOINT
+              value: http://jaeger-collector.observability:14268/api/traces
+          ports:
+            - containerPort: 8083
+              name: http
+              protocol: TCP  
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rent-service
+  labels:
+    tier: backend
+    app: rent-service
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8084
+      #targetPort: 8084
+      #nodePort: 30084
+  selector:
+    app: rent-msvc
+    api: rent-msvc

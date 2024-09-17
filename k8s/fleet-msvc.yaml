@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleet-deployment
+  labels:
+    app: fleet-msvc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fleet-msvc # name of pod to match
+      api: fleet-msvc
+  template:
+    metadata:
+      labels:
+        app: fleet-msvc
+        api: fleet-msvc
+    spec:
+      containers:
+        - name: fleet-msvc
+          image: ghcr.io/lefosg/quarkus-rest-car-rental-service/fleet:microservices
+          # resources: 
+          #   requests:
+          #     memory: "64Mi"  # 64 MiB
+          #     cpu: "250m" # 1/4 of cpu
+          #   limits:
+          #     memory: "128Mi"  # 128 MiB
+          #     cpu: "500m"  # half of cpu
+          ports:
+            - containerPort: 8083
+              name: http
+              protocol: TCP      
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleet-service
+  labels: 
+    tier: backend
+    app: fleet-service
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8083
+      #targetPort: 8083
+      #nodePort: 30083
+  selector:
+    app: fleet-msvc
+    api: fleet-msvc

@@ -18,7 +18,6 @@ env:
   USER_DEPLOYMENT_MANIFEST_PATH: k8s/user_management-msvc.yaml
 
   RENT_IMAGE_NAME: ${{ github.repository }}/rent
-  RENT_SBOM_FILENAME: rent.sbom.json
   RENT_DEPLOYMENT_MANIFEST_PATH: k8s/rent-msvc.yaml
 
   RESOURCE_GROUP: "quarkus-car-rental-service-rg"
@@ -26,7 +25,7 @@ env:
 
 jobs:
 
-  deploy-microservices:
+  deploy-fleet:
     permissions:
       actions: read
       contents: read
@@ -42,9 +41,6 @@ jobs:
         uses: azure/login@v1.4.6
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          #client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          #tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          #subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # Use kubelogin to configure your kubeconfig for Azure auth
       - name: Set up kubelogin for non-interactive login
@@ -61,11 +57,6 @@ jobs:
           admin: 'false'
           use-kubelogin: 'true'
 
-      - name: help
-        run: |
-          pwd
-          ls
-
       # Deploys Fleet Microservice
       - name: Deploys application
         uses: Azure/k8s-deploy@v4
@@ -74,6 +65,38 @@ jobs:
           manifests: ${{ github.workspace }}/${{ env.FLEET_DEPLOYMENT_MANIFEST_PATH }}
           images: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}:microservices
 
+  deploy-user:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      # Logs in with your Azure credentials
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Use kubelogin to configure your kubeconfig for Azure auth
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.25'
+
+      # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          admin: 'false'
+          use-kubelogin: 'true'
+
       # Deploys User Microservice
       - name: Deploys application
         uses: Azure/k8s-deploy@v4
@@ -81,6 +104,39 @@ jobs:
           action: deploy
           manifests: ${{ github.workspace }}/${{ env.USER_DEPLOYMENT_MANIFEST_PATH }}
           images: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}:microservices
+
+
+  deploy-rent:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      # Logs in with your Azure credentials
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Use kubelogin to configure your kubeconfig for Azure auth
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.25'
+
+      # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          admin: 'false'
+          use-kubelogin: 'true'
 
       # Deploys Rent Microservice
       - name: Deploys application

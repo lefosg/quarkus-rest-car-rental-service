@@ -11,17 +11,14 @@ env:
   FLEET_MSVC: FleetMicroservice
   FLEET_IMAGE_NAME: ${{ github.repository }}/fleet # github.repository as <account>/<repo>
   FLEET_SBOM_FILENAME: fleet.sbom.json
-  FLEET_DEPLOYMENT_MANIFEST_PATH: ./k8s/fleet-msvc.yaml
 
   USER_MSVC: UserManagementMicroservice
   USER_IMAGE_NAME: ${{ github.repository }}/user
   USER_SBOM_FILENAME: user.sbom.json
-  USER_DEPLOYMENT_MANIFEST_PATH: ./k8s/user_management-msvc.yaml
 
   RENT_MSVC: RentMicroservice
   RENT_IMAGE_NAME: ${{ github.repository }}/rent
   RENT_SBOM_FILENAME: rent.sbom.json
-  RENT_DEPLOYMENT_MANIFEST_PATH: ./k8s/rent-msvc.yaml
 
   RESOURCE_GROUP: "quarkus-car-rental-service-rg"
   CLUSTER_NAME: "car-rental-service"
@@ -89,7 +86,7 @@ jobs:
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}-provenance-att
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 
@@ -99,12 +96,12 @@ jobs:
           image: ${{ env.REGISTRY }}/${{env.FLEET_IMAGE_NAME}}:microservices
           output-file: ${{env.FLEET_SBOM_FILENAME}}
           format: 'cyclonedx-json'
-          upload-artifact: true
+          upload-artifact: false
 
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}-sbom-att
           sbom-path: ${{env.FLEET_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
@@ -174,7 +171,7 @@ jobs:
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}-provenance-att
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 
@@ -184,12 +181,12 @@ jobs:
           image: ${{ env.REGISTRY }}/${{env.USER_IMAGE_NAME}}:microservices
           output-file: ${{env.USER_SBOM_FILENAME}}
           format: 'cyclonedx-json'
-          upload-artifact: true
+          upload-artifact: false
 
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}-sbom-att
           sbom-path: ${{env.USER_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
@@ -256,7 +253,7 @@ jobs:
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}-provenance-att
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 
@@ -266,12 +263,12 @@ jobs:
           image: ${{ env.REGISTRY }}/${{env.RENT_IMAGE_NAME}}:microservices
           output-file: ${{env.RENT_SBOM_FILENAME}}
           format: 'cyclonedx-json'
-          upload-artifact: true
+          upload-artifact: false
 
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}-sbom-att
           sbom-path: ${{env.RENT_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true

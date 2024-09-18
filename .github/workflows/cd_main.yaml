@@ -10,6 +10,7 @@ on:
 env:
 
   REGISTRY: ghcr.io
+  GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   FLEET_IMAGE_NAME: ${{ github.repository }}/fleet # github.repository as <account>/<repo>
   FLEET_DEPLOYMENT_MANIFEST_PATH: k8s/fleet-msvc.yaml

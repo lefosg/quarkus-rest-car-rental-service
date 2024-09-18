@@ -36,10 +36,15 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Verify Fleet Container Attestation
-        run: |
-          docker login ${{env.REGISTRY}}
-          gh attestation verify oci://${{env.REGISTRY}}/${{env.FLEET_IMAGE_NAME}}:latest -R ${{ github.repository }}
+        run: gh attestation verify oci://${{env.REGISTRY}}/${{env.FLEET_IMAGE_NAME}}:latest -R ${{ github.repository }}
 
       # Logs in with your Azure credentials
       - name: Azure login
@@ -81,10 +86,15 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Verify User Container Attestation
-        run: |
-          docker login ${{env.REGISTRY}}
-          gh attestation verify oci://${{env.REGISTRY}}/${{env.USER_IMAGE_NAME}}:latest -R ${{ github.repository }}
+        run: gh attestation verify oci://${{env.REGISTRY}}/${{env.USER_IMAGE_NAME}}:latest -R ${{ github.repository }}
 
       # Logs in with your Azure credentials
       - name: Azure login
@@ -127,10 +137,15 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Verify Rent Container Attestation
-        run: |
-          docker login ${{env.REGISTRY}}
-          gh attestation verify oci://${{env.REGISTRY}}/${{env.RENT_IMAGE_NAME}}:latest -R ${{ github.repository }}
+        run: gh attestation verify oci://${{env.REGISTRY}}/${{env.RENT_IMAGE_NAME}}:latest -R ${{ github.repository }}
 
       # Logs in with your Azure credentials
       - name: Azure login

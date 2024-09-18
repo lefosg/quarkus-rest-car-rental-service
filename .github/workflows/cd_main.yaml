@@ -1,12 +1,11 @@
 name: Deploy Images
 
 on:
-#  workflow_run:
-#    workflows: [ "Build Images" ]
-#    types:
-#      - completed
-  push:
-    branches: [ "microservices" ]
+  workflow_run:
+    workflows: [ "Build Images" ]
+    types:
+      - completed
+
 
 env:
 

@@ -3,6 +3,10 @@ name: Build Images
 on:
   push:
     branches: [ "microservices" ]
+    #paths:
+    #  - FleetMicroservice/src/**
+    #  - UserManagementMicroservice/src/**
+    #  - Rent/src/**
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -78,15 +82,17 @@ jobs:
           context: ${{ github.workspace }}/${{env.FLEET_MSVC}}
           file: ${{ github.workspace }}/${{env.FLEET_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          #tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # Uses Sigstore. Does provenance based on SLSA, using in-toto format
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}-provenance-att
+          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }} 
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 
@@ -163,7 +169,8 @@ jobs:
           context: ${{ github.workspace }}/${{env.USER_MSVC}}
           file: ${{ github.workspace }}/${{env.USER_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          #tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -171,7 +178,7 @@ jobs:
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}-provenance-att
+          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }} 
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 
@@ -245,7 +252,8 @@ jobs:
           context: ${{ github.workspace }}/${{env.RENT_MSVC}}
           file: ${{ github.workspace }}/${{env.RENT_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          #tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -253,7 +261,7 @@ jobs:
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}-provenance-att
+          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }} 
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 

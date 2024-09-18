@@ -108,8 +108,8 @@ jobs:
         uses: actions/attest-sbom@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}
-          sbom-path: ${{env.FLEET_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
+          sbom-path: ${{env.FLEET_SBOM_FILENAME}}
           push-to-registry: true
 
       #- name: Verify image
@@ -194,8 +194,8 @@ jobs:
         uses: actions/attest-sbom@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}  
-          sbom-path: ${{env.USER_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
+          sbom-path: ${{env.USER_SBOM_FILENAME}}
           push-to-registry: true
 
   build-rent:
@@ -277,6 +277,6 @@ jobs:
         uses: actions/attest-sbom@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}  
-          sbom-path: ${{env.RENT_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
+          sbom-path: ${{env.RENT_SBOM_FILENAME}}
           push-to-registry: true

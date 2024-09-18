@@ -36,6 +36,11 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Verify Fleet Container Attestation
+        run: |
+          docker login ${{env.REGISTRY}}
+          gh attestation verify oci://${{env.REGISTRY}}/${{env.FLEET_IMAGE_NAME}}:latest -R ${{ github.repository }}
+
       # Logs in with your Azure credentials
       - name: Azure login
         uses: azure/login@v1.4.6
@@ -75,6 +80,11 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
+
+      - name: Verify User Container Attestation
+        run: |
+          docker login ${{env.REGISTRY}}
+          gh attestation verify oci://${{env.REGISTRY}}/${{env.USER_IMAGE_NAME}}:latest -R ${{ github.repository }}
 
       # Logs in with your Azure credentials
       - name: Azure login
@@ -116,6 +126,11 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
+
+      - name: Verify Rent Container Attestation
+        run: |
+          docker login ${{env.REGISTRY}}
+          gh attestation verify oci://${{env.REGISTRY}}/${{env.RENT_IMAGE_NAME}}:latest -R ${{ github.repository }}
 
       # Logs in with your Azure credentials
       - name: Azure login

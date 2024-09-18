@@ -99,7 +99,7 @@ jobs:
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{env.FLEET_IMAGE_NAME}}:microservices
+          image: ${{ env.REGISTRY }}/${{env.FLEET_IMAGE_NAME}}:latest
           output-file: ${{env.FLEET_SBOM_FILENAME}}
           format: 'cyclonedx-json'
           upload-artifact: false
@@ -107,7 +107,7 @@ jobs:
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}-sbom-att
+          subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }}
           sbom-path: ${{env.FLEET_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
@@ -185,7 +185,7 @@ jobs:
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{env.USER_IMAGE_NAME}}:microservices
+          image: ${{ env.REGISTRY }}/${{env.USER_IMAGE_NAME}}:latest
           output-file: ${{env.USER_SBOM_FILENAME}}
           format: 'cyclonedx-json'
           upload-artifact: false
@@ -193,7 +193,7 @@ jobs:
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}-sbom-att
+          subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }}  
           sbom-path: ${{env.USER_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
@@ -268,7 +268,7 @@ jobs:
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{env.RENT_IMAGE_NAME}}:microservices
+          image: ${{ env.REGISTRY }}/${{env.RENT_IMAGE_NAME}}:latest
           output-file: ${{env.RENT_SBOM_FILENAME}}
           format: 'cyclonedx-json'
           upload-artifact: false
@@ -276,7 +276,7 @@ jobs:
       - name: Attest SBOM
         uses: actions/attest-sbom@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}-sbom-att
+          subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }}  
           sbom-path: ${{env.RENT_SBOM_FILENAME}}
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true

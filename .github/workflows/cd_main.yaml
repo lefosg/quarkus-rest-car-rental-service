@@ -1,10 +1,12 @@
 name: Deploy Images
 
 on:
-  workflow_run:
-    workflows: [ "Build Images" ]
-    types:
-      - completed
+#  workflow_run:
+#    workflows: [ "Build Images" ]
+#    types:
+#      - completed
+  push:
+    branches: [ "microservices" ]
 
 env:
 
@@ -25,7 +27,7 @@ env:
 
 jobs:
 
-  deploy-fleet:
+  deploy-microservices:
     permissions:
       actions: read
       contents: read
@@ -57,6 +59,11 @@ jobs:
           cluster-name: ${{ env.CLUSTER_NAME }}
           admin: 'false'
           use-kubelogin: 'true'
+
+      - name: help
+        run: |
+          pwd
+          ls
 
       # Deploys Fleet Microservice
       - name: Deploys application

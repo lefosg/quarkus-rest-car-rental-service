@@ -44,11 +44,11 @@ metadata:
     tier: backend
     app: user-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 8082
-      #targetPort: 8082
+      targetPort: 8082
       #nodePort: 30082
   selector:
     app: user-msvc

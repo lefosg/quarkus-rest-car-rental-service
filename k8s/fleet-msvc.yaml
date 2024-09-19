@@ -41,11 +41,11 @@ metadata:
     tier: backend
     app: fleet-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 8083
-      #targetPort: 8083
+      targetPort: 8083
       #nodePort: 30083
   selector:
     app: fleet-msvc

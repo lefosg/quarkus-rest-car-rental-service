@@ -1,0 +1,56 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: car-rental-service-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/default-backend: default-http-backend
+  #   nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: default-http-backend
+      port: 
+        number: 8080
+  rules:
+  - http:
+      paths:
+      ### Default API
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: default-http-backend
+            port: 
+              number: 8080
+      ### Fleet API
+      - path: "/api/vehicle/"
+        pathType: Prefix
+        backend:
+          service:
+            name: fleet-service
+            port: 
+              number: 8083
+      ### User Management API
+      - path: "/api/customer/"
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port: 
+              number: 8082
+      - path: "/api/company/"
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port: 
+              number: 8082
+      ### Rent API
+      - path: "/api/rent/"
+        pathType: Prefix
+        backend:
+          service:
+            name: rent-service
+            port: 
+              number: 8084

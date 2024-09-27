@@ -5,4 +5,4 @@ kubernetes_version="1.30.3"
 system_node_count=1
 
 storage_rg_name="storage_rg"
-storage_account_name="carrentalstorage"
+storage_account_name="carrentalservicestorage"

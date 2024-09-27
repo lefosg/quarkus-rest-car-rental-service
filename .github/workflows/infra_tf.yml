@@ -45,11 +45,12 @@ jobs:
             ls -la
             ls ../
             terraform output -json
+            terraform output -json | jq -r '.["storage_container_name.value"]'
       
       - name: Get output values from terraform
         run: |
-          echo "STORAGE_ACCOUNT_CONNECTION_STRING=$(terraform output -json | jq -r '.["storage_account_connection_string"]')" >> $GITHUB_ENV
-          echo "STORAGE_CONTAINER_NAME=$(terraform output -json | jq -r '.["storage_container_name"]')" >> $GITHUB_ENV
+          echo "STORAGE_ACCOUNT_CONNECTION_STRING=$(terraform output -json | jq -r '.["storage_account_connection_string.value"]')" >> $GITHUB_ENV
+          echo "STORAGE_CONTAINER_NAME=$(terraform output -json | jq -r '.["storage_container_name.value"]')" >> $GITHUB_ENV
           
       - name: test
         run: |

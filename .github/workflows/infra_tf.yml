@@ -37,3 +37,28 @@ jobs:
         run: terraform apply --auto-approve
         env:
           ARM_SUBSCRIPTION_ID : ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+      - name: jyjhgf
+        run: |
+            pwd
+            ls
+            ls -la
+            ls ../
+            terraform output -json
+      
+      - name: Get output values from terraform
+        run: |
+          echo "STORAGE_ACCOUNT_CONNECTION_STRING=$(terraform output -json | jq -r '.["storage_account_connection_string"]')" >> $GITHUB_ENV
+          echo "STORAGE_CONTAINER_NAME=$(terraform output -json | jq -r '.["storage_container_name"]')" >> $GITHUB_ENV
+          
+      - name: test
+        run: |
+          echo $STORAGE_ACCOUNT_CONNECTION_STRING
+          echo $STORAGE_CONTAINER_NAME
+
+      - name: Upload tfstate to Blob Storage
+        uses: LanceMcCarthy/Action-AzureBlobUpload@v2
+        with:
+          connection_string: ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}
+          container_name: ${{ env.STORAGE_CONTAINER_NAME }}
+          source_folder: terraform.tfstate

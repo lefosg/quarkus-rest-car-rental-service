@@ -5,6 +5,7 @@ on:
     branches: [ "microservices" ]
     paths:
       - infra/terraform/**
+      - .github/workflows/infra_tf.yml
 
 defaults:
   run:

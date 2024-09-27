@@ -25,5 +25,8 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Terraform init
+        run: terraform init
+
       - name: Terraform destroy
         run: terraform destroy

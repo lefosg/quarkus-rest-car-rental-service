@@ -1,4 +1,4 @@
-variable "rg_name" {
+variable "aks_rg_name" {
     type = string
     description = "Name of the resource group containing the k8s cluster"
 }
@@ -21,4 +21,16 @@ variable "kubernetes_version" {
 variable "system_node_count" {
     type = number
     description = "Node count in aks cluster"
+}
+
+
+variable "storage_rg_name" {
+    type = string
+    description = "Name of the resource group for storage account"
+}
+
+
+variable "storage_account_name" {
+    type = string
+    description = "Storage account name"
 }

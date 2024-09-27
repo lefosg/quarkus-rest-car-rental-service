@@ -1,0 +1,33 @@
+name: Create Azure infrastructure 
+
+on:
+  push: 
+    branches: [ "microservices" ]
+    paths:
+      - infra/terraform/**
+
+defaults:
+  run:
+    shell: bash
+    working-directory: infra/terraform/
+
+jobs:
+
+  deploy_infra:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform apply
+        run: terraform apply --auto-approve
+        env:
+          ARM_SUBSCRIPTION_ID : ${{ secrets.ARM_SUBSCRIPTION_ID }}

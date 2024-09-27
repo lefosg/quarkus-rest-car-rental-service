@@ -42,5 +42,21 @@ nb-configuration.xml
 # Plugin directory
 /.quarkus/cli/plugins/
 
+# Terraform (IaC)
+infra/terraform/**/.terraform/*
+infra/terraform/*.tfstate
+infra/terraform/*.tfstate.*
+infra/terraform/crash.log
+infra/terraform/crash.*.log
+#infra/terraform/*.tfvars
+infra/terraform/*.tfvars.json
+infra/terraform/override.tf
+infra/terraform/override.tf.json
+infra/terraform/*_override.tf
+infra/terraform/*_override.tf.json
+infra/terraform/.terraform.tfstate.lock.info
+infra/terraform/.terraformrc
+infra/terraform/terraform.rc
+
 #my
-k8s/aks-context.sh
+infra/k8s/aks-context.sh

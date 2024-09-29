@@ -1,0 +1,32 @@
+name: Destroy Azure infrastructure 
+
+on: workflow_dispatch 
+
+defaults:
+  run:
+    shell: bash
+    working-directory: infra/terraform/
+
+jobs:
+
+    destroy_azure_infra:
+      
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform destroy
+        run: terraform destroy

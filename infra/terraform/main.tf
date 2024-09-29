@@ -17,7 +17,7 @@ provider "azurerm" {
 
 # ----- Resource Group -----
 
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "aks_rg" {
   name     = var.aks_rg_name
   location = var.location
 }
@@ -27,8 +27,8 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = var.cluster_name
   kubernetes_version  = var.kubernetes_version
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.aks_rg.location
+  resource_group_name = azurerm_resource_group.aks_rg.name
   dns_prefix          = var.cluster_name
 
   default_node_pool {

@@ -38,9 +38,6 @@ jobs:
 
       - name: Terraform init
         run: terraform init
-
-      - name: Get state file from Blob Storage
-        run: 
-
+        
       - name: Terraform destroy
-        run: terraform destroy --target azurerm_resource_group.aks_rg
+        run: terraform destroy --target azurerm_kubernetes_cluster.aks

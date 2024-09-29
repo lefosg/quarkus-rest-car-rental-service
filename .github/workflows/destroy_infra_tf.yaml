@@ -28,8 +28,8 @@ jobs:
       - name: Azure Blob Storage - Download Blob
         uses: armanrahman22/azblob-download-action@v0.0.4
         with:
-          storage-account-name: "storage_rg"
-          container-name: "carrentalservicestorage"
+          storage-account-name: "carrentalservicestorage"
+          container-name: "tfstate"
           blob-name: "terraform.tfstate"
           download-path: ${{env.terraform_dir}}/
 

@@ -24,9 +24,6 @@ env:
   RENT_IMAGE_NAME: ${{ github.repository }}/rent
   RENT_SBOM_FILENAME: rent.sbom.json
 
-  RESOURCE_GROUP: "quarkus-car-rental-service-rg"
-  CLUSTER_NAME: "car-rental-service"
-
 jobs:
   build-fleet:
 

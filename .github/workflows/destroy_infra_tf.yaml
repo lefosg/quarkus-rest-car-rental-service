@@ -26,7 +26,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Azure Blob Storage - Download Blob
-        uses: armanrahman22/azblob-download-action
+        uses: armanrahman22/azblob-download-action@v0.0.4
         with:
           storage-account-name: "storage_rg"
           container-name: "carrentalservicestorage"
@@ -38,6 +38,6 @@ jobs:
 
       - name: Terraform init
         run: terraform init
-        
+
       - name: Terraform destroy
         run: terraform destroy --target azurerm_kubernetes_cluster.aks

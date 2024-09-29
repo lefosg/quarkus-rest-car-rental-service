@@ -29,7 +29,7 @@ jobs:
       #   run: az storage blob download -c tfstate -n terraform.tfstate --account-name carrentalservicestorage -f ${{env.terraform_dir}}/terraform.tfstate --auth-mode login
 
       - name: Azure Blob Storage - Download Blob
-        uses: armanrahman22/azblob-download-action
+        uses: armanrahman22/azblob-download-action@v0.0.4
         with:
           storage-account-name: "carrentalservicestorage"
           container-name: "tfstate"

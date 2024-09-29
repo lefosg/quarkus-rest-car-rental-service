@@ -61,4 +61,5 @@ jobs:
         with:
           connection_string: ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}
           container_name: ${{ env.STORAGE_CONTAINER_NAME }}
-          source_folder: ./terraform.tfstate
+          source_folder: ${{ github.workspace }}/terraform.tfstate
+          destination_folder: .

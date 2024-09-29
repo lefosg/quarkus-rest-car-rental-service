@@ -1,4 +1,4 @@
-name: Destroy Azure infrastructure 
+name: Destroy AKS 
 
 on: workflow_dispatch 
 
@@ -31,9 +31,9 @@ jobs:
       - name: Azure Blob Storage - Download Blob
         uses: armanrahman22/azblob-download-action@v0.0.4
         with:
-          storage-account-name: "carrentalservicestorage"
-          container-name: "tfstate"
-          blob-name: "terraform.tfstate"
+          storage-account-name: carrentalservicestorage
+          container-name: tfstate
+          blob-name: terraform.tfstate
           download-path: ${{env.terraform_dir}}
 
       - name: Setup Terraform

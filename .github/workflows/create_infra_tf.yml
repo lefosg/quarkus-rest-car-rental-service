@@ -12,6 +12,9 @@ defaults:
     shell: bash
     working-directory: infra/terraform/
 
+env:
+  terraform_dir: infra/terraform
+
 jobs:
 
   deploy_infra:
@@ -61,5 +64,5 @@ jobs:
         with:
           connection_string: ${{ env.STORAGE_ACCOUNT_CONNECTION_STRING }}
           container_name: ${{ env.STORAGE_CONTAINER_NAME }}
-          source_folder: ${{ github.workspace }}/terraform.tfstate
+          source_folder: ${{ github.workspace }}/${{env.terraform_dir}}/terraform.tfstate
           destination_folder: .

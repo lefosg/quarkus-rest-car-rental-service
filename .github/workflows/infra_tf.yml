@@ -45,7 +45,6 @@ jobs:
             ls -la
             ls ../
             terraform output -json
-            terraform output -json | jq -r '.["storage_container_name"].["value"]'
       
       - name: Get output values from terraform
         run: |

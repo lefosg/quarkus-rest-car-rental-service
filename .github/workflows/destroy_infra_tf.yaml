@@ -26,7 +26,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Azure Blob Storage - Download tfstate
-        run: az storage blob download -c tfstate -n terraform.tfstate --account-name carrentalservicestorage -f ${{env.terraform_dir}} --auth-mode login
+        run: az storage blob download -c tfstate -n terraform.tfstate --account-name carrentalservicestorage -f ${{env.terraform_dir}}/terraform.tfstate --auth-mode login
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3

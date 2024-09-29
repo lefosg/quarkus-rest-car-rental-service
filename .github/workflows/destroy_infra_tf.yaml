@@ -25,13 +25,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Azure Blob Storage - Download Blob
-        uses: armanrahman22/azblob-download-action@v0.0.4
-        with:
-          storage-account-name: "carrentalservicestorage"
-          container-name: "tfstate"
-          blob-name: "terraform.tfstate"
-          download-path: ${{env.terraform_dir}}/
+      - name: Azure Blob Storage - Download tfstate
+        run: az storage blob download -c tfstate -n terraform.tfstate --account-name carrentalservicestorage -f ${{env.terraform_dir}}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3

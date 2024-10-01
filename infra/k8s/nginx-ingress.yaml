@@ -69,4 +69,4 @@ spec:
           service:
             name: jaeger-service
             port: 
-              number: 16686
+              name: http-query-port

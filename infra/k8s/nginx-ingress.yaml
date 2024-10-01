@@ -54,3 +54,19 @@ spec:
             name: rent-service
             port: 
               number: 8084
+      ### ArgoCD Service
+      - path: "/services/argocd/"
+        pathType: Prefix
+        backend:
+          service:
+            name: argocd-server
+            port: 
+              number: 443
+      ### Jaeger Service
+      - path: "/services/jaeger/"
+        pathType: Prefix
+        backend:
+          service:
+            name: jaeger-service
+            port: 
+              number: 16686

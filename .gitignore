@@ -60,3 +60,5 @@ infra/terraform/terraform.rc
 
 #my
 infra/k8s/aks-context.sh
+# infra/k8s/create-all.sh
+# infra/k8s/delete-all.sh

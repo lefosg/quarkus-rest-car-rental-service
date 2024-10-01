@@ -1,0 +1,73 @@
+name: Provision Kubernetes Infrastructure
+
+on:
+  push:
+    branches: ['microservices']
+    paths:
+      - infra/k8s/**
+      - .github/workflows/k8s_infra.yaml
+
+defaults:
+  run:
+    shell: bash
+    working-directory: infra/k8s/
+
+env:
+  k8s_dir: ${{ github.workspace }}/infra/k8s
+  RESOURCE_GROUP: "quarkus-car-rental-service-rg"
+  CLUSTER_NAME: "car-rental-service"
+
+jobs:
+
+  configure-k8s-cluster:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+
+      - name: Base SHA
+        id: base-sha
+        run: echo "sha=$(git rev-parse origin/master)" >> $GITHUB_OUTPUT
+      
+      - name: Get Changed Directories
+        id: changed-directories
+        uses: tj-actions/changed-files@v35
+        # with:
+          # files: ${{env.k8s_dir}}/*.yaml
+          # base_sha: "${{ steps.base-sha.outputs.sha }}"
+
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.25'
+
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ env.RESOURCE_GROUP }}
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          admin: 'false'
+          use-kubelogin: 'true'
+
+      - name: Kubectl install
+        uses: azure/setup-kubectl@v4
+      
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-directories.outputs.all_changed_and_modified_files }}; do
+            echo $file
+            if [[ $file == *.yaml ]] && [[ $file == ${env.k8s_dir}/* ]]; then
+              kubectl apply -f "$file"
+            fi
+          done
+
+          
+          
+  

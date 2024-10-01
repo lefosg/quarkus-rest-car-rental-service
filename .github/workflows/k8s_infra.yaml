@@ -61,8 +61,11 @@ jobs:
       
       - name: List all changed files
         run: |
+          echo "bash_k8s_dir=${{env.k8s_dir}}" >> $GITHUB_ENV
           for file in ${{ steps.changed-directories.outputs.all_changed_and_modified_files }}; do
-            if [[ $file == *.yaml ]] && [[ -e "${{env.k8s_dir}}/$file" ]]; then
+            echo "${{env.bash_k8s_dir}}/$file"
+            echo $file
+            if [[ $file == *.yaml ]] && [[ -e "${{env.bash_k8s_dir}}/$file" ]]; then
               echo $file
               kubectl apply -f $file
             fi

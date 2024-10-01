@@ -23,9 +23,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-            fetch-depth: 0
+      
+   
+      - uses: actions/checkout@v4
+
+      - name: a
+        run: |
+          pwd
+          ls
+          ls
+          ls
+          ls
+
 
       - name: Base SHA
         id: base-sha
@@ -61,14 +70,14 @@ jobs:
       
       - name: List all changed files
         run: |
-          echo "bash_k8s_dir=${{env.k8s_dir}}" >> $GITHUB_ENV
+          echo "bash_k8s_dir=$(pwd)" >> $GITHUB_ENV
           for file in ${{ steps.changed-directories.outputs.all_changed_and_modified_files }}; do
             filename=$(basename $file)
             echo "${{env.bash_k8s_dir}}/$filename"
             echo $filename
-            if [[ $filename == *.yaml ]] && [[ -e "${{env.bash_k8s_dir}}/$filename" ]]; then
+            if [[ $filename == *.yaml ]] && [[ -e "$filename" ]]; then
               echo $filename
-              kubectl apply -f ${{env.bash_k8s_dir}}/$filename
+              kubectl apply -f $filename
             fi
           done
 

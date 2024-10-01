@@ -68,5 +68,5 @@ spec:
         backend:
           service:
             name: jaeger-service
-            port: 
-              name: http-query-port
+            port:
+              number: 16686

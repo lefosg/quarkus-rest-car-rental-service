@@ -70,3 +70,4 @@ spec:
             name: jaeger-service
             port:
               number: 16686
+              

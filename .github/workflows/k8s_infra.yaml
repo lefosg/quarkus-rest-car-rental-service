@@ -62,8 +62,8 @@ jobs:
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-directories.outputs.all_changed_and_modified_files }}; do
-            echo $file
             if [[ $file == *.yaml ]] && [[ $file == ${{env.k8s_dir}}/* ]]; then
+              echo $file
               kubectl apply -f "$file"
             fi
           done

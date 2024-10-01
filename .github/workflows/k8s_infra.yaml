@@ -63,11 +63,12 @@ jobs:
         run: |
           echo "bash_k8s_dir=${{env.k8s_dir}}" >> $GITHUB_ENV
           for file in ${{ steps.changed-directories.outputs.all_changed_and_modified_files }}; do
-            echo "${{env.bash_k8s_dir}}/$file"
-            echo $file
-            if [[ $file == *.yaml ]] && [[ -e "${{env.bash_k8s_dir}}/$file" ]]; then
-              echo $file
-              kubectl apply -f $file
+            filename=$(basename $file)
+            echo "${{env.bash_k8s_dir}}/$filename"
+            echo $filename
+            if [[ $filename == *.yaml ]] && [[ -e "${{env.bash_k8s_dir}}/$filename" ]]; then
+              echo $filename
+              kubectl apply -f ${{env.bash_k8s_dir}}/$filename
             fi
           done
 

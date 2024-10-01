@@ -74,3 +74,4 @@ spec:
   selector:
     api: jaeger
     app: jaeger
+

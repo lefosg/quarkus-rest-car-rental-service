@@ -1,0 +1,5 @@
+deployment:
+  image: "ghcr.io/lefosg/quarkus-rest-car-rental-service/rent"
+  tag: "latest"
+name: rent-msvc
+port: 8084

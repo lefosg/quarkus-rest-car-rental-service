@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.name }} # name of pod to match
+      api: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        api: {{ .Values.name }}
+    spec:
+      containers:
+        - name: {{ .Values.name }}s
+          image: {{ .Values.deployment.image }}:{{ .Values.deployment.tag }}
+          # resources: 
+          #   requests:
+          #     memory: "64Mi"  # 64 MiB
+          #     cpu: "250m" # 1/4 of cpu
+          #   limits:
+          #     memory: "128Mi"  # 128 MiB
+          #     cpu: "500m"  # half of cpu
+          ports:
+            - containerPort: {{ .Values.port }}
+              name: http
+              protocol: TCP     

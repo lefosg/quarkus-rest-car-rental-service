@@ -1,4 +1,4 @@
-name: Provision Kubernetes Infrastructure
+name: Apply K8s Configurations
 
 on:
   push:
@@ -68,7 +68,7 @@ jobs:
       - name: Kubectl install
         uses: azure/setup-kubectl@v4
       
-      - name: List all changed files
+      - name: Apply kubectl on changed files
         run: |
           echo "bash_k8s_dir=$(pwd)" >> $GITHUB_ENV
           for file in ${{ steps.changed-directories.outputs.all_changed_and_modified_files }}; do

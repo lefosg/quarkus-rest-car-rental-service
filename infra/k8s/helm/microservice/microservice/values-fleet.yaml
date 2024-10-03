@@ -1,0 +1,5 @@
+deployment:
+  image: "ghcr.io/lefosg/quarkus-rest-car-rental-service/fleet"
+  tag: "latest"
+name: fleet-msvc
+port: 8083

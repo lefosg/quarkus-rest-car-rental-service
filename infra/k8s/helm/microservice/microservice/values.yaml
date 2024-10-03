@@ -1,0 +1,5 @@
+deployment:
+  image: "gcr.io/google-samples/hello-app"
+  tag: "1.0"
+name: hello-default-deployment
+port: 8080

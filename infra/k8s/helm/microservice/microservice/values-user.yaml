@@ -1,0 +1,5 @@
+deployment:
+  image: "ghcr.io/lefosg/quarkus-rest-car-rental-service/user"
+  tag: "latest"
+name: user-msvc
+port: 8082

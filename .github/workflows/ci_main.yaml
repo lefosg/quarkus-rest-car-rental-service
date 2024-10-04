@@ -1,12 +1,13 @@
 name: Build Images
 
 on:
-  pull_request: 
+  push: 
     branches: [ "microservices" ]
-    #paths:
-    #  - FleetMicroservice/src/**
-    #  - UserManagementMicroservice/src/**
-    #  - Rent/src/**
+    paths:
+     - FleetMicroservice/src/**
+     - UserManagementMicroservice/src/**
+     - Rent/src/**
+     - .github/workflows/ci_main.yaml
 
 env:
   # Use docker.io for Docker Hub if empty

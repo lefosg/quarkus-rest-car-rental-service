@@ -4,6 +4,16 @@ terraform {
       source = "hashicorp/azurerm"
       version = "4.3.0"
     }
+
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.32.0"
+    }
+
+     helm = {
+      source = "hashicorp/helm"
+      version = "2.15.0"
+    }
   }
 }
 
@@ -14,6 +24,20 @@ provider "azurerm" {
     
   }
 }
+
+# provider "kubernetes" {
+#   # Configuration options
+# }
+
+# provider "helm" {
+#   # Configuration options
+#   kubernetes {
+#         host     = azurerm_kubernetes_cluster.aks.kube_config_raw.0.host
+#         client_key             = base64decode(azurerm_kubernetes_cluster.your_cluster.kube_config.0.client_key)
+#         client_certificate     = base64decode(azurerm_kubernetes_cluster.your_cluster.kube_config.0.client_certificate)
+#         cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.your_cluster.kube_config.0.cluster_ca_certificate)
+#     } 
+# }
 
 # ----- Resource Group -----
 
@@ -50,6 +74,26 @@ resource "azurerm_kubernetes_cluster" "aks" {
     Environment = "Dev/Test"
   }
 }
+
+    # Now configure the AKS cluster
+# resource "kubernetes_namespace" "ingress-nginx" {
+#   metadata {
+#     name = "ingress-nginx"
+#   }
+# }
+
+# data "helm_repository" "stable" {
+#   name = "stable"
+#   url  = "https://kubernetes-charts.storage.googleapis.com"
+# }
+
+# resource "helm_release" "nginix_ingress" {
+#     name      = "nginx_ingress"
+#     repository = data.helm_repository.stable.metadata.0.name
+#     chart     = "stable/nginx-ingress"
+#     namespace = kubernetes_namespace.ingress-nginx
+    
+# }
 
 # ----- Storage Account -----
 

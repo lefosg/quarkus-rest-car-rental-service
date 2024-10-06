@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ingress-tls-certificate
+  namespace: default
+spec:
+  dnsNames: 
+  - myk8scluster.ddns.net
+  secretName: ingress-tls-certificate
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer
+  commonName: myk8scluster.ddns.net

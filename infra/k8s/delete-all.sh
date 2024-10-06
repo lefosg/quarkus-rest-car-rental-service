@@ -16,3 +16,7 @@ kubectl delete ingress car-rental-service-ingress
 # kubectl delete namespace argocd
 # kubectl label namespace ingress-nginx istio-injection-
 # kubectl label namespace default istio-injection-
+helm uninstall fleet-msvc
+helm uninstall user-msvc
+helm uninstall rent-msvc
+helm uninstall hello-default-deployment

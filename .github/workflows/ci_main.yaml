@@ -16,14 +16,17 @@ env:
   FLEET_MSVC: FleetMicroservice
   FLEET_IMAGE_NAME: ${{ github.repository }}/fleet # github.repository as <account>/<repo>
   FLEET_SBOM_FILENAME: fleet.sbom.json
+  FLEET_SAST_FILENAME: fleet.sarif
 
   USER_MSVC: UserManagementMicroservice
   USER_IMAGE_NAME: ${{ github.repository }}/user
   USER_SBOM_FILENAME: user.sbom.json
+  USER_SAST_FILENAME: user.sarif
 
   RENT_MSVC: RentMicroservice
   RENT_IMAGE_NAME: ${{ github.repository }}/rent
   RENT_SBOM_FILENAME: rent.sbom.json
+  RENT_SAST_FILENAME: rent.sarif
 
 jobs:
   build-fleet:
@@ -38,6 +41,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: SAST Scan with Bearer
+        uses: bearer/bearer-action@v2
+        with:
+          path: ./${{env.FLEET_MSVC}}
+          output: ./${{env.FLEET_SAST_FILENAME}}
+          scanner: sast,secrets
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ./${{env.FLEET_SAST_FILENAME}}
+          path: ./${{env.FLEET_SAST_FILENAME}}
+          overwrite: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -126,6 +142,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: SAST Scan with Bearer
+        uses: bearer/bearer-action@v2
+        with:
+          path: ./${{env.USER_MSVC}}
+          output: ./${{env.USER_SAST_FILENAME}}
+          scanner: sast,secrets
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ./${{env.USER_SAST_FILENAME}}
+          path: ./${{env.USER_SAST_FILENAME}}
+          overwrite: true
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -208,6 +237,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: SAST Scan with Bearer
+        uses: bearer/bearer-action@v2
+        with:
+          path: ./${{env.RENT_MSVC}}
+          output: ./${{env.RENT_SAST_FILENAME}}
+          scanner: sast,secrets
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ./${{env.RENT_SAST_FILENAME}}
+          path: ./${{env.RENT_SAST_FILENAME}}
+          overwrite: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4

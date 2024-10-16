@@ -52,7 +52,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ${{env.FLEET_SAST_FILENAME}}
-          path: ./  ${{env.FLEET_SAST_FILENAME}}
+          path: ./${{env.FLEET_SAST_FILENAME}}
           overwrite: true
 
       - name: Set up JDK 17

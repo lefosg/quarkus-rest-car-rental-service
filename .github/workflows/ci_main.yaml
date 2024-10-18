@@ -31,7 +31,7 @@ env:
 jobs:
   build-fleet:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: write
       packages: write
@@ -139,7 +139,7 @@ jobs:
 
   build-user:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: write
       packages: write
@@ -243,7 +243,7 @@ jobs:
 
   build-rent:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       contents: write
       packages: write

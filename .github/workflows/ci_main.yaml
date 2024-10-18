@@ -56,7 +56,7 @@ jobs:
 #          overwrite: true
 
       - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v3.0.0
+        uses: SonarSource/sonarqube-scan-action@v2.3.0
         with:
           projectBaseDir: ./${{env.FLEET_MSVC}}
         env:
@@ -164,7 +164,7 @@ jobs:
 #          overwrite: true
 
       - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v3.0.0
+        uses: SonarSource/sonarqube-scan-action@v2.3.0
         with:
           projectBaseDir: ./${{env.USER_MSVC}}
         env:
@@ -268,7 +268,7 @@ jobs:
 #          overwrite: true
 
       - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v3.0.0
+        uses: SonarSource/sonarqube-scan-action@v2.3.0
         with:
           projectBaseDir: ./${{env.RENT_MSVC}}
         env:

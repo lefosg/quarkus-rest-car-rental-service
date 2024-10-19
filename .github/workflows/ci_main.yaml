@@ -69,6 +69,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.15.0
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
@@ -85,11 +88,11 @@ jobs:
             ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             ${{ runner.os }}-m2-
 
-#      - name: Build and analyze
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#        run: mvn -B --file ./${{env.FLEET_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B --file ./${{env.FLEET_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
 
 
       - name: Maven Package
@@ -191,6 +194,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.15.0
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
@@ -207,11 +213,11 @@ jobs:
             ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             ${{ runner.os }}-m2-
 
-#      - name: Build and analyze
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#        run: mvn -B --file ./${{env.USER_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B --file ./${{env.USER_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
 
       - name: Maven Package
         run: mvn clean package --file ./${{env.USER_MSVC}}/pom.xml
@@ -308,6 +314,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.15.0
+
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
@@ -324,11 +333,11 @@ jobs:
             ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             ${{ runner.os }}-m2-
 
-#      - name: Build and analyze
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#        run: mvn -B --file ./${{env.RENT_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B --file ./${{env.RENT_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
 
       - name: Maven Package
         run: mvn clean package --file ./${{env.RENT_MSVC}}/pom.xml

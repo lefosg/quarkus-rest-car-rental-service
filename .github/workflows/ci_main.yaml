@@ -117,8 +117,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-#          context: ${{ github.workspace }}/${{env.FLEET_MSVC}}
-          context: .
+          context: ${{ github.workspace }}/${{env.FLEET_MSVC}}
+#          context: .
           file: ${{ github.workspace }}/${{env.FLEET_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
           #tags: ${{ steps.meta.outputs.tags }}
@@ -242,8 +242,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-#          context: ${{ github.workspace }}/${{env.USER_MSVC}}
-          context: .
+          context: ${{ github.workspace }}/${{env.USER_MSVC}}
+#          context: .
           file: ${{ github.workspace }}/${{env.USER_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
           #tags: ${{ steps.meta.outputs.tags }}
@@ -363,8 +363,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-#          context: ${{ github.workspace }}/${{env.RENT_MSVC}}
-          context: .
+          context: ${{ github.workspace }}/${{env.RENT_MSVC}}
+#          context: .
           file: ${{ github.workspace }}/${{env.RENT_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
           #tags: ${{ steps.meta.outputs.tags }}

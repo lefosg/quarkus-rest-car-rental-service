@@ -55,19 +55,26 @@ jobs:
 #          path: ./${{env.FLEET_SAST_FILENAME}}
 #          overwrite: true
 
-      - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2.3.0
-        with:
-          projectBaseDir: ./${{env.FLEET_MSVC}}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#      - name: Official SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@v2.3.0
+#        with:
+#          projectBaseDir: ./${{env.FLEET_MSVC}}
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache Maven packages
         uses: actions/cache@v4
@@ -77,6 +84,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             ${{ runner.os }}-m2-
+
+#      - name: Build and analyze
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#        run: mvn -B --file ./${{env.FLEET_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
+
 
       - name: Maven Package
         run: mvn clean package --file ./${{env.FLEET_MSVC}}/pom.xml
@@ -163,19 +177,26 @@ jobs:
 #          path: ./${{env.USER_SAST_FILENAME}}
 #          overwrite: true
 
-      - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2.3.0
-        with:
-          projectBaseDir: ./${{env.USER_MSVC}}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#      - name: Official SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@v2.3.0
+#        with:
+#          projectBaseDir: ./${{env.USER_MSVC}}
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache Maven packages
         uses: actions/cache@v4
@@ -185,6 +206,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             ${{ runner.os }}-m2-
+
+#      - name: Build and analyze
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#        run: mvn -B --file ./${{env.USER_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
 
       - name: Maven Package
         run: mvn clean package --file ./${{env.USER_MSVC}}/pom.xml
@@ -267,19 +294,26 @@ jobs:
 #          path: ./${{env.RENT_SAST_FILENAME}}
 #          overwrite: true
 
-      - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2.3.0
-        with:
-          projectBaseDir: ./${{env.RENT_MSVC}}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#      - name: Official SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@v2.3.0
+#        with:
+#          projectBaseDir: ./${{env.RENT_MSVC}}
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache Maven packages
         uses: actions/cache@v4
@@ -289,6 +323,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
             ${{ runner.os }}-m2-
+
+#      - name: Build and analyze
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#        run: mvn -B --file ./${{env.RENT_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
 
       - name: Maven Package
         run: mvn clean package --file ./${{env.RENT_MSVC}}/pom.xml

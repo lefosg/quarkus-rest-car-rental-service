@@ -90,13 +90,12 @@ jobs:
 
       - name: Build and analyze
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FLEET }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B --file ./${{env.FLEET_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
+        run: mvn -B --file ./${{env.FLEET_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus-rest-car-rental-service-fleet -Dsonar.projectName='quarkus-rest-car-rental-service-fleet'
 
-
-      - name: Maven Package
-        run: mvn clean package --file ./${{env.FLEET_MSVC}}/pom.xml
+#      - name: Maven Package
+#        run: mvn clean package --file ./${{env.FLEET_MSVC}}/pom.xml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
@@ -118,7 +117,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: ${{ github.workspace }}/${{env.FLEET_MSVC}}
+#          context: ${{ github.workspace }}/${{env.FLEET_MSVC}}
+          context: .
           file: ${{ github.workspace }}/${{env.FLEET_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
           #tags: ${{ steps.meta.outputs.tags }}
@@ -215,12 +215,12 @@ jobs:
 
       - name: Build and analyze
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_USER }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B --file ./${{env.USER_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
+        run: mvn -B --file ./${{env.USER_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus-rest-car-rental-service-user -Dsonar.projectName='quarkus-rest-car-rental-service-user'
 
-      - name: Maven Package
-        run: mvn clean package --file ./${{env.USER_MSVC}}/pom.xml
+#      - name: Maven Package
+#        run: mvn clean package --file ./${{env.USER_MSVC}}/pom.xml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
@@ -242,7 +242,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: ${{ github.workspace }}/${{env.USER_MSVC}}
+#          context: ${{ github.workspace }}/${{env.USER_MSVC}}
+          context: .
           file: ${{ github.workspace }}/${{env.USER_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
           #tags: ${{ steps.meta.outputs.tags }}
@@ -335,12 +336,12 @@ jobs:
 
       - name: Build and analyze
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_RENT }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B --file ./${{env.RENT_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus -Dsonar.projectName='quarkus'
+        run: mvn -B --file ./${{env.RENT_MSVC}}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=quarkus-rest-car-rental-service-rent -Dsonar.projectName='quarkus-rest-car-rental-service-rent'
 
-      - name: Maven Package
-        run: mvn clean package --file ./${{env.RENT_MSVC}}/pom.xml
+#      - name: Maven Package
+#        run: mvn clean package --file ./${{env.RENT_MSVC}}/pom.xml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
@@ -362,7 +363,8 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: ${{ github.workspace }}/${{env.RENT_MSVC}}
+#          context: ${{ github.workspace }}/${{env.RENT_MSVC}}
+          context: .
           file: ${{ github.workspace }}/${{env.RENT_MSVC}}/src/main/docker/Dockerfile.jvm
           push: true
           #tags: ${{ steps.meta.outputs.tags }}

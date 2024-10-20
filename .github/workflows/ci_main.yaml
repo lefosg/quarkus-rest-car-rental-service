@@ -17,16 +17,19 @@ env:
   FLEET_IMAGE_NAME: ${{ github.repository }}/fleet # github.repository as <account>/<repo>
   FLEET_SBOM_FILENAME: fleet.sbom.json
   FLEET_SAST_FILENAME: fleet.sarif
+  FLEET_TRIVY_REPORT: fleet.trivy
 
   USER_MSVC: UserManagementMicroservice
   USER_IMAGE_NAME: ${{ github.repository }}/user
   USER_SBOM_FILENAME: user.sbom.json
   USER_SAST_FILENAME: user.sarif
+  USER_TRIVY_REPORT: user.trivy
 
   RENT_MSVC: RentMicroservice
   RENT_IMAGE_NAME: ${{ github.repository }}/rent
   RENT_SBOM_FILENAME: rent.sbom.json
   RENT_SAST_FILENAME: rent.sarif
+  RENT_TRIVY_REPORT: rent.trivy
 
 jobs:
   build-fleet:
@@ -151,6 +154,18 @@ jobs:
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           sbom-path: ${{env.FLEET_SBOM_FILENAME}}
           push-to-registry: true
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{env.FLEET_IMAGE_NAME}}:latest
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: ${{env.FLEET_TRIVY_REPORT}}
+
+      - name: asd
+        run: cat ${{env.FLEET_TRIVY_REPORT}}
 
       #- name: Verify image
       #  run: cosign verify --certificate-identity=${{github.workflow_ref}} --certificate-oidc-issuer=https://github.com/login/oauth ${{ env.REGISTRY }}/${{github.actor}}/${{env.FLEET_IMAGE_NAME}}${DIGEST} | jq .
@@ -277,6 +292,18 @@ jobs:
           sbom-path: ${{env.USER_SBOM_FILENAME}}
           push-to-registry: true
 
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{env.USER_IMAGE_NAME}}:latest
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: ${{env.USER_TRIVY_REPORT}}
+
+      - name: asd
+        run: cat ${{env.USER_TRIVY_REPORT}}
+
   build-rent:
 
     runs-on: self-hosted
@@ -398,3 +425,15 @@ jobs:
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           sbom-path: ${{env.RENT_SBOM_FILENAME}}
           push-to-registry: true
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{env.RENT_IMAGE_NAME}}:latest
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: ${{env.RENT_TRIVY_REPORT}}
+
+      - name: asd
+        run: cat ${{env.RENT_TRIVY_REPORT}}

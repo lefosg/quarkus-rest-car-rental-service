@@ -129,7 +129,7 @@ jobs:
 
       # Uses Sigstore. Does provenance based on SLSA, using in-toto format
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v1.4.3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.FLEET_IMAGE_NAME }} 
           subject-digest: ${{steps.build-and-push.outputs.digest}}
@@ -253,7 +253,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v1.4.3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.USER_IMAGE_NAME }} 
           subject-digest: ${{steps.build-and-push.outputs.digest}}
@@ -374,11 +374,12 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v1.4.3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.RENT_IMAGE_NAME }} 
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
+
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:

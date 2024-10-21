@@ -131,18 +131,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{env.FLEET_IMAGE_NAME}}:latest
-          format: 'table'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          output: ${{env.FLEET_TRIVY_REPORT}}
-
-      - name: asd
-        run: cat ${{env.FLEET_TRIVY_REPORT}}
-
       # Uses Sigstore. Does provenance based on SLSA, using in-toto format
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1.4.3
@@ -167,6 +155,26 @@ jobs:
           sbom-path: ${{env.FLEET_SBOM_FILENAME}}
           push-to-registry: true
 
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{env.FLEET_IMAGE_NAME}}:latest
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: ${{env.FLEET_TRIVY_REPORT}}
+
+      - name: Upload Trivy Artifact to Nexus Repository
+        uses: sonatype-nexus-community/nexus-repo-github-action@1.0.0
+        with:
+          serverUrl: ${{ secrets.SONARTYPE_NEXUS_URL }}
+          username: ${{ secrets.SONARTYPE_NEXUS_USERNAME }}
+          password: ${{ secrets.SONARTYPE_NEXUS_PASSWORD }}
+          format: raw
+          repository: security
+          coordinates: groupId=com.example artifactId=fleet-trivy version=1.0.0
+          assets: extension=txt
+          filename: ./${{env.FLEET_TRIVY_REPORT}}
 
 
       #- name: Verify image
@@ -271,18 +279,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{env.USER_IMAGE_NAME}}:latest
-          format: 'table'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          output: ${{env.USER_TRIVY_REPORT}}
-
-      - name: asd
-        run: cat ${{env.USER_TRIVY_REPORT}}
-
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1.4.3
         with:
@@ -306,7 +302,26 @@ jobs:
           sbom-path: ${{env.USER_SBOM_FILENAME}}
           push-to-registry: true
 
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{env.USER_IMAGE_NAME}}:latest
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: ${{env.USER_TRIVY_REPORT}}
 
+      - name: Upload Trivy Artifact to Nexus Repository
+        uses: sonatype-nexus-community/nexus-repo-github-action@1.0.0
+        with:
+          serverUrl: ${{ secrets.SONARTYPE_NEXUS_URL }}
+          username: ${{ secrets.SONARTYPE_NEXUS_USERNAME }}
+          password: ${{ secrets.SONARTYPE_NEXUS_PASSWORD }}
+          format: raw
+          repository: security
+          coordinates: groupId=com.example artifactId=user-trivy version=1.0.0
+          assets: extension=txt
+          filename: ./${{env.USER_TRIVY_REPORT}}
 
   build-rent:
 
@@ -414,18 +429,6 @@ jobs:
           subject-digest: ${{steps.build-and-push.outputs.digest}}
           push-to-registry: true
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{env.RENT_IMAGE_NAME}}:latest
-          format: 'table'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          output: ${{env.RENT_TRIVY_REPORT}}
-
-      - name: asd
-        run: cat ${{env.RENT_TRIVY_REPORT}}
-
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
@@ -442,4 +445,23 @@ jobs:
           sbom-path: ${{env.RENT_SBOM_FILENAME}}
           push-to-registry: true
 
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{env.RENT_IMAGE_NAME}}:latest
+          format: 'table'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          output: ${{env.RENT_TRIVY_REPORT}}
 
+      - name: Upload Trivy Artifact to Nexus Repository
+        uses: sonatype-nexus-community/nexus-repo-github-action@1.0.0
+        with:
+          serverUrl: ${{ secrets.SONARTYPE_NEXUS_URL }}
+          username: ${{ secrets.SONARTYPE_NEXUS_USERNAME }}
+          password: ${{ secrets.SONARTYPE_NEXUS_PASSWORD }}
+          format: raw
+          repository: security
+          coordinates: groupId=com.example artifactId=rent-trivy version=1.0.0
+          assets: extension=txt
+          filename: ./${{env.RENT_TRIVY_REPORT}}
